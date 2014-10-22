@@ -21,6 +21,30 @@ namespace Chaos_University
 
         MouseState mouse;
 
+        //Base game methods below...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
