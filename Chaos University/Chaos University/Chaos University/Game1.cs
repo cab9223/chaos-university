@@ -24,6 +24,30 @@ namespace Chaos_University
         GamePiece[,] gameGrid;      //Grid of game pieces
         int gamePieceSize;          //Height of width of a game piece
 
+        //Base game methods below...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
