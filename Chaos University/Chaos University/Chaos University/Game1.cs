@@ -19,6 +19,8 @@ namespace Chaos_University
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        MouseState mouse;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -81,7 +83,7 @@ namespace Chaos_University
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
             // TODO: Add your drawing code here
 
