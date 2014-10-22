@@ -19,7 +19,10 @@ namespace Chaos_University
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        MouseState mouse;
+        MouseState mouse;           //Current mouse state
+        MouseState mousePrev;       //Previous mouse state
+        GamePiece[,] gameGrid;      //Grid of game pieces
+        int gamePieceSize;          //Height of width of a game piece
 
         public Game1()
         {
@@ -73,7 +76,20 @@ namespace Chaos_University
                 this.Exit();
 
             // TODO: Add your update logic here
+            mouse = Mouse.GetState();
 
+            if(mouse.LeftButton == ButtonState.Pressed && mousePrev.LeftButton == ButtonState.Released)
+            {
+                for (int j = 0; j < gameGrid.GetLength(0); ++j)
+                {
+                    for (int i = 0; i < gameGrid.GetLength(1); ++i)
+                    {
+                        //Place or turn direction tile at gameGrid[i / gamePieceSize, j / gamePieceSize]
+                    }
+                }
+            }
+
+            mousePrev = Mouse.GetState();
             base.Update(gameTime);
         }
 
@@ -86,7 +102,16 @@ namespace Chaos_University
             GraphicsDevice.Clear(Color.Black);
 
             // TODO: Add your drawing code here
+            spriteBatch.Begin();
 
+            for (int j = 0; j < gameGrid.GetLength(0); ++j)
+            {
+                for (int i = 0; i < gameGrid.GetLength(1); ++i)
+                {
+                    //Draw at X = gamePieceSize * i, Y = gamePieceSize * j
+                }
+            }
+            spriteBatch.End();
             base.Draw(gameTime);
         }
     }
