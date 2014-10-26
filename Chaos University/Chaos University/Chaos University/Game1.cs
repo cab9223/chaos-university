@@ -21,31 +21,21 @@ namespace Chaos_University
 
         MouseState mouse;           //Current mouse state
         MouseState mousePrev;       //Previous mouse state
-        GamePiece[,] gameGrid;      //Grid of game pieces
+        Tile[,] tileGrid;           //Grid of tiles
         int gamePieceSize;          //Height of width of a game piece
 
+        public enum GameState
+        {
+            TitleScreen,
+            Menus,
+            PlacingTiles,
+            Playing,
+            GameOver
+        }
+
         //Base game methods below...
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        Player playerChar;
+        GameState current = GameState.TitleScreen;
 
 
         public Game1()
@@ -104,11 +94,28 @@ namespace Chaos_University
 
             if(mouse.LeftButton == ButtonState.Pressed && mousePrev.LeftButton == ButtonState.Released)
             {
-                for (int j = 0; j < gameGrid.GetLength(0); ++j)
+                for (int j = 0; j < tileGrid.GetLength(0); ++j)
                 {
-                    for (int i = 0; i < gameGrid.GetLength(1); ++i)
+                    for (int i = 0; i < tileGrid.GetLength(1); ++i)
                     {
                         //Place or turn direction tile at gameGrid[i / gamePieceSize, j / gamePieceSize]
+                    }
+                }
+            }
+
+            // Collision detection, for playing the game.
+            if (current == GameState.Playing)
+            {
+                // We probably want this to hold for a second then move the player by GlobalVar.TileSize pixels.
+                // Holding for a second so that it's actually visible what happens- and it's not like we have a reason to
+                // code this thing to take real-time input.
+                for (int i = 0; i < (GlobalVar.GameWidth / GlobalVar.TileSize); i++)
+                {
+                    for (int c = 0; c < (GlobalVar.GameHeight / GlobalVar.TileSize); c++)
+                    {
+                        if (playerChar.CheckPosition(tileGrid[i, c]))
+                        {                           
+                        }
                     }
                 }
             }
@@ -128,9 +135,9 @@ namespace Chaos_University
             // TODO: Add your drawing code here
             spriteBatch.Begin();
 
-            for (int j = 0; j < gameGrid.GetLength(0); ++j)
+            for (int j = 0; j < tileGrid.GetLength(0); ++j)
             {
-                for (int i = 0; i < gameGrid.GetLength(1); ++i)
+                for (int i = 0; i < tileGrid.GetLength(1); ++i)
                 {
                     //Draw at X = gamePieceSize * i, Y = gamePieceSize * j
                 }

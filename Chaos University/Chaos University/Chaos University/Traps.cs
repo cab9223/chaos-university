@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Chaos_University
 {
-    class Traps : GamePiece
+    class Traps : Tile
     {
     }
 }
