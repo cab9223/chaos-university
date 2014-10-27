@@ -128,12 +128,13 @@ namespace Chaos_University
 
                     }
 
-                    if (className == "money")
+                    if (className == "money") //Money now takes 3 arguments
                     {
                         int TempX = Int32.Parse(classCord[1]);
                         int TempY = Int32.Parse(classCord[2]);
+                        int amount = Int32.Parse(classCord[3]);
 
-                        Money money = new Money(TempX, TempY);
+                        Money money = new Money(TempX, TempY, amount); //This now takes an amount int, if any adjustments need to be made
                     }
 
                     if (className == "goal")
