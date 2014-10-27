@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+
 namespace Chaos_University
 {
     abstract class GamePiece
@@ -17,7 +18,7 @@ namespace Chaos_University
 
         // Tentative direction things. Two rectangles- one for position, one for spot on grid has been discussed.
         // Am going with a single rectangle for position, will divide by the size of a tile and ignore the remainder for spot on grid.
-        private Rectangle positionRect;
+        public Rectangle positionRect;
         public Rectangle PositionRect
         {
             get
@@ -37,6 +38,12 @@ namespace Chaos_University
         {
             positionRect.X = x;
             positionRect.Y = y;
+        }
+
+
+        public virtual void Draw(SpriteBatch obj) //Draws any gameobject to screen
+        {
+            obj.Draw(this.currentTexture, positionRect, Color.White);
         }
     }
 }

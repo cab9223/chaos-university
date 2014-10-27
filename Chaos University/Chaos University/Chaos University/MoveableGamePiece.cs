@@ -33,5 +33,23 @@ namespace Chaos_University
                 direction = value;
             }
         }
+
+
+        public int X //Property easily sets Position Rectangles X value
+        {
+            get { return positionRect.X; }
+            set { positionRect.X = value; }
+        }
+
+        public int Y //Property easily sets Position Rectangles Y value
+        {
+            get { return positionRect.Y; }
+            set { positionRect.Y = value; }
+        }
+
+
+
+
+
     }
 }

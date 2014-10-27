@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+
 namespace Chaos_University
 {
     class Wall : GamePiece
@@ -13,6 +14,12 @@ namespace Chaos_University
         {
             //Nothing yet
         }
+
+
+        
+
+
+
 
 
     }

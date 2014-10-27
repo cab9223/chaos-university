@@ -51,5 +51,11 @@ namespace Chaos_University
                 return false;
             }
         }
+
+
+        public override void Draw(SpriteBatch obj) //Draws player using base draw method
+        {
+            base.Draw(obj);
+        }
     }
 }
