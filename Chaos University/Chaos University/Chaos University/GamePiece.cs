@@ -12,6 +12,9 @@ namespace Chaos_University
 {
     abstract class GamePiece
     {
+        private Texture2D currentTexture { get; set; } //All GamePiece images
+
+
         // Tentative direction things. Two rectangles- one for position, one for spot on grid has been discussed.
         // Am going with a single rectangle for position, will divide by the size of a tile and ignore the remainder for spot on grid.
         private Rectangle positionRect;

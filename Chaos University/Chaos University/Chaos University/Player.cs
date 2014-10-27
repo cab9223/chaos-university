@@ -15,10 +15,13 @@ namespace Chaos_University
     // Stuff here is pretty self-explanitory, the imageFile thing is for future implementation of image handling stuff.
     class Player : MoveableGamePiece
     {
+        private string plrName { get; set; } //Players name
+
+
         public Player(int x, int y, int direction, string name, string imageFile) //Constructor
             : base(x, y, direction)
         {
-            //Nothing yet
+            plrName = name;  //sets player name
         }
 
         private string name;

@@ -9,7 +9,7 @@ namespace Chaos_University
     {
 
 
-        public Enemy(int x, int y, int dir) //Constructor
+        public Enemy(int x, int y, int dir, string imageFile) //Constructor
             : base(x, y, dir)
         {
             //Nothing yet
