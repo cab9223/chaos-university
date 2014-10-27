@@ -13,7 +13,7 @@ namespace Chaos_University
 {
     class MoveableGamePiece : GamePiece
     {
-        public MoveableGamePiece(int x, int y, int dir)
+        public MoveableGamePiece(int x, int y, int dir) //Constructor
             : base(x, y)
         {
             direction = dir;

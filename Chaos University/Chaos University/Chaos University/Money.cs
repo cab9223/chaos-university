@@ -7,5 +7,13 @@ namespace Chaos_University
 {
     class Money : GamePiece
     {
+
+        public Money(int x, int y) //Constructor
+            : base(x, y)
+        {
+            //Nothing yet
+        }
+
+
     }
 }

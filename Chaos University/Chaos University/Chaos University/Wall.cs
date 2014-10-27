@@ -7,5 +7,13 @@ namespace Chaos_University
 {
     class Wall : GamePiece
     {
+
+        public Wall(int x, int y) //Constructor
+            : base(x, y) 
+        {
+            //Nothing yet
+        }
+
+
     }
 }

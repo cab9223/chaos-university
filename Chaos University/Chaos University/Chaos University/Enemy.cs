@@ -7,5 +7,14 @@ namespace Chaos_University
 {
     class Enemy : MoveableGamePiece
     {
+
+
+        public Enemy(int x, int y, int dir) //Constructor
+            : base(x, y, dir)
+        {
+            //Nothing yet
+        }
+
+
     }
 }
