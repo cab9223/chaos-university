@@ -145,12 +145,13 @@ namespace Chaos_University
 
                     }
 
-                    if (className == "trap")
+                    if (className == "trap") //Trap now takes 3 arguments
                     {
                         int TempX = Int32.Parse(classCord[1]);
                         int TempY = Int32.Parse(classCord[2]);
+                        string type = classCord[3];
 
-                        Traps trap = new Traps(TempX, TempY);
+                        Traps trap = new Traps(TempX, TempY, type);  //This now takes trap type string, if you need to make any adjustments
                     }
 
                     loopCount++;

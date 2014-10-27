@@ -17,6 +17,10 @@ namespace Chaos_University
     {
         private string plrName { get; set; } //Players name
 
+        private int money { get; set; } //Players cash
+
+        private int score { get; set; } //Perhaps points accumulated, maybe
+
 
         public Player(int x, int y, int direction, string name, string imageFile) //Constructor
             : base(x, y, direction)
@@ -46,6 +50,21 @@ namespace Chaos_University
                 return true;
             }
 
+            else
+            {
+                return false;
+            }
+        }
+
+
+        public bool ReduceMoney(int costs) //Reduces money after stage or purchase, if money is negative then returns true for a gameover state
+        {
+            money = money - costs;
+
+            if (money < 0)
+            {
+                return true;
+            }
             else
             {
                 return false;

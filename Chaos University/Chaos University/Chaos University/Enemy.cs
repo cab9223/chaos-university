@@ -25,13 +25,13 @@ namespace Chaos_University
 
         public void Attack() //Method for attacking player
         {
-
+            //Stub
         }
 
 
         public void Patrol() //Method to move enemy around map
         {
-
+            //Stub
         }
 
 

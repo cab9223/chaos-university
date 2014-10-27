@@ -15,5 +15,20 @@ namespace Chaos_University
         }
 
 
+        public bool CheckCollision(GamePiece obj)//Method Checks to see if player reached the goal
+        {
+            if (obj.positionRect.Intersects(this.positionRect))
+            {
+                return true;
+            }
+            return false;
+        }
+
+
+        public void LevelComplete() //Method to end level and transition to menu
+        {
+            //stub
+        }
+
     }
 }
