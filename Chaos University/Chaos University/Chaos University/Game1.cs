@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -55,6 +56,107 @@ namespace Chaos_University
             // TODO: Add your initialization logic here
 
             base.Initialize();
+        }
+
+        // will load a level based on level int passes into
+        private void LoadLevel(int newLevel)
+        {
+            //concatanates "LevelMap" and passed int to find map file.
+            string levelNumber = newLevel.ToString();
+            string file = "LevelMap" + levelNumber + ".txt";
+            
+            //makes new stream reader
+            StreamReader input = null;
+            
+                //mapfiles will be one line long to avoid dealing with newlines. Also, assuming mapfile resides in bin.
+                input = new StreamReader(file);
+                string line = "";
+                line = input.ReadLine();
+
+
+                //makes an array based of split on [space]. format is (classType,Xcord,Ycord)
+                string[] fullMap = line.Split(' ');
+
+                //gets total number of objects from mapfile
+                int mapSize = fullMap.Length;
+
+                int loopCount = 0;
+
+                //will loop through all objects in map file and create new class objects based on fullMap[] string
+                while (loopCount != mapSize)
+                {
+                    //classCord now holds info as such: [0] class name [1] Xcord [2] Ycord | Possible [3] for direction
+                    string[] classCord = fullMap[loopCount].Split(',');
+
+                    string className = classCord[0];
+
+                    //if array has a 4th element for direction, will do special things. Not fully useable till .pngs are made
+                    /* int checkDir = classCord.Length;
+
+                     if (checkDir == 4)
+                     {
+                         if (className == "player")
+                         {
+                             int TempX = Int32.Parse(classCord[1]);
+                             int TempY = Int32.Parse(classCord[2]);
+                             int Direction = Int32.Parse(classCord[3]);
+
+                             Player player = new Player(TempX, TempY, Direction, name, something.png);
+                         }
+                      
+                         if (calssName == "guard")
+                         {
+                             int TempX = Int32.Parse(classCord[1]);
+                             int TempY = Int32.Parse(classCord[2]);
+                             int Direction = Int32.Parse(classCord[3]);
+                      
+                             Enemy guard = new Enemy(TempX, TempY, Direction, name, something.png);
+                     }
+                     
+                     */
+
+                    //creates new class objects depending on classname at classCord[0]
+
+
+                    if (className == "wall")
+                    {
+                        int TempX = Int32.Parse(classCord[1]);
+                        int TempY = Int32.Parse(classCord[2]);
+
+                        Wall wall = new Wall(TempX, TempY);
+                        // will most likly add this to a list or something like that
+
+                    }
+
+                    if (className == "money")
+                    {
+                        int TempX = Int32.Parse(classCord[1]);
+                        int TempY = Int32.Parse(classCord[2]);
+
+                        Money money = new Money(TempX, TempY);
+                    }
+
+                    if (className == "goal")
+                    {
+                        int TempX = Int32.Parse(classCord[1]);
+                        int TempY = Int32.Parse(classCord[2]);
+
+                        Goal goal = new Goal(TempX, TempY);
+
+                    }
+
+                    if (className == "trap")
+                    {
+                        int TempX = Int32.Parse(classCord[1]);
+                        int TempY = Int32.Parse(classCord[2]);
+
+                        Traps trap = new Traps(TempX, TempY);
+                    }
+
+                    loopCount++;
+                }
+            //closes reader
+                input.Close();       
         }
 
         /// <summary>
