@@ -15,24 +15,25 @@ namespace Chaos_University
     // Stuff here is pretty self-explanitory, the imageFile thing is for future implementation of image handling stuff.
     class Player : MoveableGamePiece
     {
-        private string plrName { get; set; } //Players name
+        public string PlrName { get; set; } //Players name
 
-        private int money { get; set; } //Players cash
+        public int Money { get; set; } //Players cash
 
-        private int score { get; set; } //Perhaps points accumulated, maybe
-
+        public int Score { get; set; } //Perhaps points accumulated, maybe
+        
+        //public Majors PlrClass { get; set; } sets major, only for actual use if we implement a major system.
 
         public Player(int x, int y, int direction, string name, string imageFile) //Constructor
             : base(x, y, direction)
         {
-            plrName = name;  //sets player name
+            PlrName = name;  //sets player name
         }
 
 
         // Checks position with a single object.
         public bool CheckPosition(GamePiece thing)
         {
-            if ((this.PositionRect.X / GlobalVar.TileSize == thing.PositionRect.X / GlobalVar.TileSize) && (this.PositionRect.Y / GlobalVar.TileSize == thing.PositionRect.Y / GlobalVar.TileSize))
+            if ((this.PositionRect.X / GlobalVar.TILESIZE == thing.PositionRect.X / GlobalVar.TILESIZE) && (this.PositionRect.Y / GlobalVar.TILESIZE == thing.PositionRect.Y / GlobalVar.TILESIZE))
             {
                 return true;
             }
@@ -46,9 +47,9 @@ namespace Chaos_University
 
         public bool ReduceMoney(int costs) //Reduces money after stage or purchase, if money is negative then returns true for a gameover state
         {
-            money = money - costs;
+            Money = Money - costs;
 
-            if (money < 0)
+            if (Money <= 0)
             {
                 return true;
             }
@@ -63,5 +64,33 @@ namespace Chaos_University
         {
             base.Draw(obj);
         }
+
+        // Movement. Switch by direction. Will want to execute one update per seconde, or adjust rate of movement.
+        public override void Move()
+        {
+            Rectangle temp = PositionRect;
+
+            switch (Direction)
+            {                    
+                case 0:
+                    temp.Y += GlobalVar.TILESIZE;
+                    break;
+
+                case 1:
+                    temp.X -= GlobalVar.TILESIZE;
+                    break;
+
+                case 2:
+                    temp.Y -= GlobalVar.TILESIZE;
+                    break;
+
+                case 3:
+                    temp.X += GlobalVar.TILESIZE;
+                    break;
+            }
+
+            PositionRect = temp;
+        }
+
     }
 }

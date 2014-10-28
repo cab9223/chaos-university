@@ -14,13 +14,13 @@ namespace Chaos_University
 {
     class Money : GamePiece
     {
-        private bool Active { get; set; }//Is this money currently active on screen
+        public bool Active { get; set; }//Is this money currently active on screen
 
-        private int Amount { set; get; } //The value of the money object
+        public int Amount { set; get; } //The value of the money object
 
 
         public Money(int x, int y, int amount) //Constructor
-            : base(x, y)
+            : base(x, y, "placeholder")
         {
             Amount = amount;
         }

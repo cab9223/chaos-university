@@ -213,9 +213,9 @@ namespace Chaos_University
                 // We probably want this to hold for a second then move the player by GlobalVar.TileSize pixels.
                 // Holding for a second so that it's actually visible what happens- and it's not like we have a reason to
                 // code this thing to take real-time input.
-                for (int i = 0; i < (GlobalVar.GameWidth / GlobalVar.TileSize); i++)
+                for (int i = 0; i < (GlobalVar.GAMEWIDTH / GlobalVar.TILESIZE); i++)
                 {
-                    for (int c = 0; c < (GlobalVar.GameHeight / GlobalVar.TileSize); c++)
+                    for (int c = 0; c < (GlobalVar.GAMEHEIGHT / GlobalVar.TILESIZE); c++)
                     {
                         if (playerChar.CheckPosition(tileGrid[i, c]))
                         {                           

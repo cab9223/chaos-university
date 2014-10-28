@@ -14,7 +14,7 @@ namespace Chaos_University
     class MoveableGamePiece : GamePiece
     {
         public MoveableGamePiece(int x, int y, int dir) //Constructor
-            : base(x, y)
+            : base(x, y, "placeholder")
         {
             direction = dir;
         }
@@ -42,8 +42,8 @@ namespace Chaos_University
             }
         }
 
-
-        public int X //Property easily sets Position Rectangles X value
+        //Don't think this is needed. Am now using stuff that was gone over in class 10/26 to change position.
+        /*public int X //Property easily sets Position Rectangles X value
         {
             get { return positionRect.X; }
             set { positionRect.X = value; }
@@ -53,11 +53,10 @@ namespace Chaos_University
         {
             get { return positionRect.Y; }
             set { positionRect.Y = value; }
-        }
+        }*/
 
 
-
-
-
+        public abstract void Move();
+        
     }
 }

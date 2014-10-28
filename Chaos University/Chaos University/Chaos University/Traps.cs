@@ -14,21 +14,42 @@ namespace Chaos_University
 {
     class Traps : Tile
     {
-        private bool Active { get; set; }
+        public bool Active { get; set; }
 
-        private string trapType { get; set; }
+        public string TrapType { get; set; }
 
+        public int Direction { get; set; }
 
         public Traps(int x, int y, string type) //Constructor
             : base(x, y)
         {
             Active = true;
+
+            TrapType = type;
+        }
+
+        public Traps(int x, int y, string type, int dir) //Constructor
+            : base(x, y)
+        {
+            Active = true;
+
+            TrapType = type;
+
+            if (type.ToLower().CompareTo("movement") == 0)
+            {
+                Direction = dir;
+            }
         }
 
 
-        public void HitTrap()
+
+        public void HitTrap(MoveableGamePiece thing)
         {
             //Code for player hitting a trap, depending on what the trapType is
+            if (TrapType.ToLower().CompareTo("movement") == 0)
+            {
+                thing.Direction = this.Direction;
+            }
         }
 
 

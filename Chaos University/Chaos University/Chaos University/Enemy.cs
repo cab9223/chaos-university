@@ -14,7 +14,7 @@ namespace Chaos_University
 {
     class Enemy : MoveableGamePiece
     {
-        private int difficulty { get; set; }
+        public int Difficulty { get; set; }
 
 
         public Enemy(int x, int y, int dir, string imageFile) //Constructor
@@ -32,7 +32,7 @@ namespace Chaos_University
 
         public void Patrol() //Method to move enemy around map
         {
-            switch (difficulty)
+            switch (Difficulty)
             {
                 case 0:
                     //Simple back and forth partol, stops at cirtain distance or wall
@@ -49,11 +49,20 @@ namespace Chaos_University
 
         public bool CheckCollision(GamePiece obj)//Method Checks to see if enemy hits something
         {
-            if (obj.positionRect.Intersects(this.positionRect))
+            /*if (obj.positionRect.Intersects(this.positionRect))
             {
                 return true;
             }
-            return false;
+            return false;*/
+            if ((this.PositionRect.X / GlobalVar.TILESIZE == obj.PositionRect.X / GlobalVar.TILESIZE) && (this.PositionRect.Y / GlobalVar.TILESIZE == obj.PositionRect.Y / GlobalVar.TILESIZE))
+            {
+                return true;
+            }
+
+            else
+            {
+                return false;
+            }
         }
 
 
