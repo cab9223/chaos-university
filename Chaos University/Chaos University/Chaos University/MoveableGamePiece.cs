@@ -20,6 +20,7 @@ namespace Chaos_University
         }
 
         // standard 4-direction setup.
+        // 0 = Up, 1 = Right, 2 = Down, 3 = Left
         private int direction;
         public int Direction
         {
@@ -30,7 +31,14 @@ namespace Chaos_University
 
             set
             {
-                direction = value;
+                if ((value > -1) && (value < 4)) //Test to make sure its direction is from only 0 to 3
+                {
+                    direction = value;
+                }
+                else
+                {
+                    direction = 0;
+                }
             }
         }
 

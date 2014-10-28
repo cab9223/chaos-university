@@ -28,19 +28,6 @@ namespace Chaos_University
             plrName = name;  //sets player name
         }
 
-        private string name;
-        public string Name
-        {
-            get
-            {
-                return name;
-            }
-
-            set
-            {
-                name = value;
-            }
-        }
 
         // Checks position with a single object.
         public bool CheckPosition(GamePiece thing)
