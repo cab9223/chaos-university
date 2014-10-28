@@ -36,7 +36,7 @@ namespace Chaos_University
 
         //Base game methods below...
         Player playerChar;
-        GameState current = GameState.TitleScreen;
+        GameState current;
 
 
         public Game1()
@@ -54,6 +54,9 @@ namespace Chaos_University
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            current = GameState.TitleScreen;
+
+
 
             base.Initialize();
         }

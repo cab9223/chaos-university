@@ -17,7 +17,7 @@ namespace Chaos_University
     {
 
         public Tile(int x, int y) //Constructor
-            : base(x, y)
+            : base(x, y, "placeholder")
         {
             //Nothing yet
         }

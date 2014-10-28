@@ -16,7 +16,7 @@ namespace Chaos_University
     {
 
         public Wall(int x, int y) //Constructor
-            : base(x, y) 
+            : base(x, y, "placeholder") 
         {
             //Nothing yet
         }
