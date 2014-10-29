@@ -78,7 +78,6 @@
     <Compile Include="GlobalVar.cs" />
     <Compile Include="Goal.cs" />
     <Compile Include="Level.cs" />
-    <Compile Include="Levels.cs" />
     <Compile Include="Mage.cs" />
     <Compile Include="Majors.cs" />
     <Compile Include="Money.cs" />
