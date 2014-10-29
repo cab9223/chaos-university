@@ -128,7 +128,7 @@ namespace Chaos_University
                         int TempX = Int32.Parse(classCord[1]);
                         int TempY = Int32.Parse(classCord[2]);
 
-                        Wall wall = new Wall(TempX, TempY);
+                        level.SetTile(TempX, TempY, new Wall(TempX * GlobalVar.TILESIZE, TempY * GlobalVar.TILESIZE));
                         // will most likly add this to a list or something like that
 
                     }
@@ -216,40 +216,53 @@ namespace Chaos_University
 
             // TODO: Add your update logic here
             mouse = Mouse.GetState();
+            keyboard = Keyboard.GetState();
 
-            if(mouse.LeftButton == ButtonState.Pressed && mousePrev.LeftButton == ButtonState.Released)
+            switch (current)
             {
-                for (int j = 0; j < level.Height; ++j)
-                {
-                    for (int i = 0; i < level.Width; ++i)
+                case GameState.Title:
+                    current = GameState.Playing;
+                    break;
+                case GameState.Menus:
+                    break;
+                case GameState.PlacingTiles:
+                    if (mouse.LeftButton == ButtonState.Pressed && mousePrev.LeftButton == ButtonState.Released)
                     {
                         //Place or turn direction tile at gameGrid[i / gamePieceSize, j / gamePieceSize]
                     }
-                }
-            }
-
-            // Collision detection, for playing the game.
-            if (current == GameState.Playing)
-            {
-                // We probably want this to hold for a second then move the player by GlobalVar.TileSize pixels.
-                // Holding for a second so that it's actually visible what happens- and it's not like we have a reason to
-                // code this thing to take real-time input.
-                for (int i = 0; i < (GlobalVar.GAMEWIDTH / GlobalVar.TILESIZE); i++)
-                {
-                    for (int c = 0; c < (GlobalVar.GAMEHEIGHT / GlobalVar.TILESIZE); c++)
+                    if(keyboard.IsKeyDown(Keys.Enter))
                     {
-                        if (playerChar.CheckPosition(level.GetGamePiece(i, c)))
-                        {
-                            //tileGrid[i, c].ThingIn.HitTrap(playerChar);
-                        }
+                        current = GameState.Playing;
                     }
-                }
+                    break;
+                case GameState.Playing:
+                    // Collision detection, for playing the game.
+                    if (current == GameState.Playing)
+                    {
+                        // We probably want this to hold for a second then move the player by GlobalVar.TileSize pixels.
+                        // Holding for a second so that it's actually visible what happens- and it's not like we have a reason to
+                        // code this thing to take real-time input.
+                        for (int i = 0; i < (GlobalVar.GAMEWIDTH / GlobalVar.TILESIZE); i++)
+                        {
+                            for (int c = 0; c < (GlobalVar.GAMEHEIGHT / GlobalVar.TILESIZE); c++)
+                            {
+                                if (playerChar.CheckPosition(level.GetGamePiece(i, c)))
+                                {
+                                    //tileGrid[i, c].ThingIn.HitTrap(playerChar);
+                                }
+                            }
+                        }
 
-                // Don't do anything else for another second.
-                System.Threading.Thread.Sleep(1000);
+                        // Don't do anything else for another second.
+                        System.Threading.Thread.Sleep(1000);
+                    }
+                    break;
+                case GameState.GameOver:
+                    break;
             }
 
             mousePrev = Mouse.GetState();
+            keyboardPrev = Keyboard.GetState();
             
             base.Update(gameTime);
         }
@@ -268,13 +281,13 @@ namespace Chaos_University
             switch (current)
             {
                 case GameState.Title:
-                    level.Draw(spriteBatch);
                     break;
                 case GameState.Menus:
                     break;
                 case GameState.PlacingTiles:
                     break;
                 case GameState.Playing:
+                    level.Draw(spriteBatch);
                     break;
                 case GameState.GameOver:
                     break;
