@@ -18,7 +18,7 @@ namespace Chaos_University
         public Traps ThingIn { get; set; }
         
         public Tile(int x, int y) //Constructor
-            : base(x, y, "placeholder")
+            : base(x, y)
         {
             //Nothing yet
         }

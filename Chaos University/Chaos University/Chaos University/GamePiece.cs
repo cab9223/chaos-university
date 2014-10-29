@@ -33,7 +33,7 @@ namespace Chaos_University
         }
         
         // Base constructor that everything else will draw from.
-        public GamePiece(int x, int y, string imageName)
+        public GamePiece(int x, int y)
         {
             //will need to do a try-catch block for loading the image file for this object.
             

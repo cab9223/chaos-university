@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace Chaos_University
 {
-    class Traps : Tile
+    class Traps : GamePiece
     {
         public bool Active { get; set; }
 
