@@ -26,6 +26,11 @@ namespace Chaos_University
             Active = true;
 
             TrapType = type;
+
+            if (type.ToLower().CompareTo("movement") == 0)
+            {
+                Type = "MvtTrap";
+            }
         }
 
         public Traps(int x, int y, string type, int dir) //Constructor
@@ -37,6 +42,8 @@ namespace Chaos_University
 
             if (type.ToLower().CompareTo("movement") == 0)
             {
+                Type = "MvtTrap";
+
                 Direction = dir;
             }
         }

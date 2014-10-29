@@ -78,6 +78,17 @@ namespace Chaos_University
                 string line = "";
                 line = input.ReadLine();
 
+                string[] indexs = line.Split(' ');
+                
+                int tempWidth = Int32.Parse(indexs[0]);
+                int tempHeight = Int32.Parse(indexs[1]);
+
+                level = new Level(tempWidth, tempHeight, GlobalVar.TILESIZE);
+                
+                line = input.ReadLine();
+
+                
+
 
                 //makes an array based of split on [space]. format is (classType,Xcord,Ycord)
                 string[] fullMap = line.Split(' ');
@@ -183,6 +194,31 @@ namespace Chaos_University
             playerChar.CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Bandana"));
             playerChar.CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Backpack"));
 
+            for (int i = 0; i < level.Width; i++)
+            {
+                for (int c = 0; c < level.Height; c++)
+                {
+                    if (level.GetGamePiece(i, c).Type == "MvtTrap")
+                    {
+                        level.GetGamePiece(i, c).CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Up"));
+                        level.GetGamePiece(i, c).CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Right"));
+                        level.GetGamePiece(i, c).CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Down"));
+                        level.GetGamePiece(i, c).CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Left"));
+                    }
+
+                    if (level.GetGamePiece(i, c).Type == "Tile")
+                    {
+                        level.GetGamePiece(i, c).CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Tile"));
+                    }
+
+                    if (level.GetGamePiece(i, c).Type == "Wall")
+                    {
+                        level.GetGamePiece(i, c).CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Wall"));
+                    }
+                    
+                }
+            }
+
             level = new Level(5, 5, GlobalVar.TILESIZE);
             for (int j = 0; j < 6; ++j)
             {
@@ -234,9 +270,9 @@ namespace Chaos_University
                 // We probably want this to hold for a second then move the player by GlobalVar.TileSize pixels.
                 // Holding for a second so that it's actually visible what happens- and it's not like we have a reason to
                 // code this thing to take real-time input.
-                for (int i = 0; i < (GlobalVar.GAMEWIDTH / GlobalVar.TILESIZE); i++)
+                for (int i = 0; i < level.Width; i++)
                 {
-                    for (int c = 0; c < (GlobalVar.GAMEHEIGHT / GlobalVar.TILESIZE); c++)
+                    for (int c = 0; c < level.Height; c++)
                     {
                         if (playerChar.CheckPosition(level.GetGamePiece(i, c)))
                         {

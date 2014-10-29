@@ -18,6 +18,8 @@ namespace Chaos_University
         public Tile(int x, int y) //Constructor
             : base(x, y)
         {
+            Type = "Tile";
+
             //Nothing yet
         }
 
