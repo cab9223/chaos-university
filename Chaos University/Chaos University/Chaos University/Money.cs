@@ -20,7 +20,7 @@ namespace Chaos_University
 
 
         public Money(int x, int y, int amount) //Constructor
-            : base(x, y, "placeholder")
+            : base(x, y)
         {
             Amount = amount;
         }
