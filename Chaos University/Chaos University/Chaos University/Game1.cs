@@ -78,6 +78,15 @@ namespace Chaos_University
                 string line = "";
                 line = input.ReadLine();
 
+                string[] indexs = line.Split(' ');
+
+                int tempWidth = Int32.Parse(indexs[0]);
+                int tempHeight = Int32.Parse(indexs[1]);
+
+                level = new Level(tempWidth, tempHeight, GlobalVar.TILESIZE);
+
+                line = input.ReadLine();
+
                 
                 //makes an array based of split on [space]. format is (classType,Xcord,Ycord)
                 string[] fullMap = line.Split(' ');
