@@ -27,6 +27,9 @@ namespace Chaos_University
         KeyboardState keyboardPrev; //Keyboard state previous
         int gamePieceSize;          //Height of width of a game piece
 
+        SpriteFont menuFont;
+        SpriteFont headerFont;
+
         Level level;
 
         public enum GameState
@@ -192,16 +195,10 @@ namespace Chaos_University
             playerChar.CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Head"));
             playerChar.CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Bandana"));
             playerChar.CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Backpack"));
+            menuFont = this.Content.Load<SpriteFont>("MenuFont");
+            menuFont = this.Content.Load<SpriteFont>("MenuHeaderFont");
 
-            level = new Level(5, 5, GlobalVar.TILESIZE);
-            for (int j = 0; j < 6; ++j)
-            {
-                for (int i = 0; i < 6; ++i)
-                {
-                    level.SetTile(i, j, new Tile(0, 0));
-                }
-            }
-             
+            this.LoadLevel(0);
         }
 
         /// <summary>
@@ -291,6 +288,10 @@ namespace Chaos_University
             switch (current)
             {
                 case GameState.Title:
+                    spriteBatch.DrawString(menuFont,        //Draw Press Enter Prompt
+                        "Press enter to continue.",
+                        new Vector2(25, GraphicsDevice.Viewport.Height - 26),
+                        Color.White);
                     break;
                 case GameState.Menus:
                     break;
