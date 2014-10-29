@@ -23,12 +23,13 @@ namespace Chaos_University
 
         MouseState mouse;           //Current mouse state
         MouseState mousePrev;       //Previous mouse state
-        Tile[,] tileGrid;           //Grid of tiles
         int gamePieceSize;          //Height of width of a game piece
+
+        Level level;
 
         public enum GameState
         {
-            TitleScreen,
+            Title,
             Menus,
             PlacingTiles,
             Playing,
@@ -56,8 +57,6 @@ namespace Chaos_University
         {
             // TODO: Add your initialization logic here
             current = GameState.TitleScreen;
-
-            tileGrid = new Tile[2,2];
 
             base.Initialize();
         }
@@ -181,6 +180,15 @@ namespace Chaos_University
             playerChar.CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Head"));
             playerChar.CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Bandana"));
             playerChar.CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Backpack"));
+
+            level = new Level(5, 5, GlobalVar.TILESIZE);
+            for (int j = 0; j < 6; ++j)
+            {
+                for (int i = 0; i < 6; ++i)
+                {
+                    level.SetTile(i, j, new Tile(0, 0));
+                }
+            }
              
         }
 
@@ -209,9 +217,9 @@ namespace Chaos_University
 
             if(mouse.LeftButton == ButtonState.Pressed && mousePrev.LeftButton == ButtonState.Released)
             {
-                for (int j = 0; j < tileGrid.GetLength(0); ++j)
+                for (int j = 0; j < level.Height; ++j)
                 {
-                    for (int i = 0; i < tileGrid.GetLength(1); ++i)
+                    for (int i = 0; i < level.Width; ++i)
                     {
                         //Place or turn direction tile at gameGrid[i / gamePieceSize, j / gamePieceSize]
                     }
@@ -228,9 +236,9 @@ namespace Chaos_University
                 {
                     for (int c = 0; c < (GlobalVar.GAMEHEIGHT / GlobalVar.TILESIZE); c++)
                     {
-                        if (playerChar.CheckPosition(tileGrid[i, c]))
+                        if (playerChar.CheckPosition(level.GetGamePiece(i, c)))
                         {
-                            tileGrid[i, c].ThingIn.HitTrap(playerChar);
+                            //tileGrid[i, c].ThingIn.HitTrap(playerChar);
                         }
                     }
                 }
@@ -255,13 +263,21 @@ namespace Chaos_University
             // TODO: Add your drawing code here
             spriteBatch.Begin();
 
-            for (int j = 0; j < tileGrid.GetLength(0); ++j)
+            switch (current)
             {
-                for (int i = 0; i < tileGrid.GetLength(1); ++i)
-                {
-                    //Draw at X = gamePieceSize * i, Y = gamePieceSize * j
-                }
+                case GameState.Title:
+                    level.Draw(spriteBatch);
+                    break;
+                case GameState.Menus:
+                    break;
+                case GameState.PlacingTiles:
+                    break;
+                case GameState.Playing:
+                    break;
+                case GameState.GameOver:
+                    break;
             }
+
             spriteBatch.End();
             base.Draw(gameTime);
         }
