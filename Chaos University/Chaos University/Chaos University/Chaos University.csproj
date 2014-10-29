@@ -88,10 +88,16 @@
     <Compile Include="Wall.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Color.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Content Include="Game.ico" />
     <Content Include="GameThumbnail.png">
       <XnaPlatformSpecific>true</XnaPlatformSpecific>
     </Content>
+    <None Include="LevelMap1.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Chaos UniversityContent\Chaos UniversityContent.contentproj">

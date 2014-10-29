@@ -62,9 +62,8 @@ namespace Chaos_University
 
 
         public override void Draw(SpriteBatch obj) //Draws player using base draw method
-        {
-            
-            StreamReader reader = new StreamReader("Color");
+        {             
+            StreamReader reader = new StreamReader(TitleContainer.OpenStream("Color.txt"));
             int readColor = Int32.Parse(reader.ReadLine());
             Rectangle temp;
             //Draws the five parts of the character on top of each other.
