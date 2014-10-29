@@ -9,7 +9,7 @@ namespace Chaos_University
     {
 
         public Goal(int x, int y) //Constructor
-            : base(x, y, "placeholder")
+            : base(x, y)
         {
             //Nothing yet
         }

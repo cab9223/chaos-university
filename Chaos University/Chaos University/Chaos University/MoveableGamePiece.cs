@@ -14,7 +14,7 @@ namespace Chaos_University
     abstract class MoveableGamePiece : GamePiece
     {
         public MoveableGamePiece(int x, int y, int dir) //Constructor
-            : base(x, y, "placeholder")
+            : base(x, y)
         {
             direction = dir;
         }
