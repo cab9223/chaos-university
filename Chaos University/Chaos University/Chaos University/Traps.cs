@@ -29,7 +29,7 @@ namespace Chaos_University
 
             if (type.ToLower().CompareTo("movement") == 0)
             {
-                Type = "MvtTrap";
+                TrapType = "MvtTrap";
             }
         }
 
@@ -42,7 +42,7 @@ namespace Chaos_University
 
             if (type.ToLower().CompareTo("movement") == 0)
             {
-                Type = "MvtTrap";
+                TrapType = "MvtTrap";
 
                 Direction = dir;
             }
@@ -81,7 +81,7 @@ namespace Chaos_University
         {
             if (Active ==  true)
             {
-                if (TrapType.ToLower().CompareTo("movement") == 0)
+                if (TrapType == "MvtTrap")
                 {
                     obj.Draw(this.CurrentTexture[Direction], positionRect, Color.White);
                 }
