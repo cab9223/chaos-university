@@ -45,10 +45,13 @@ namespace Chaos_University
 
         public void HitTrap(MoveableGamePiece thing)
         {
-            //Code for player hitting a trap, depending on what the trapType is
-            if (TrapType.ToLower().CompareTo("movement") == 0)
+            if (Active)
             {
-                thing.Direction = this.Direction;
+                //Code for player hitting a trap, depending on what the trapType is
+                if (TrapType.ToLower().CompareTo("movement") == 0)
+                {
+                    thing.Direction = this.Direction;
+                }
             }
         }
 

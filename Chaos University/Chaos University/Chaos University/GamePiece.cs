@@ -13,7 +13,7 @@ namespace Chaos_University
 {
     abstract class GamePiece
     {
-        public Texture2D CurrentTexture { get; set; } //All GamePiece images
+        public Texture2D[] CurrentTexture { get; set; } //All GamePiece images
 
 
         // Tentative direction things. Two rectangles- one for position, one for spot on grid has been discussed.
@@ -37,14 +37,15 @@ namespace Chaos_University
         public GamePiece(int x, int y, string imageName)
         {
             //will need to do a try-catch block for loading the image file for this object.
+            CurrentTexture = new Texture2D[1];
 
             //Old constructor will give a runtime error(PositionRect initialized to nothing). Remove note once we have character setup working.
-            positionRect = new Rectangle(x, y, CurrentTexture.Width, CurrentTexture.Height);
+            positionRect = new Rectangle(x, y, CurrentTexture[0].Width, CurrentTexture[0].Height);
         }
 
         public virtual void Draw(SpriteBatch obj) //Draws any gameobject to screen
         {
-            obj.Draw(this.CurrentTexture, positionRect, Color.White);
+            obj.Draw(this.CurrentTexture[0], positionRect, Color.White);
         }
     }
 }

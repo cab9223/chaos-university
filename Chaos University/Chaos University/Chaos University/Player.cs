@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using System.IO;
 
 namespace Chaos_University
 {
@@ -27,6 +28,9 @@ namespace Chaos_University
             : base(x, y, direction)
         {
             PlrName = name;  //sets player name
+
+            CurrentTexture = new Texture2D[5];
+
         }
 
 
@@ -62,7 +66,53 @@ namespace Chaos_University
 
         public override void Draw(SpriteBatch obj) //Draws player using base draw method
         {
-            base.Draw(obj);
+            
+            StreamReader reader = new StreamReader("Color");
+            int readColor = Int32.Parse(reader.ReadLine());
+            Rectangle temp;
+            //Draws the five parts of the character on top of each other.
+            switch(readColor)
+            {
+                default:
+                    // Draws body.
+                    obj.Draw(CurrentTexture[0], PositionRect, Color.White);
+                    
+                    // Draws vest.
+                    temp = new Rectangle(
+                        (PositionRect.X + PositionRect.Right)/2 + CurrentTexture[1].Width,
+                        (PositionRect.Y + PositionRect.Bottom)/2 + CurrentTexture[1].Height,
+                        CurrentTexture[1].Width,
+                        CurrentTexture[1].Height);
+
+                    obj.Draw(CurrentTexture[1], temp, Color.White);
+
+                    // Draws head.
+                    temp = new Rectangle(
+                        (PositionRect.X + PositionRect.Right)/2 + CurrentTexture[2].Width,
+                        (PositionRect.Y + PositionRect.Bottom)/2 + CurrentTexture[2].Height,
+                        CurrentTexture[2].Width,
+                        CurrentTexture[2].Height);
+
+                    obj.Draw(CurrentTexture[2], temp, Color.White);
+
+                    // Draws bandana.
+                    temp = new Rectangle(
+                        (PositionRect.X + PositionRect.Right)/2 + CurrentTexture[3].Width,
+                        (PositionRect.Y + PositionRect.Bottom)/2 + CurrentTexture[3].Height,
+                        CurrentTexture[3].Width,
+                        CurrentTexture[3].Height);
+
+                    obj.Draw(CurrentTexture[3], temp, Color.White);
+
+                    //Draws backpack.
+                    temp = new Rectangle(
+                        (PositionRect.X + PositionRect.Right)/2 + CurrentTexture[4].Width,
+                        PositionRect.Bottom + CurrentTexture[4].Height,
+                        CurrentTexture[4].Width,
+                        CurrentTexture[4].Height);
+                    obj.Draw(CurrentTexture[4], temp, Color.White);
+                    break;
+            }
         }
 
         // Movement. Switch by direction. Will want to execute one update per seconde, or adjust rate of movement.

@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using System.IO;
 
 namespace Chaos_University
 {
@@ -169,11 +170,18 @@ namespace Chaos_University
         /// all of your content.
         /// </summary>
         protected override void LoadContent()
-        {
+        {            
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+            
+            playerChar.CurrentTexture[0] = this.Content.Load<Texture2D>("Default_Body");
+            playerChar.CurrentTexture[1] = this.Content.Load<Texture2D>("Default_Vest");
+            playerChar.CurrentTexture[2] = this.Content.Load<Texture2D>("Default_Head");
+            playerChar.CurrentTexture[3] = this.Content.Load<Texture2D>("Default_Bandana");
+            playerChar.CurrentTexture[4] = this.Content.Load<Texture2D>("Default_Backpack");
+             
         }
 
         /// <summary>
@@ -221,13 +229,18 @@ namespace Chaos_University
                     for (int c = 0; c < (GlobalVar.GAMEHEIGHT / GlobalVar.TILESIZE); c++)
                     {
                         if (playerChar.CheckPosition(tileGrid[i, c]))
-                        {                           
+                        {
+                            tileGrid[i, c].ThingIn.HitTrap(playerChar);
                         }
                     }
                 }
+
+                // Don't do anything else for another second.
+                System.Threading.Thread.Sleep(1000);
             }
 
             mousePrev = Mouse.GetState();
+            
             base.Update(gameTime);
         }
 
