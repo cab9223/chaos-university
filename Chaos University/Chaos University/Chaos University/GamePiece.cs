@@ -45,5 +45,7 @@ namespace Chaos_University
         {
             obj.Draw(this.CurrentTexture[0], positionRect, Color.White);
         }
+
+        public abstract bool Collide();
     }
 }

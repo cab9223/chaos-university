@@ -23,6 +23,8 @@ namespace Chaos_University
 
         MouseState mouse;           //Current mouse state
         MouseState mousePrev;       //Previous mouse state
+        KeyboardState keyboard;     //Keyboard state
+        KeyboardState keyboardPrev; //Keyboard state previous
         int gamePieceSize;          //Height of width of a game piece
 
         Level level;
@@ -56,7 +58,7 @@ namespace Chaos_University
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            current = GameState.TitleScreen;
+            current = GameState.Title;
 
             base.Initialize();
         }
