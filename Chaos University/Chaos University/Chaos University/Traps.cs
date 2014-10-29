@@ -25,9 +25,9 @@ namespace Chaos_University
         {
             Active = true;
 
-            TrapType = type;
+            Type = type;
 
-            if (type.ToLower().CompareTo("movement") == 0)
+            if (Type.ToLower().CompareTo("MvtTrap") == 0)
             {
                 TrapType = "MvtTrap";
             }
@@ -40,7 +40,7 @@ namespace Chaos_University
 
             TrapType = type;
 
-            if (type.ToLower().CompareTo("movement") == 0)
+            if (type.ToLower().CompareTo("MvtTrap") == 0)
             {
                 TrapType = "MvtTrap";
 

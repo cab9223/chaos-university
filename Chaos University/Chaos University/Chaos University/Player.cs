@@ -24,10 +24,10 @@ namespace Chaos_University
         
         //public Majors PlrClass { get; set; } sets major, only for actual use if we implement a major system.
 
-        public Player(int x, int y, int direction, string name, string imageFile) //Constructor
+        public Player(int x, int y, int direction) //Constructor
             : base(x, y, direction)
         {
-            PlrName = name;  //sets player name
+            //PlrName = name;  //sets player name
         }
 
 

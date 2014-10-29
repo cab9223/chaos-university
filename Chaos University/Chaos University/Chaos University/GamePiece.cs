@@ -40,6 +40,8 @@ namespace Chaos_University
             
             //Old constructor will give a runtime error(PositionRect initialized to nothing). Remove note once we have character setup working.
             positionRect = new Rectangle(x, y, GlobalVar.TILESIZE, GlobalVar.TILESIZE);
+
+            CurrentTexture = new List<Texture2D>();
         }
 
         public virtual void Draw(SpriteBatch obj) //Draws any gameobject to screen

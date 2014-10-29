@@ -61,6 +61,7 @@ namespace Chaos_University
         {
             // TODO: Add your initialization logic here
             current = GameState.Title;
+            playerChar = new Player(0, 0, 0);
 
             base.Initialize();
         }
@@ -133,6 +134,14 @@ namespace Chaos_University
 
                     //creates new class objects depending on classname at classCord[0]
 
+                    if (className == "player")
+                    {
+                        int TempX = Int32.Parse(classCord[1]);
+                        int TempY = Int32.Parse(classCord[2]);
+                        int Direction = Int32.Parse(classCord[3]);
+
+                        Player playerChar = new Player(TempX, TempY, Direction);
+                    }
 
                     if (className == "wall")
                     {
@@ -148,9 +157,9 @@ namespace Chaos_University
                     {
                         int TempX = Int32.Parse(classCord[1]);
                         int TempY = Int32.Parse(classCord[2]);
-                        int amount = Int32.Parse(classCord[3]);
+                        //int amount = Int32.Parse(classCord[3]);
 
-                        level.SetTile(TempX, TempY, new Money(TempX * GlobalVar.TILESIZE, TempY * GlobalVar.TILESIZE, amount));
+                        //level.SetTile(TempX, TempY, new Money(TempX * GlobalVar.TILESIZE, TempY * GlobalVar.TILESIZE, amount));
                         //This now takes an amount int, if any adjustments need to be made
                     }
 
@@ -168,7 +177,7 @@ namespace Chaos_University
                         int TempY = Int32.Parse(classCord[2]);
                         string type = classCord[3];
 
-                        level.SetTile(TempX, TempY, new Traps(TempX * GlobalVar.TILESIZE, TempY * GlobalVar.TILESIZE, type));
+                        level.SetTile(TempX, TempY, new Traps(TempX * GlobalVar.TILESIZE, TempY * GlobalVar.TILESIZE, "MvtTrap"));
                         //This now takes trap type string, if you need to make any adjustments
                     }
 
@@ -187,7 +196,7 @@ namespace Chaos_University
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            this.LoadLevel(0);
+            this.LoadLevel(1);
 
             // TODO: use this.Content to load your game content here
             
@@ -274,7 +283,7 @@ namespace Chaos_University
                         // We probably want this to hold for a second then move the player by GlobalVar.TileSize pixels.
                         // Holding for a second so that it's actually visible what happens- and it's not like we have a reason to
                         // code this thing to take real-time input.
-                        for (int i = 0; i < (GlobalVar.GAMEWIDTH / GlobalVar.TILESIZE); i++)
+                        /*for (int i = 0; i < (GlobalVar.GAMEWIDTH / GlobalVar.TILESIZE); i++)
                         {
                             for (int c = 0; c < (GlobalVar.GAMEHEIGHT / GlobalVar.TILESIZE); c++)
                             {
@@ -283,7 +292,7 @@ namespace Chaos_University
                                     //tileGrid[i, c].ThingIn.HitTrap(playerChar);
                                 }
                             }
-                        }
+                        }*/
 
                         // Don't do anything else for another second.
                         System.Threading.Thread.Sleep(1000);
