@@ -15,6 +15,7 @@ namespace Chaos_University
     {
         public List<Texture2D> CurrentTexture { get; set; } //All GamePiece images
 
+        public string Type { get; set; }
 
         // Tentative direction things. Two rectangles- one for position, one for spot on grid has been discussed.
         // Am going with a single rectangle for position, will divide by the size of a tile and ignore the remainder for spot on grid.
