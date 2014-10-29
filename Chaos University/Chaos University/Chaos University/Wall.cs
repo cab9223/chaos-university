@@ -18,6 +18,8 @@ namespace Chaos_University
         public Wall(int x, int y) //Constructor
             : base(x, y) 
         {
+            Type = "Wall";
+
             //Nothing yet
         }
 

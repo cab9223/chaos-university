@@ -78,13 +78,13 @@ namespace Chaos_University
                 string line = "";
                 line = input.ReadLine();
 
-
+                
                 //makes an array based of split on [space]. format is (classType,Xcord,Ycord)
                 string[] fullMap = line.Split(' ');
 
                 //gets total number of objects from mapfile
                 int mapSize = fullMap.Length;
-
+                
                 int loopCount = 0;
 
                 //will loop through all objects in map file and create new class objects based on fullMap[] string
@@ -139,7 +139,8 @@ namespace Chaos_University
                         int TempY = Int32.Parse(classCord[2]);
                         int amount = Int32.Parse(classCord[3]);
 
-                        Money money = new Money(TempX, TempY, amount); //This now takes an amount int, if any adjustments need to be made
+                        level.SetTile(TempX, TempY, new Money(TempX * GlobalVar.TILESIZE, TempY * GlobalVar.TILESIZE, amount));
+                        //This now takes an amount int, if any adjustments need to be made
                     }
 
                     if (className == "goal")
@@ -147,8 +148,7 @@ namespace Chaos_University
                         int TempX = Int32.Parse(classCord[1]);
                         int TempY = Int32.Parse(classCord[2]);
 
-                        Goal goal = new Goal(TempX, TempY);
-
+                        level.SetTile(TempX, TempY, new Goal(TempX * GlobalVar.TILESIZE, TempY * GlobalVar.TILESIZE));
                     }
 
                     if (className == "trap") //Trap now takes 3 arguments
@@ -157,7 +157,8 @@ namespace Chaos_University
                         int TempY = Int32.Parse(classCord[2]);
                         string type = classCord[3];
 
-                        Traps trap = new Traps(TempX, TempY, type);  //This now takes trap type string, if you need to make any adjustments
+                        level.SetTile(TempX, TempY, new Traps(TempX * GlobalVar.TILESIZE, TempY * GlobalVar.TILESIZE, type));
+                        //This now takes trap type string, if you need to make any adjustments
                     }
 
                     loopCount++;
