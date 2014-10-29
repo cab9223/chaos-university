@@ -70,5 +70,10 @@ namespace Chaos_University
         {
             base.Draw(obj);
         }
+
+        public override void Move()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

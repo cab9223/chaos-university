@@ -11,10 +11,10 @@ namespace Chaos_University
 
         // These two let us change the width and height of the game at-will, without messing up
         // our other equations. 
-        public static const int GAMEWIDTH = 800;
-        public static const int GAMEHEIGHT = 600;
+        public static int GAMEWIDTH = 800;
+        public static int GAMEHEIGHT = 600;
 
         // Allows us to edit the size of a single tile- also useful for a bunch of other things that have been startedo n.
-        public static const int TILESIZE = 50;
+        public static int TILESIZE = 50;
     }
 }

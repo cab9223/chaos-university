@@ -56,7 +56,7 @@ namespace Chaos_University
             // TODO: Add your initialization logic here
             current = GameState.TitleScreen;
 
-
+            tileGrid = new Tile[2,2];
 
             base.Initialize();
         }

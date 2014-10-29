@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace Chaos_University
 {
-    class MoveableGamePiece : GamePiece
+    abstract class MoveableGamePiece : GamePiece
     {
         public MoveableGamePiece(int x, int y, int dir) //Constructor
             : base(x, y, "placeholder")
