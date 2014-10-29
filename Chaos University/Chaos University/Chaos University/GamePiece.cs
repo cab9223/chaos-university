@@ -38,7 +38,7 @@ namespace Chaos_University
             //will need to do a try-catch block for loading the image file for this object.
             
             //Old constructor will give a runtime error(PositionRect initialized to nothing). Remove note once we have character setup working.
-            positionRect = new Rectangle(x, y, CurrentTexture[0].Width, CurrentTexture[0].Height);
+            positionRect = new Rectangle(x, y, GlobalVar.TILESIZE, GlobalVar.TILESIZE);
         }
 
         public virtual void Draw(SpriteBatch obj) //Draws any gameobject to screen
