@@ -187,6 +187,8 @@ namespace Chaos_University
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            this.LoadLevel(0);
+
             // TODO: use this.Content to load your game content here
             
             playerChar.CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Body"));
@@ -197,7 +199,31 @@ namespace Chaos_University
             menuFont = this.Content.Load<SpriteFont>("MenuFont");
             menuFont = this.Content.Load<SpriteFont>("MenuHeaderFont");
 
-            this.LoadLevel(0);
+            for (int i = 0; i < level.Width; i++)
+            {
+                for (int c = 0; c < level.Height; c++)
+                {
+                    if (level.GetGamePiece(i, c).Type == "MvtTrap")
+                    {
+                        level.GetGamePiece(i, c).CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Up"));
+                        level.GetGamePiece(i, c).CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Right"));
+                        level.GetGamePiece(i, c).CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Down"));
+                        level.GetGamePiece(i, c).CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Left"));
+                    }
+
+                    if (level.GetGamePiece(i, c).Type == "Tile")
+                    {
+                        level.GetGamePiece(i, c).CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Tile"));
+                    }
+
+                    if (level.GetGamePiece(i, c).Type == "Wall")
+                    {
+                        level.GetGamePiece(i, c).CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Wall"));
+                    }
+
+                }
+            }
+
         }
 
         /// <summary>
