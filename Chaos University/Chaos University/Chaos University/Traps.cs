@@ -81,7 +81,11 @@ namespace Chaos_University
         {
             if (Active ==  true)
             {
-                base.Draw(obj);
+                if (TrapType.ToLower().CompareTo("movement") == 0)
+                {
+                    obj.Draw(this.CurrentTexture[Direction], positionRect, Color.White);
+                }
+                
             }
         }
 
