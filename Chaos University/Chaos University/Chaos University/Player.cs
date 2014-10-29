@@ -28,9 +28,6 @@ namespace Chaos_University
             : base(x, y, direction)
         {
             PlrName = name;  //sets player name
-
-            CurrentTexture = new Texture2D[5];
-
         }
 
 

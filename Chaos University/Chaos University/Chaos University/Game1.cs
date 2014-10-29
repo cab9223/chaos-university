@@ -176,11 +176,11 @@ namespace Chaos_University
 
             // TODO: use this.Content to load your game content here
             
-            playerChar.CurrentTexture[0] = this.Content.Load<Texture2D>("Default_Body");
-            playerChar.CurrentTexture[1] = this.Content.Load<Texture2D>("Default_Vest");
-            playerChar.CurrentTexture[2] = this.Content.Load<Texture2D>("Default_Head");
-            playerChar.CurrentTexture[3] = this.Content.Load<Texture2D>("Default_Bandana");
-            playerChar.CurrentTexture[4] = this.Content.Load<Texture2D>("Default_Backpack");
+            playerChar.CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Body"));
+            playerChar.CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Vest"));
+            playerChar.CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Head"));
+            playerChar.CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Bandana"));
+            playerChar.CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Backpack"));
              
         }
 
