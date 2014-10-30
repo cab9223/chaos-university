@@ -17,6 +17,8 @@ namespace Chaos_University
 
         public string Type { get; set; }
 
+        public int indexTexture;
+
         // Tentative direction things. Two rectangles- one for position, one for spot on grid has been discussed.
         // Am going with a single rectangle for position, will divide by the size of a tile and ignore the remainder for spot on grid.
         public Rectangle positionRect;
@@ -42,11 +44,20 @@ namespace Chaos_University
             positionRect = new Rectangle(x, y, GlobalVar.TILESIZE, GlobalVar.TILESIZE);
 
             CurrentTexture = new List<Texture2D>();
+            indexTexture = 0;
         }
 
         public virtual void Draw(SpriteBatch obj) //Draws any gameobject to screen
         {
-            obj.Draw(this.CurrentTexture[0], positionRect, Color.White);
+            obj.Draw(this.CurrentTexture[indexTexture], positionRect, Color.White);
+        }
+
+        public virtual void IncrementType()
+        {
+            if (indexTexture != CurrentTexture.Count() - 1)
+                indexTexture++;
+            else
+                indexTexture = 0;
         }
 
         //public abstract bool Collide();

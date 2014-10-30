@@ -70,9 +70,18 @@ namespace Chaos_University
             switch(readColor)
             {
                 default:
+                    /*
                     // Draws body.
                     obj.Draw(CurrentTexture[0], PositionRect, Color.White);
-                    
+
+                    //Draws backpack.
+                    temp = new Rectangle(
+                        (PositionRect.X + PositionRect.Right) / 2 + CurrentTexture[4].Width,
+                        PositionRect.Bottom + CurrentTexture[4].Height,
+                        CurrentTexture[4].Width,
+                        CurrentTexture[4].Height);
+                    obj.Draw(CurrentTexture[4], temp, Color.White);
+
                     // Draws vest.
                     temp = new Rectangle(
                         (PositionRect.X + PositionRect.Right)/2 + CurrentTexture[1].Width,
@@ -91,22 +100,15 @@ namespace Chaos_University
 
                     obj.Draw(CurrentTexture[2], temp, Color.White);
 
-                    // Draws bandana.
+                    // Draws bandana.*/
                     temp = new Rectangle(
                         (PositionRect.X + PositionRect.Right)/2 + CurrentTexture[3].Width,
                         (PositionRect.Y + PositionRect.Bottom)/2 + CurrentTexture[3].Height,
                         CurrentTexture[3].Width,
                         CurrentTexture[3].Height);
 
-                    obj.Draw(CurrentTexture[3], temp, Color.White);
-
-                    //Draws backpack.
-                    temp = new Rectangle(
-                        (PositionRect.X + PositionRect.Right)/2 + CurrentTexture[4].Width,
-                        PositionRect.Bottom + CurrentTexture[4].Height,
-                        CurrentTexture[4].Width,
-                        CurrentTexture[4].Height);
-                    obj.Draw(CurrentTexture[4], temp, Color.White);
+                    foreach(Texture2D texture in CurrentTexture)
+                        obj.Draw(texture, temp, Color.White);
                     break;
             }
         }

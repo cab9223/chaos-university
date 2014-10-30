@@ -22,7 +22,5 @@ namespace Chaos_University
 
             //Nothing yet
         }
-
-
     }
 }

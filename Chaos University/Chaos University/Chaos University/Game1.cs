@@ -68,7 +68,7 @@ namespace Chaos_University
         {
             // TODO: Add your initialization logic here
             current = GameState.Title;
-            playerChar = new Player(0, 0, 0);
+            this.IsMouseVisible = true;
 
             base.Initialize();
         }
@@ -204,13 +204,16 @@ namespace Chaos_University
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             this.LoadLevel(1);
+            playerChar = new Player(0, 0, 0);
 
             // TODO: use this.Content to load your game content here
-            playerChar.CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Head"));
+            // Order player textures from lowest to highest. (Alex wishes this was a robot.)
             playerChar.CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Body"));
-            playerChar.CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Backpack"));
-            playerChar.CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Bandana"));
             playerChar.CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Vest"));
+            playerChar.CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Backpack"));
+            playerChar.CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Head"));
+            playerChar.CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Bandana"));
+
             menuFont = this.Content.Load<SpriteFont>("MenuFont");
             headerFont = this.Content.Load<SpriteFont>("MenuHeaderFont");
 
@@ -228,15 +231,16 @@ namespace Chaos_University
                     //If trap.
                     if (level.GetGamePiece(i, j).Type == "MvtTrap")
                     {
-                        level.GetGamePiece(i, j).CurrentTexture.Add(gridNorth);
-                        level.GetGamePiece(i, j).CurrentTexture.Add(gridEast);
-                        level.GetGamePiece(i, j).CurrentTexture.Add(gridSouth);
-                        level.GetGamePiece(i, j).CurrentTexture.Add(gridWest);
+                        level.GetGamePiece(i, j).CurrentTexture.Add(gridFloor);
                     }
                     //If tile.
                     else if (level.GetGamePiece(i, j).Type == "Tile")
                     {
                         level.GetGamePiece(i, j).CurrentTexture.Add(gridFloor);
+                        level.GetGamePiece(i, j).CurrentTexture.Add(gridNorth);
+                        level.GetGamePiece(i, j).CurrentTexture.Add(gridEast);
+                        level.GetGamePiece(i, j).CurrentTexture.Add(gridSouth);
+                        level.GetGamePiece(i, j).CurrentTexture.Add(gridWest);
                     }
                     //If wall.
                     else if (level.GetGamePiece(i, j).Type == "Wall")
@@ -280,7 +284,7 @@ namespace Chaos_University
             switch (current)
             {
                 case GameState.Title:
-                    current = GameState.Playing;
+                    current = GameState.PlacingTiles;
                     break;
                 case GameState.Menus:
                     break;
@@ -288,6 +292,10 @@ namespace Chaos_University
                     if (mouse.LeftButton == ButtonState.Pressed && mousePrev.LeftButton == ButtonState.Released)
                     {
                         //Place or turn direction tile at gameGrid[j / gamePieceSize, i / gamePieceSize]
+                        Console.WriteLine(mouse.X + " " + mouse.Y);
+                        level.GetGamePiece(
+                            (int)(mouse.X / GlobalVar.TILESIZE),
+                            (int)(mouse.Y / GlobalVar.TILESIZE)).IncrementType();
                     }
                     if(keyboard.IsKeyDown(Keys.Enter))
                     {
@@ -348,9 +356,12 @@ namespace Chaos_University
                 case GameState.Menus:
                     break;
                 case GameState.PlacingTiles:
+                    level.Draw(spriteBatch);
+                    playerChar.Draw(spriteBatch);
                     break;
                 case GameState.Playing:
                     level.Draw(spriteBatch);
+                    playerChar.Draw(spriteBatch);
                     break;
                 case GameState.GameOver:
                     break;
