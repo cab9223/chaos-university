@@ -24,7 +24,6 @@ namespace Chaos_University
         MouseState mousePrev;       //Previous mouse state
         KeyboardState keyboard;     //Keyboard state
         KeyboardState keyboardPrev; //Keyboard state previous
-        int gamePieceSize;          //Height of width of a game piece
 
         SpriteFont menuFont;
         SpriteFont headerFont;
@@ -39,6 +38,20 @@ namespace Chaos_University
             Playing,
             GameOver
         }
+
+        //Textures
+        Texture2D playerHead;
+        Texture2D playerBody;
+        Texture2D playerBackpack;
+        Texture2D playerBandana;
+        Texture2D playerVest;
+
+        Texture2D gridNorth;
+        Texture2D gridEast;
+        Texture2D gridSouth;
+        Texture2D gridWest;
+        Texture2D gridWall;
+        Texture2D gridFloor;
 
         //Base game methods below...
         Player playerChar;
@@ -199,40 +212,50 @@ namespace Chaos_University
             this.LoadLevel(1);
 
             // TODO: use this.Content to load your game content here
-            
-            playerChar.CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Body"));
-            playerChar.CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Vest"));
-            playerChar.CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Head"));
-            playerChar.CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Bandana"));
-            playerChar.CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Backpack"));
+            playerHead = this.Content.Load<Texture2D>("Default_Head");
+            playerBody = this.Content.Load<Texture2D>("Default_Body");
+            playerBackpack = this.Content.Load<Texture2D>("Default_Backpack");
+            playerBandana = this.Content.Load<Texture2D>("Default_Bandana");
+            playerVest = this.Content.Load<Texture2D>("Default_Vest");
+
+            playerChar.CurrentTexture.Add(playerHead);
+            playerChar.CurrentTexture.Add(playerBody);
+            playerChar.CurrentTexture.Add(playerBackpack);
+            playerChar.CurrentTexture.Add(playerBandana);
+            playerChar.CurrentTexture.Add(playerVest);
             menuFont = this.Content.Load<SpriteFont>("MenuFont");
-            menuFont = this.Content.Load<SpriteFont>("MenuHeaderFont");
+            headerFont = this.Content.Load<SpriteFont>("MenuHeaderFont");
 
-            for (int i = 0; i < level.Width; i++)
+            gridNorth = this.Content.Load<Texture2D>("Default_Up");
+            gridEast = this.Content.Load<Texture2D>("Default_Right");
+            gridSouth = this.Content.Load<Texture2D>("Default_Down");
+            gridWest = this.Content.Load<Texture2D>("Default_Left");
+            gridWall = this.Content.Load<Texture2D>("Default_Tile");
+            gridFloor = this.Content.Load<Texture2D>("Default_Wall");
+
+            for (int j = 0; j < level.Width; j++)
             {
-                for (int c = 0; c < level.Height; c++)
+                for (int i = 0; i < level.Height; i++)
                 {
-                    if (level.GetGamePiece(i, c).Type == "MvtTrap")
+                    if (level.GetGamePiece(i, j).Type == "MvtTrap")
                     {
-                        level.GetGamePiece(i, c).CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Up"));
-                        level.GetGamePiece(i, c).CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Right"));
-                        level.GetGamePiece(i, c).CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Down"));
-                        level.GetGamePiece(i, c).CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Left"));
+                        level.GetGamePiece(i, j).CurrentTexture.Add(gridNorth);
+                        level.GetGamePiece(i, j).CurrentTexture.Add(gridEast);
+                        level.GetGamePiece(i, j).CurrentTexture.Add(gridSouth);
+                        level.GetGamePiece(i, j).CurrentTexture.Add(gridWest);
                     }
 
-                    if (level.GetGamePiece(i, c).Type == "Tile")
+                    if (level.GetGamePiece(i, j).Type == "Tile")
                     {
-                        level.GetGamePiece(i, c).CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Tile"));
+                        level.GetGamePiece(i, j).CurrentTexture.Add(gridFloor);
                     }
 
-                    if (level.GetGamePiece(i, c).Type == "Wall")
+                    if (level.GetGamePiece(i, j).Type == "Wall")
                     {
-                        level.GetGamePiece(i, c).CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Wall"));
+                        level.GetGamePiece(i, j).CurrentTexture.Add(gridWall);
                     }
-
                 }
             }
-
         }
 
         /// <summary>
@@ -269,7 +292,7 @@ namespace Chaos_University
                 case GameState.PlacingTiles:
                     if (mouse.LeftButton == ButtonState.Pressed && mousePrev.LeftButton == ButtonState.Released)
                     {
-                        //Place or turn direction tile at gameGrid[i / gamePieceSize, j / gamePieceSize]
+                        //Place or turn direction tile at gameGrid[j / gamePieceSize, i / gamePieceSize]
                     }
                     if(keyboard.IsKeyDown(Keys.Enter))
                     {
@@ -283,13 +306,13 @@ namespace Chaos_University
                         // We probably want this to hold for a second then move the player by GlobalVar.TileSize pixels.
                         // Holding for a second so that it's actually visible what happens- and it's not like we have a reason to
                         // code this thing to take real-time input.
-                        /*for (int i = 0; i < (GlobalVar.GAMEWIDTH / GlobalVar.TILESIZE); i++)
+                        /*for (int j = 0; j < (GlobalVar.GAMEWIDTH / GlobalVar.TILESIZE); j++)
                         {
-                            for (int c = 0; c < (GlobalVar.GAMEHEIGHT / GlobalVar.TILESIZE); c++)
+                            for (int i = 0; i < (GlobalVar.GAMEHEIGHT / GlobalVar.TILESIZE); i++)
                             {
-                                if (playerChar.CheckPosition(level.GetGamePiece(i, c)))
+                                if (playerChar.CheckPosition(level.GetGamePiece(i, j)))
                                 {
-                                    //tileGrid[i, c].ThingIn.HitTrap(playerChar);
+                                    //tileGrid[i, j].ThingIn.HitTrap(playerChar);
                                 }
                             }
                         }*/
@@ -332,7 +355,14 @@ namespace Chaos_University
                 case GameState.PlacingTiles:
                     break;
                 case GameState.Playing:
-                    level.Draw(spriteBatch);
+                    //level.Draw(spriteBatch);
+                    for (int j = 0; j < 5; ++j)
+                    {
+                        for (int i = 0; i < 5; ++i)
+                        {
+                            level.GetGamePiece(i, j).Draw(spriteBatch);
+                        }
+                    }
                     break;
                 case GameState.GameOver:
                     break;

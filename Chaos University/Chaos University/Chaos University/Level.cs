@@ -26,25 +26,25 @@ namespace Chaos_University
             width = _width;
             height = _height;
             gamePieceSize = _gamePieceSize;
-            grid = new GamePiece[_height, _width];
+            grid = new GamePiece[_width, _height];
 
-            for (int i = 0; i < _width; i++)
+            for (int j = 0; j < _width; j++)
             {
-                for (int c = 0; c < _height; c++)
+                for (int i = 0; i < _height; i++)
                 {
-                    grid[i, c] = new Tile(i * GlobalVar.TILESIZE, c * GlobalVar.TILESIZE);
+                    grid[i, j] = new Tile(i * GlobalVar.TILESIZE, j * GlobalVar.TILESIZE);
                 }
             }
         }
 
-        public void SetTile(int y_index, int x_index, GamePiece newGamePiece)
+        public void SetTile(int x_index, int y_index, GamePiece newGamePiece)
         {
             newGamePiece.PositionRect = new Rectangle(
                 x_index * gamePieceSize,
                 y_index * gamePieceSize,
                 gamePieceSize,
                 gamePieceSize);
-            grid[y_index, x_index] = newGamePiece;
+            grid[x_index, y_index] = newGamePiece;
         }
 
         public void Draw(SpriteBatch obj)
@@ -53,12 +53,12 @@ namespace Chaos_University
             {
                 for (int i = 0; i < grid.GetLength(1); ++i)
                 {
-                    grid[j, i].Draw(obj);
+                    grid[i, j].Draw(obj);
                 }
             }
         }
 
-        public GamePiece GetGamePiece(int y_index, int x_index)
+        public GamePiece GetGamePiece(int x_index, int y_index)
         {
             return grid[x_index, y_index];
         }
