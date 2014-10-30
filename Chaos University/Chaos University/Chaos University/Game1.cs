@@ -40,12 +40,6 @@ namespace Chaos_University
         }
 
         //Textures
-        Texture2D playerHead;
-        Texture2D playerBody;
-        Texture2D playerBackpack;
-        Texture2D playerBandana;
-        Texture2D playerVest;
-
         Texture2D gridNorth;
         Texture2D gridEast;
         Texture2D gridSouth;
@@ -212,17 +206,11 @@ namespace Chaos_University
             this.LoadLevel(1);
 
             // TODO: use this.Content to load your game content here
-            playerHead = this.Content.Load<Texture2D>("Default_Head");
-            playerBody = this.Content.Load<Texture2D>("Default_Body");
-            playerBackpack = this.Content.Load<Texture2D>("Default_Backpack");
-            playerBandana = this.Content.Load<Texture2D>("Default_Bandana");
-            playerVest = this.Content.Load<Texture2D>("Default_Vest");
-
-            playerChar.CurrentTexture.Add(playerHead);
-            playerChar.CurrentTexture.Add(playerBody);
-            playerChar.CurrentTexture.Add(playerBackpack);
-            playerChar.CurrentTexture.Add(playerBandana);
-            playerChar.CurrentTexture.Add(playerVest);
+            playerChar.CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Head"));
+            playerChar.CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Body"));
+            playerChar.CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Backpack"));
+            playerChar.CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Bandana"));
+            playerChar.CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Vest"));
             menuFont = this.Content.Load<SpriteFont>("MenuFont");
             headerFont = this.Content.Load<SpriteFont>("MenuHeaderFont");
 
@@ -237,6 +225,7 @@ namespace Chaos_University
             {
                 for (int i = 0; i < level.Height; i++)
                 {
+                    //If trap.
                     if (level.GetGamePiece(i, j).Type == "MvtTrap")
                     {
                         level.GetGamePiece(i, j).CurrentTexture.Add(gridNorth);
@@ -244,15 +233,21 @@ namespace Chaos_University
                         level.GetGamePiece(i, j).CurrentTexture.Add(gridSouth);
                         level.GetGamePiece(i, j).CurrentTexture.Add(gridWest);
                     }
-
-                    if (level.GetGamePiece(i, j).Type == "Tile")
+                    //If tile.
+                    else if (level.GetGamePiece(i, j).Type == "Tile")
                     {
                         level.GetGamePiece(i, j).CurrentTexture.Add(gridFloor);
                     }
-
-                    if (level.GetGamePiece(i, j).Type == "Wall")
+                    //If wall.
+                    else if (level.GetGamePiece(i, j).Type == "Wall")
                     {
                         level.GetGamePiece(i, j).CurrentTexture.Add(gridWall);
+                    }
+                    //If unhandled object type, make it a tile.
+                    else
+                    {
+                        level.SetTile(i, j, new Tile(i * GlobalVar.TILESIZE, j * GlobalVar.TILESIZE));
+                        level.GetGamePiece(i, j).CurrentTexture.Add(gridFloor);
                     }
                 }
             }
@@ -355,14 +350,7 @@ namespace Chaos_University
                 case GameState.PlacingTiles:
                     break;
                 case GameState.Playing:
-                    //level.Draw(spriteBatch);
-                    for (int j = 0; j < 5; ++j)
-                    {
-                        for (int i = 0; i < 5; ++i)
-                        {
-                            level.GetGamePiece(i, j).Draw(spriteBatch);
-                        }
-                    }
+                    level.Draw(spriteBatch);
                     break;
                 case GameState.GameOver:
                     break;
