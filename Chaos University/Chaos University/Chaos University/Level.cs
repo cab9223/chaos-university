@@ -60,7 +60,14 @@ namespace Chaos_University
 
         public GamePiece GetGamePiece(int x_index, int y_index)
         {
-            return grid[x_index, y_index];
+            try
+            {
+                return grid[x_index, y_index];
+            }
+            catch(IndexOutOfRangeException)
+            {
+                throw;
+            }
         }
     }
 }

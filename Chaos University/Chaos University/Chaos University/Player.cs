@@ -100,7 +100,10 @@ namespace Chaos_University
 
                     obj.Draw(CurrentTexture[2], temp, Color.White);
 
-                    // Draws bandana.*/
+                    // Draws bandana.
+                     */
+
+                    //Draws Everything.
                     temp = new Rectangle(
                         (PositionRect.X + PositionRect.Right)/2 + CurrentTexture[3].Width,
                         (PositionRect.Y + PositionRect.Bottom)/2 + CurrentTexture[3].Height,

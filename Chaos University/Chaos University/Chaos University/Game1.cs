@@ -25,6 +25,7 @@ namespace Chaos_University
         KeyboardState keyboard;     //Keyboard state
         KeyboardState keyboardPrev; //Keyboard state previous
 
+        Vector2 menuPos;            //Position of the menu header
         SpriteFont menuFont;
         SpriteFont headerFont;
 
@@ -67,22 +68,22 @@ namespace Chaos_University
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            current = GameState.Title;
-            this.IsMouseVisible = true;
+            current = GameState.Title;      // Establish starting game state.
+            this.IsMouseVisible = true;     // Make mouse visible on screen.
 
             base.Initialize();
         }
 
-        // will load a level based on level int passes into
+        // Loads a level. Requires integer for specific file name.
         private void LoadLevel(int newLevel)
         {
             //concatanates "LevelMap" and passed int to find map file.
-            string levelNumber = newLevel.ToString();
-            string file = "LevelMap" + levelNumber + ".txt";
+            string file = "LevelMap" + newLevel + ".txt";
             
             //makes new stream reader
-            StreamReader input = null;
-            
+            StreamReader input;
+            try
+            {
                 //mapfiles will be one line long to avoid dealing with newlines. Also, assuming mapfile resides in bin.
                 input = new StreamReader(file);
                 string line = "";
@@ -97,13 +98,12 @@ namespace Chaos_University
 
                 line = input.ReadLine();
 
-                
                 //makes an array based of split on [space]. format is (classType,Xcord,Ycord)
                 string[] fullMap = line.Split(' ');
 
                 //gets total number of objects from mapfile
                 int mapSize = fullMap.Length;
-                
+
                 int loopCount = 0;
 
                 //will loop through all objects in map file and create new class objects based on fullMap[] string
@@ -190,8 +190,19 @@ namespace Chaos_University
 
                     loopCount++;
                 }
-            //closes reader
-                input.Close();       
+                //closes reader
+                input.Close();
+            }
+            //Close if File Not Found. (Change to send an error message?)
+            catch(FileNotFoundException)
+            {
+                this.Exit();
+            }
+            //Close if any other odd Exception.
+            catch(Exception)
+            {
+                this.Exit();
+            }
         }
 
         /// <summary>
@@ -216,6 +227,8 @@ namespace Chaos_University
 
             menuFont = this.Content.Load<SpriteFont>("MenuFont");
             headerFont = this.Content.Load<SpriteFont>("MenuHeaderFont");
+
+            menuPos = headerFont.MeasureString("CHAOS UNIVERSITY");
 
             gridNorth = this.Content.Load<Texture2D>("Default_Up");
             gridEast = this.Content.Load<Texture2D>("Default_Right");
@@ -283,25 +296,39 @@ namespace Chaos_University
 
             switch (current)
             {
+                //TITLE SCREEN
                 case GameState.Title:
-                    current = GameState.PlacingTiles;
+                    if (keyboard.IsKeyDown(Keys.Enter))
+                    {
+                        current = GameState.PlacingTiles;
+                    }
                     break;
+
+                //MENU SCREEN
                 case GameState.Menus:
                     break;
+
+                //PLACING TILES
                 case GameState.PlacingTiles:
                     if (mouse.LeftButton == ButtonState.Pressed && mousePrev.LeftButton == ButtonState.Released)
                     {
                         //Place or turn direction tile at gameGrid[j / gamePieceSize, i / gamePieceSize]
                         Console.WriteLine(mouse.X + " " + mouse.Y);
-                        level.GetGamePiece(
-                            (int)(mouse.X / GlobalVar.TILESIZE),
-                            (int)(mouse.Y / GlobalVar.TILESIZE)).IncrementType();
+                        try
+                        {
+                            level.GetGamePiece(
+                                (int)(mouse.X / GlobalVar.TILESIZE),
+                                (int)(mouse.Y / GlobalVar.TILESIZE)).IncrementType();
+                        }
+                        catch (IndexOutOfRangeException) { }
                     }
-                    if(keyboard.IsKeyDown(Keys.Enter))
+                    if(keyboard.IsKeyDown(Keys.Enter) && keyboardPrev.IsKeyUp(Keys.Enter))
                     {
                         current = GameState.Playing;
                     }
                     break;
+
+                //RUNNING SEQUENCE
                 case GameState.Playing:
                     // Collision detection, for playing the game.
                     if (current == GameState.Playing)
@@ -324,6 +351,8 @@ namespace Chaos_University
                         System.Threading.Thread.Sleep(1000);
                     }
                     break;
+
+                //GAME OVER
                 case GameState.GameOver:
                     break;
             }
@@ -347,22 +376,40 @@ namespace Chaos_University
 
             switch (current)
             {
+                //TITLE SCREEN
                 case GameState.Title:
-                    spriteBatch.DrawString(menuFont,        //Draw Press Enter Prompt
+                    spriteBatch.DrawString(headerFont,  //Draw Title
+                        "CHAOS UNIVERSITY",
+                        new Vector2(GraphicsDevice.Viewport.Width / 2, 0),
+                        Color.White,
+                        0.0f,
+                        new Vector2(menuPos.X / 2, 0),
+                        new Vector2(1.2f, 1.0f),
+                        SpriteEffects.None,
+                        0);
+                    spriteBatch.DrawString(menuFont,    //Draw Press Enter Prompt
                         "Press enter to continue.",
                         new Vector2(25, GraphicsDevice.Viewport.Height - 26),
                         Color.White);
                     break;
+
+                //MENU SCREEN
                 case GameState.Menus:
                     break;
+
+                //PLACING TILES
                 case GameState.PlacingTiles:
                     level.Draw(spriteBatch);
                     playerChar.Draw(spriteBatch);
                     break;
+
+                //RUNNING SEQUENCE
                 case GameState.Playing:
                     level.Draw(spriteBatch);
                     playerChar.Draw(spriteBatch);
                     break;
+
+                //GAME OVER
                 case GameState.GameOver:
                     break;
             }
