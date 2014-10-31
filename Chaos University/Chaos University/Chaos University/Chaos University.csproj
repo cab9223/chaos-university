@@ -76,6 +76,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enemy.cs" />
+    <Compile Include="Enums.cs" />
     <Compile Include="GamePiece.cs" />
     <Compile Include="GlobalVar.cs" />
     <Compile Include="Goal.cs" />

@@ -31,15 +31,6 @@ namespace Chaos_University
 
         Level level;
 
-        public enum GameState
-        {
-            Title,
-            Menus,
-            PlacingTiles,
-            Playing,
-            GameOver
-        }
-
         //Textures
         Texture2D gridNorth;
         Texture2D gridEast;
@@ -331,25 +322,22 @@ namespace Chaos_University
                 //RUNNING SEQUENCE
                 case GameState.Playing:
                     // Collision detection, for playing the game.
-                    if (current == GameState.Playing)
+                    // We probably want this to hold for a second then move the player by GlobalVar.TileSize pixels.
+                    // Holding for a second so that it's actually visible what happens- and it's not like we have a reason to
+                    // code this thing to take real-time input.
+                    /*for (int j = 0; j < (GlobalVar.GAMEWIDTH / GlobalVar.TILESIZE); j++)
                     {
-                        // We probably want this to hold for a second then move the player by GlobalVar.TileSize pixels.
-                        // Holding for a second so that it's actually visible what happens- and it's not like we have a reason to
-                        // code this thing to take real-time input.
-                        /*for (int j = 0; j < (GlobalVar.GAMEWIDTH / GlobalVar.TILESIZE); j++)
+                        for (int i = 0; i < (GlobalVar.GAMEHEIGHT / GlobalVar.TILESIZE); i++)
                         {
-                            for (int i = 0; i < (GlobalVar.GAMEHEIGHT / GlobalVar.TILESIZE); i++)
+                            if (playerChar.CheckPosition(level.GetGamePiece(i, j)))
                             {
-                                if (playerChar.CheckPosition(level.GetGamePiece(i, j)))
-                                {
-                                    //tileGrid[i, j].ThingIn.HitTrap(playerChar);
-                                }
+                                //tileGrid[i, j].ThingIn.HitTrap(playerChar);
                             }
-                        }*/
+                        }
+                    }*/
 
-                        // Don't do anything else for another second.
-                        System.Threading.Thread.Sleep(1000);
-                    }
+                    // Don't do anything else for another second.
+                    System.Threading.Thread.Sleep(1000);
                     break;
 
                 //GAME OVER
