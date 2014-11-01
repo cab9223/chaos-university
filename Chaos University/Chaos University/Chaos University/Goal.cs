@@ -18,7 +18,7 @@ namespace Chaos_University
         public Goal(int x, int y, List<Texture2D> textures)
             : base(x, y, textures)
         {
-            
+            PieceState = PieceState.Goal;
         }
     }
 }

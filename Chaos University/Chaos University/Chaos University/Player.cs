@@ -15,12 +15,54 @@ namespace Chaos_University
     // Stuff here is pretty self-explanitory, the imageFile thing is for future implementation of image handling stuff.
     class Player : MoveableGamePiece
     {
+        private int tries;
+        public int Tries
+        {
+            get
+            {
+                return tries;
+            }
+            set
+            {
+                tries = value;
+            }
+        }
+
+        private int parCount;
+        public int ParCount
+        {
+            get
+            {
+                return parCount;
+            }
+            set
+            {
+                parCount = value;
+            }
+        }
+
+        private bool moving;
+        public bool Moving
+        {
+            get
+            {
+                return moving;
+            }
+            set
+            {
+                moving = value;
+            }
+        }
+
         //Constructor
         public Player(int x, int y, int direction, List<Texture2D> textures)
             : base(x, y, direction, textures)
         {
             //PlrName = name;  //sets player name
             Console.WriteLine(PositionRect.ToString());
+            moving = false;
+            tries = 3;
+            parCount = 0;
         }
 
         //Draws all player components.
@@ -56,39 +98,42 @@ namespace Chaos_University
         //Move Player
         public override void Move(int distance)
         {
-            switch (Direction)
+            if (moving)
             {
-                case 0:
-                    PositionRect = new Rectangle(
-                        PositionRect.X,
-                        PositionRect.Y - distance,
-                        PositionRect.Width,
-                        PositionRect.Height);
-                    break;
+                switch (Direction)
+                {
+                    case 0:
+                        PositionRect = new Rectangle(
+                            PositionRect.X,
+                            PositionRect.Y - distance,
+                            PositionRect.Width,
+                            PositionRect.Height);
+                        break;
 
-                case 1:
-                    PositionRect = new Rectangle(
-                        PositionRect.X + distance,
-                        PositionRect.Y,
-                        PositionRect.Width,
-                        PositionRect.Height);
-                    break;
+                    case 1:
+                        PositionRect = new Rectangle(
+                            PositionRect.X + distance,
+                            PositionRect.Y,
+                            PositionRect.Width,
+                            PositionRect.Height);
+                        break;
 
-                case 2:
-                    PositionRect = new Rectangle(
-                        PositionRect.X,
-                        PositionRect.Y + distance,
-                        PositionRect.Width,
-                        PositionRect.Height);
-                    break;
+                    case 2:
+                        PositionRect = new Rectangle(
+                            PositionRect.X,
+                            PositionRect.Y + distance,
+                            PositionRect.Width,
+                            PositionRect.Height);
+                        break;
 
-                case 3:
-                    PositionRect = new Rectangle(
-                        PositionRect.X - distance,
-                        PositionRect.Y,
-                        PositionRect.Width,
-                        PositionRect.Height);
-                    break;
+                    case 3:
+                        PositionRect = new Rectangle(
+                            PositionRect.X - distance,
+                            PositionRect.Y,
+                            PositionRect.Width,
+                            PositionRect.Height);
+                        break;
+                }
             }
         }
 

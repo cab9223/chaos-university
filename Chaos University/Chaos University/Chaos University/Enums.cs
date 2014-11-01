@@ -21,6 +21,7 @@ namespace Chaos_University
         East,
         South,
         West,
-        Wall
+        Wall,
+        Goal
     }
 }

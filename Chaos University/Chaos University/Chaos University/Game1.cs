@@ -25,28 +25,22 @@ namespace Chaos_University
         KeyboardState keyboard;     //Keyboard state
         KeyboardState keyboardPrev; //Keyboard state previous
 
-        Vector2 menuPos;            //Position of the menu header
-        SpriteFont menuFont;
-        SpriteFont headerFont;
+        int clickPrevX;             //X index of previous tile changed.
+        int clickPrevY;             //Y index of previous tile changed.
+        Level level;                //Current level of the game.
+        Player playerChar;          //Player
+        Rectangle playerStart;      //Player starting position.
+        GameState current;          //State of the game (title, menu, playing, gameover, etc.)
 
-        Level level;
+        Vector2 menuPos;            //Position of the menu header
+        SpriteFont menuFont;        //Font of menu text
+        SpriteFont headerFont;      //Font of header text
 
         //Textures
-        Texture2D gridNorth;
-        Texture2D gridEast;
-        Texture2D gridSouth;
-        Texture2D gridWest;
-        Texture2D gridWall;
-        Texture2D gridFloor;
         List<Texture2D> tileTextures;
         List<Texture2D> wallTextures;
+        List<Texture2D> goalTextures;
         List<Texture2D> playerTextures;
-
-        //Base game methods below...
-        Rectangle playerStart;
-        Player playerChar;
-        GameState current;
-
 
         public Game1()
         {
@@ -66,6 +60,9 @@ namespace Chaos_University
             current = GameState.Title;      // Establish starting game state.
             this.IsMouseVisible = true;     // Make mouse visible on screen.
 
+            clickPrevX = -1;                //Start clickPrev at a nonexistent index.
+            clickPrevY = -1;
+
             base.Initialize();
         }
 
@@ -83,13 +80,15 @@ namespace Chaos_University
                 input = new StreamReader(file);
                 string line = "";
 
-                int tempWidth = int.Parse(input.ReadLine());
-                int tempHeight = int.Parse(input.ReadLine());
-                int columnNumber;
-                int lineNumber = 0;
+                int tempWidth = int.Parse(input.ReadLine());    //Width of map from file.
+                int tempHeight = int.Parse(input.ReadLine());   //Height of map from file.
+                int levelPar = int.Parse(input.ReadLine());     //Par of level from file.
+                int columnNumber;                               //Counter for each column being written.
+                int lineNumber = 0;                             //Counter for each row/line being written.
 
-                level = new Level(tempWidth, tempHeight, GlobalVar.TILESIZE);
+                level = new Level(tempWidth, tempHeight, GlobalVar.TILESIZE, levelPar);     //Establish level.
 
+                //While a line is to be read.
                 while((line = input.ReadLine()) != null)
                 {
                     columnNumber = 0;
@@ -97,18 +96,28 @@ namespace Chaos_University
                     {
                         switch(block)
                         {
+                            //Any unknown piece becomes a tile.
                             default:
                                 level.SetTile(columnNumber, lineNumber, new Tile(
                                     columnNumber * GlobalVar.TILESIZE,
                                     lineNumber * GlobalVar.TILESIZE,
                                     tileTextures));
                                 break;
+                            //1 = Wall.
                             case '1':
                                 level.SetTile(columnNumber, lineNumber, new Wall(
                                     columnNumber * GlobalVar.TILESIZE,
                                     lineNumber * GlobalVar.TILESIZE,
                                     wallTextures));
                                 break;
+                            //F = Goal
+                            case 'F':
+                                level.SetTile(columnNumber, lineNumber, new Goal(
+                                    columnNumber * GlobalVar.TILESIZE,
+                                    lineNumber * GlobalVar.TILESIZE,
+                                    goalTextures));
+                                break;
+                            //X = Player start and tile.
                             case 'X':
                                 level.SetTile(columnNumber, lineNumber, new Tile(
                                     columnNumber * GlobalVar.TILESIZE,
@@ -155,12 +164,21 @@ namespace Chaos_University
 
             menuPos = headerFont.MeasureString("CHAOS UNIVERSITY");
 
-            gridNorth = this.Content.Load<Texture2D>("Default_Up");
-            gridEast = this.Content.Load<Texture2D>("Default_Right");
-            gridSouth = this.Content.Load<Texture2D>("Default_Down");
-            gridWest = this.Content.Load<Texture2D>("Default_Left");
-            gridWall = this.Content.Load<Texture2D>("Default_Tile");
-            gridFloor = this.Content.Load<Texture2D>("Default_Wall");
+            // Order tile textures in order that they appear when clicked.
+            tileTextures = new List<Texture2D>();
+            tileTextures.Add(this.Content.Load<Texture2D>("Default_Tile"));
+            tileTextures.Add(this.Content.Load<Texture2D>("Default_Up"));
+            tileTextures.Add(this.Content.Load<Texture2D>("Default_Right"));
+            tileTextures.Add(this.Content.Load<Texture2D>("Default_Down"));
+            tileTextures.Add(this.Content.Load<Texture2D>("Default_Left"));
+
+            //Single Wall texture.
+            wallTextures = new List<Texture2D>();
+            wallTextures.Add(this.Content.Load<Texture2D>("Default_Wall"));
+
+            //Single goal texture.
+            goalTextures = new List<Texture2D>();
+            goalTextures.Add(this.Content.Load<Texture2D>("Default_Goal"));
 
             // Order player textures from lowest to highest. (Alex wishes this was a robot.)
             playerTextures = new List<Texture2D>();
@@ -169,16 +187,6 @@ namespace Chaos_University
             playerTextures.Add(this.Content.Load<Texture2D>("Default_Backpack"));
             playerTextures.Add(this.Content.Load<Texture2D>("Default_Head"));
             playerTextures.Add(this.Content.Load<Texture2D>("Default_Bandana"));
-
-            tileTextures = new List<Texture2D>();
-            tileTextures.Add(gridFloor);
-            tileTextures.Add(gridNorth);
-            tileTextures.Add(gridEast);
-            tileTextures.Add(gridSouth);
-            tileTextures.Add(gridWest);
-
-            wallTextures = new List<Texture2D>();
-            wallTextures.Add(gridWall);
 
             this.LoadLevel(1);
         }
@@ -211,9 +219,9 @@ namespace Chaos_University
             {
                 //TITLE SCREEN
                 case GameState.Title:
-                    if (keyboard.IsKeyDown(Keys.Enter))
+                    if (keyboard.IsKeyDown(Keys.Enter) && keyboardPrev.IsKeyUp(Keys.Enter)) //Press enter to play.
                     {
-                        current = GameState.PlacingTiles;
+                        current = GameState.Playing;
                     }
                     break;
 
@@ -222,38 +230,46 @@ namespace Chaos_University
                     break;
 
                 //PLACING TILES
-                case GameState.PlacingTiles:
-                    if (mouse.LeftButton == ButtonState.Pressed && mousePrev.LeftButton == ButtonState.Released)
+                case GameState.Playing:
+                    //Mouse click to change tiles. Click fails if par is reached.
+                    if (mouse.LeftButton == ButtonState.Pressed && mousePrev.LeftButton == ButtonState.Released && playerChar.ParCount < level.Par)
                     {
-                        //Place or turn direction tile at gameGrid[j / gamePieceSize, i / gamePieceSize]
-                        Console.WriteLine(mouse.X + " " + mouse.Y);
                         try
                         {
-                            level.GetGamePiece(
-                                (int)(mouse.X / GlobalVar.TILESIZE),
-                                (int)(mouse.Y / GlobalVar.TILESIZE)).IncrementType();
+                            int clickNowX = mouse.X / GlobalVar.TILESIZE;
+                            int clickNowY = mouse.Y / GlobalVar.TILESIZE;
+                            //Change tile at mouse location.
+                            level.GetGamePiece(clickNowX, clickNowY).IncrementType();
+                            //Increment parCount if tile changed is a new tile.
+                            if(clickNowX != clickPrevX || clickNowY != clickPrevY)
+                            {
+                                clickPrevX = clickNowX;
+                                clickPrevY = clickNowY;
+                                playerChar.ParCount++;
+                            }
                         }
-                        catch (IndexOutOfRangeException) { }
+                        catch (IndexOutOfRangeException) { }    //Catch and ignore exception that mouse is beyond map.
                     }
-                    if(keyboard.IsKeyDown(Keys.Enter) && keyboardPrev.IsKeyUp(Keys.Enter))
-                    {
-                        current = GameState.Playing;
-                    }
-                    break;
 
-                //RUNNING SEQUENCE
-                case GameState.Playing:
+                    //Pressing enter makes the player start move.
+                    if(keyboard.IsKeyDown(Keys.Enter) && keyboardPrev.IsKeyUp(Keys.Enter) && !playerChar.Moving)
+                    {
+                        playerChar.Moving = true;
+                    }
+
+                    //Move Player
                     playerChar.Move((int)(100 * (float)gameTime.ElapsedGameTime.TotalSeconds));
 
+                    //For all gamepieces, check for direcion changes or collisions.
                     for (int j = 0; j < level.Height; ++j)
                     {
-                        for (int i = 0; i < level.Height; ++i)
+                        for (int i = 0; i < level.Width; ++i)
                         {
+                            //If player on direction tile.
                             if(level.GetGamePiece(i,j).PositionRect.Center == playerChar.PositionRect.Center)
                             {
-                                GamePiece subPiece = level.GetGamePiece(i, j);
-
-                                switch (subPiece.PieceState)
+                                //Turn player based on tile direction.
+                                switch (level.GetGamePiece(i, j).PieceState)
                                 {
                                     case PieceState.Floor:
                                         break;
@@ -269,14 +285,45 @@ namespace Chaos_University
                                     case PieceState.West:
                                         playerChar.turn(3);
                                         break;
+                                    case PieceState.Goal:
+                                        current = GameState.GameOver;
+                                        break;
                                 }
                             }
+
+                            //If game piece is a wall.
                             if(level.GetGamePiece(i,j).PieceState == PieceState.Wall)
                             {
+                                //Check if player collided with it.
                                 if(level.GetGamePiece(i,j).CheckCollision(playerChar))
                                 {
                                     playerChar.PositionRect = playerStart;
                                     playerChar.turn(0);
+                                    playerChar.Tries--;
+                                    playerChar.ParCount = 0;
+                                    playerChar.Moving = false;
+
+                                    //Reset all direction tiles.
+                                    for (int b = 0; b < level.Height; ++b)
+                                    {
+                                        for (int a = 0; a < level.Width; ++a)
+                                        {
+                                            if(level.GetGamePiece(a, b).PieceState == PieceState.North ||
+                                                level.GetGamePiece(a, b).PieceState == PieceState.East ||
+                                                level.GetGamePiece(a, b).PieceState == PieceState.South ||
+                                                level.GetGamePiece(a, b).PieceState == PieceState.West)
+                                            {
+                                                level.GetGamePiece(a, b).PieceState = PieceState.Floor;
+                                                level.GetGamePiece(a, b).IndexTexture = 0;
+                                            }
+                                        }
+                                    }
+
+                                    //Induce Game over if player tries = 0;
+                                    if(playerChar.Tries == 0)
+                                    {
+                                        current = GameState.GameOver;
+                                    }
                                 }
                             }
                         }
@@ -285,6 +332,10 @@ namespace Chaos_University
 
                 //GAME OVER
                 case GameState.GameOver:
+                    if (keyboard.IsKeyDown(Keys.Enter) && keyboardPrev.IsKeyUp(Keys.Enter))
+                    {
+                        current = GameState.Title;
+                    }
                     break;
             }
 
@@ -328,20 +379,41 @@ namespace Chaos_University
                 case GameState.Menus:
                     break;
 
-                //PLACING TILES
-                case GameState.PlacingTiles:
-                    level.Draw(spriteBatch);
-                    playerChar.Draw(spriteBatch);
-                    break;
-
                 //RUNNING SEQUENCE
                 case GameState.Playing:
+                    if (playerChar.ParCount < level.Par)
+                    {
+                        spriteBatch.DrawString(menuFont,    //Draw Par UI Element.
+                            String.Format("Par:   {0} of {1}", playerChar.ParCount, level.Par),
+                            new Vector2(25, GraphicsDevice.Viewport.Height - 26),
+                            Color.White);
+                    }
+                    else
+                    {
+                        spriteBatch.DrawString(menuFont,    //Draw maxed out Par UI Element.
+                            String.Format("Par:   {0} of {1} (CANNOT CHANGE ADDITIONAL TILES.)", playerChar.ParCount, level.Par),
+                            new Vector2(25, GraphicsDevice.Viewport.Height - 26),
+                            Color.White);
+                    }
+                    spriteBatch.DrawString(menuFont,        //Draw Tries Counter.
+                        String.Format("Tries: {0}", playerChar.Tries),
+                        new Vector2(25, GraphicsDevice.Viewport.Height - 50),
+                        Color.White);
                     level.Draw(spriteBatch);
                     playerChar.Draw(spriteBatch);
                     break;
 
                 //GAME OVER
                 case GameState.GameOver:
+                    spriteBatch.DrawString(headerFont,  //Draw Title
+                        "GAME OVER",
+                        new Vector2(GraphicsDevice.Viewport.Width / 2, 0),
+                        Color.White,
+                        0.0f,
+                        new Vector2(menuPos.X / 2, 0),
+                        new Vector2(1.2f, 1.0f),
+                        SpriteEffects.None,
+                        0);
                     break;
             }
 
