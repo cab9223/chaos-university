@@ -36,6 +36,7 @@ namespace Chaos_University
             }
         }
 
+        //Vector drection To Draw Textures at.
         private Vector2 vector;
         public Vector2 Vector
         {
@@ -49,11 +50,17 @@ namespace Chaos_University
             }
         }
 
-        public MoveableGamePiece(int x, int y, int dir, List<Texture2D> textures) //Constructor
+        //Constructor
+        public MoveableGamePiece(int x, int y, int dir, List<Texture2D> textures)
             : base(x, y, textures)
         {
             direction = dir;
             vector = new Vector2(0, -1);
+        }
+
+        public virtual void Move(int value)
+        {
+
         }
     }
 }

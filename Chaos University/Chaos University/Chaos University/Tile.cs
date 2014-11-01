@@ -12,42 +12,39 @@ using Microsoft.Xna.Framework.Media;
 namespace Chaos_University
 {
 
-    // Pretty sure we will need a tile class to represent stationary things that take up a spot.
+    // Floor tiles.
     class Tile : GamePiece
     {
+        //Constructor.
         public Tile(int x, int y, List<Texture2D> textures) //Constructor
             : base(x, y, textures)
         {
-            TileState = TileState.Floor;
+            PieceState = PieceState.Floor;
         }
 
-        public override void Draw(SpriteBatch obj)
-        {
-            base.Draw(obj);
-        }
-
+        //Increment floor type to a different type.
         public override void IncrementType()
         {
-            switch(TileState)
+            switch(PieceState)
             {
-                case TileState.Floor:
-                    TileState = TileState.North;
+                case PieceState.Floor:
+                    PieceState = PieceState.North;
                     IndexTexture++;
                     break;
-                case TileState.North:
-                    TileState = TileState.East;
+                case PieceState.North:
+                    PieceState = PieceState.East;
                     IndexTexture++;
                     break;
-                case TileState.East:
-                    TileState = TileState.South;
+                case PieceState.East:
+                    PieceState = PieceState.South;
                     IndexTexture++;
                     break;
-                case TileState.South:
-                    TileState = TileState.West;
+                case PieceState.South:
+                    PieceState = PieceState.West;
                     IndexTexture++;
                     break;
-                case TileState.West:
-                    TileState = TileState.Floor;
+                case PieceState.West:
+                    PieceState = PieceState.Floor;
                     IndexTexture = 0;
                     break;
             }

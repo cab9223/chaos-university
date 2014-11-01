@@ -43,7 +43,7 @@ namespace Chaos_University
         List<Texture2D> playerTextures;
 
         //Base game methods below...
-        int playerMove;
+        Rectangle playerStart;
         Player playerChar;
         GameState current;
 
@@ -119,6 +119,7 @@ namespace Chaos_University
                                     lineNumber * GlobalVar.TILESIZE,
                                     0,
                                     playerTextures);
+                                playerStart = playerChar.PositionRect;
                                 break;
                         }
                         columnNumber++;
@@ -242,49 +243,7 @@ namespace Chaos_University
 
                 //RUNNING SEQUENCE
                 case GameState.Playing:
-                    playerMove = (int)(50 * (float)gameTime.ElapsedGameTime.TotalSeconds);
-
-                    switch (playerChar.Direction)
-                    {
-                        case 0:
-                            playerChar.PositionRect = new Rectangle(
-                                playerChar.PositionRect.X,
-                                playerChar.PositionRect.Y - 1,
-                                playerChar.PositionRect.Width,
-                                playerChar.PositionRect.Height);
-                            break;
-
-                        case 1:
-                            playerChar.PositionRect = new Rectangle(
-                                playerChar.PositionRect.X + 1,
-                                playerChar.PositionRect.Y,
-                                playerChar.PositionRect.Width,
-                                playerChar.PositionRect.Height);
-                            break;
-
-                        case 2:
-                            playerChar.PositionRect = new Rectangle(
-                                playerChar.PositionRect.X,
-                                playerChar.PositionRect.Y + 1,
-                                playerChar.PositionRect.Width,
-                                playerChar.PositionRect.Height);
-                            break;
-
-                        case 3:
-                            playerChar.PositionRect = new Rectangle(
-                                playerChar.PositionRect.X - 1,
-                                playerChar.PositionRect.Y,
-                                playerChar.PositionRect.Width,
-                                playerChar.PositionRect.Height);
-                            break;
-                    }
-
-                    /*
-                    int tempX = (int)(playerChar.PositionRect.X / GlobalVar.TILESIZE);
-                    int tempY = (int)(playerChar.PositionRect.Y / GlobalVar.TILESIZE);
-
-                    GamePiece subPiece = level.GetGamePiece(tempX, tempY)
-                     */
+                    playerChar.Move((int)(100 * (float)gameTime.ElapsedGameTime.TotalSeconds));
 
                     for (int j = 0; j < level.Height; ++j)
                     {
@@ -294,27 +253,34 @@ namespace Chaos_University
                             {
                                 GamePiece subPiece = level.GetGamePiece(i, j);
 
-                                switch (subPiece.TileState)
+                                switch (subPiece.PieceState)
                                 {
-                                    case TileState.Floor:
+                                    case PieceState.Floor:
                                         break;
-                                    case TileState.North:
+                                    case PieceState.North:
                                         playerChar.turn(0);
                                         break;
-                                    case TileState.East:
+                                    case PieceState.East:
                                         playerChar.turn(1);
                                         break;
-                                    case TileState.South:
+                                    case PieceState.South:
                                         playerChar.turn(2);
                                         break;
-                                    case TileState.West:
+                                    case PieceState.West:
                                         playerChar.turn(3);
                                         break;
                                 }
                             }
+                            if(level.GetGamePiece(i,j).PieceState == PieceState.Wall)
+                            {
+                                if(level.GetGamePiece(i,j).CheckCollision(playerChar))
+                                {
+                                    playerChar.PositionRect = playerStart;
+                                    playerChar.turn(0);
+                                }
+                            }
                         }
                     }
-
                     break;
 
                 //GAME OVER

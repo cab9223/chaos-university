@@ -13,8 +13,10 @@ namespace Chaos_University
 {
     abstract class GamePiece
     {
+        //List of textures the object uses.
         public List<Texture2D> listTextures { get; set; } //All GamePiece images
 
+        //Index of the current texture of the object.
         private int indexTexture;
         public int IndexTexture
         {
@@ -29,7 +31,7 @@ namespace Chaos_University
             }
         }
 
-        // Rectangle
+        // Rectangle boundary of object.
         private Rectangle positionRect;
         public Rectangle PositionRect
         {
@@ -44,17 +46,17 @@ namespace Chaos_University
             }
         }
 
-        // Tile State
-        private TileState tileState;
-        public TileState TileState
+        //State of piece with multiple types.
+        private PieceState pieceState;
+        public PieceState PieceState
         {
             get
             {
-                return tileState;
+                return pieceState;
             }
             set
             {
-                tileState = value;
+                pieceState = value;
             }
         }
 
@@ -82,9 +84,20 @@ namespace Chaos_University
             obj.Draw(this.listTextures[indexTexture], positionRect, Color.White);
         }
 
+        //Increments type and texture for pieces with multiple types or textures.
         public virtual void IncrementType()
         {
             IndexTexture = 0;
+        }
+
+        //Checks for object collision.
+        public bool CheckCollision(GamePiece obj)
+        {
+            if (obj.PositionRect.Intersects(this.PositionRect))
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

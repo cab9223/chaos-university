@@ -20,15 +20,5 @@ namespace Chaos_University
         {
             
         }
-
-        //Method Checks to see if object is at goal.
-        public bool CheckCollision(GamePiece obj)
-        {
-            if (obj.PositionRect.Intersects(this.PositionRect))
-            {
-                return true;
-            }
-            return false;
-        }
     }
 }

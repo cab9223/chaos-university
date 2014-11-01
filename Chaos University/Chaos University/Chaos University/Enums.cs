@@ -14,7 +14,7 @@ namespace Chaos_University
         GameOver
     }
 
-    public enum TileState
+    public enum PieceState
     {
         Floor,
         North,

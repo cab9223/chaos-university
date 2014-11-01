@@ -15,17 +15,15 @@ namespace Chaos_University
     // Stuff here is pretty self-explanitory, the imageFile thing is for future implementation of image handling stuff.
     class Player : MoveableGamePiece
     {
-        public string PlrName { get; set; } //Players name
-        
-        //public Majors PlrClass { get; set; } sets major, only for actual use if we implement a major system.
-
-        public Player(int x, int y, int direction, List<Texture2D> textures) //Constructor
+        //Constructor
+        public Player(int x, int y, int direction, List<Texture2D> textures)
             : base(x, y, direction, textures)
         {
             //PlrName = name;  //sets player name
             Console.WriteLine(PositionRect.ToString());
         }
 
+        //Draws all player components.
         public override void Draw(SpriteBatch obj) //Draws player using base draw method
         {             
             StreamReader reader = new StreamReader(TitleContainer.OpenStream("Color.txt"));
@@ -55,6 +53,46 @@ namespace Chaos_University
             }
         }
 
+        //Move Player
+        public override void Move(int distance)
+        {
+            switch (Direction)
+            {
+                case 0:
+                    PositionRect = new Rectangle(
+                        PositionRect.X,
+                        PositionRect.Y - distance,
+                        PositionRect.Width,
+                        PositionRect.Height);
+                    break;
+
+                case 1:
+                    PositionRect = new Rectangle(
+                        PositionRect.X + distance,
+                        PositionRect.Y,
+                        PositionRect.Width,
+                        PositionRect.Height);
+                    break;
+
+                case 2:
+                    PositionRect = new Rectangle(
+                        PositionRect.X,
+                        PositionRect.Y + distance,
+                        PositionRect.Width,
+                        PositionRect.Height);
+                    break;
+
+                case 3:
+                    PositionRect = new Rectangle(
+                        PositionRect.X - distance,
+                        PositionRect.Y,
+                        PositionRect.Width,
+                        PositionRect.Height);
+                    break;
+            }
+        }
+
+        //Turns Player to face a new direction based on standard direction numbers.
         public void turn(int newDirection)
         {
             switch(newDirection)
@@ -76,7 +114,6 @@ namespace Chaos_University
                     Direction = 3;
                     break;
             }
-            Console.WriteLine(Math.Atan2(Vector.Y, Vector.X) + Math.PI / 2);
         }
     }
 }
