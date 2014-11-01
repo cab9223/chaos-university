@@ -50,5 +50,34 @@ namespace Chaos_University
             }
             return true;
         }
+
+        //Decrement floor type to a different type.
+        public override bool DecrementType()
+        {
+            switch (PieceState)
+            {
+                case PieceState.Floor:
+                    PieceState = PieceState.West;
+                    IndexTexture--;
+                    break;
+                case PieceState.North:
+                    PieceState = PieceState.Floor;
+                    IndexTexture = 0;
+                    break;
+                case PieceState.East:
+                    PieceState = PieceState.North;
+                    IndexTexture--;
+                    break;
+                case PieceState.South:
+                    PieceState = PieceState.East;
+                    IndexTexture--;
+                    break;
+                case PieceState.West:
+                    PieceState = PieceState.South;
+                    IndexTexture --;
+                    break;
+            }
+            return true;
+        }
     }
 }

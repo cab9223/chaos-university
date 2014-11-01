@@ -75,6 +75,7 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Money.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="GamePiece.cs" />
     <Compile Include="GlobalVar.cs" />

@@ -41,6 +41,7 @@ namespace Chaos_University
         List<Texture2D> wallTextures;
         List<Texture2D> goalTextures;
         List<Texture2D> playerTextures;
+        List<Texture2D> moneyTextures;
 
         public Game1()
         {
@@ -109,6 +110,17 @@ namespace Chaos_University
                                     columnNumber * GlobalVar.TILESIZE,
                                     lineNumber * GlobalVar.TILESIZE,
                                     wallTextures));
+                                break;
+                            //M = Moneh
+                            case 'M':
+                                level.SetTile(columnNumber, lineNumber, new Tile(
+                                    columnNumber * GlobalVar.TILESIZE,
+                                    lineNumber * GlobalVar.TILESIZE,
+                                    tileTextures));
+                                level.AddObject(new Money(
+                                    columnNumber * GlobalVar.TILESIZE,
+                                    lineNumber * GlobalVar.TILESIZE,
+                                    moneyTextures));
                                 break;
                             //F = Goal
                             case 'F':
@@ -212,6 +224,10 @@ namespace Chaos_University
             goalTextures = new List<Texture2D>();
             goalTextures.Add(this.Content.Load<Texture2D>("Default_Goal"));
 
+            //Single Money texture.
+            moneyTextures = new List<Texture2D>();
+            moneyTextures.Add(this.Content.Load<Texture2D>("Default_Collect"));
+
             // Order player textures from lowest to highest. (Alex wishes this was a robot.)
             playerTextures = new List<Texture2D>();
             playerTextures.Add(this.Content.Load<Texture2D>("Default_Body"));
@@ -263,8 +279,8 @@ namespace Chaos_University
 
                 //PLACING TILES
                 case GameState.Playing:
-                    //Mouse click to change tiles. Click fails if par is reached.
-                    if (mouse.LeftButton == ButtonState.Pressed && mousePrev.LeftButton == ButtonState.Released && playerChar.ParCount < level.Par)
+                    //Mouse click to change tiles. Click fails beyond par.
+                    if (mouse.LeftButton == ButtonState.Pressed && mousePrev.LeftButton == ButtonState.Released && playerChar.ParCount <= level.Par)
                     {
                         try
                         {
@@ -276,9 +292,14 @@ namespace Chaos_University
                                 //Increment parCount if tile changed is a new tile.
                                 if (clickNowX != clickPrevX || clickNowY != clickPrevY)
                                 {
+                                    playerChar.ParCount++;
                                     clickPrevX = clickNowX;
                                     clickPrevY = clickNowY;
-                                    playerChar.ParCount++;
+                                    //Reverses any click beyond par.
+                                    if (playerChar.ParCount == level.Par + 1)
+                                    {
+                                        level.GetGamePiece(clickPrevX, clickPrevY).DecrementType();
+                                    }
                                 }
                             }
                         }
@@ -299,7 +320,7 @@ namespace Chaos_University
                     //Move Player
                     playerChar.Move((int)(100 * (float)gameTime.ElapsedGameTime.TotalSeconds));
 
-                    //For all gamepieces, check for direcion changes or collisions.
+                    //For all gamepieces in level grid, check for direcion changes or collisions.
                     for (int j = 0; j < level.Height; ++j)
                     {
                         for (int i = 0; i < level.Width; ++i)
@@ -338,6 +359,15 @@ namespace Chaos_University
                                 {
                                     this.Fail();
                                 }
+                            }
+                        }
+
+                        //For all Game Pieces in level object list, check for collision.
+                        foreach (Money gamePiece in level.Monies)
+                        {
+                            if(gamePiece.CheckCollision(playerChar))
+                            {
+                                gamePiece.Active = false;
                             }
                         }
                     }
@@ -398,7 +428,7 @@ namespace Chaos_University
                 case GameState.Menus:
                     break;
 
-                //RUNNING SEQUENCE
+                //PLAYING
                 case GameState.Playing:
                     if (playerChar.ParCount < level.Par)
                     {
@@ -409,8 +439,8 @@ namespace Chaos_University
                     }
                     else
                     {
-                        spriteBatch.DrawString(menuFont,    //Draw maxed out Par UI Element.
-                            String.Format("Par:   {0} of {1} (PAR REACHED)", playerChar.ParCount, level.Par),
+                        spriteBatch.DrawString(menuFont,    //Draw maxed out Par UI Element. Ternary expression stops display from going above par.
+                            String.Format("Par:   {0} of {1} (PAR REACHED)", playerChar.ParCount <= level.Par ? playerChar.ParCount : level.Par, level.Par),
                             new Vector2(25, GraphicsDevice.Viewport.Height - 26),
                             Color.White);
                     }
@@ -428,6 +458,7 @@ namespace Chaos_University
                         Color.White);
                     level.Draw(spriteBatch);
                     playerChar.Draw(spriteBatch);
+
 
                     break;
 

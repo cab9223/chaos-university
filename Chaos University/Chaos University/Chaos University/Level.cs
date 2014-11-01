@@ -14,8 +14,20 @@ namespace Chaos_University
 {
     class Level
     {
-        GamePiece[,] grid;              //Grid of game pieces
-        private int gamePieceSize;      //Height of width of a game piece
+        private GamePiece[,] grid;          //Grid of game pieces
+        private int gamePieceSize;          //Height of width of a game piece
+        private List<Money> monies;    //List of non-grid objects on map.
+        public List<Money> Monies
+        {
+            get
+            {
+                return monies;
+            }
+            set
+            {
+                monies = value;
+            }
+        }
 
         //Width of map (measured in tiles) 6 = 6 tiles wide.
         private int width;
@@ -59,7 +71,6 @@ namespace Chaos_University
             }
         }
 
-
         //Constructor
         public Level(int _width, int _height, int _gamePieceSize, int _par)
         {
@@ -67,6 +78,7 @@ namespace Chaos_University
             height = _height;
             gamePieceSize = _gamePieceSize;
             grid = new GamePiece[_width, _height];
+            monies = new List<Money>();
             par = _par;
         }
 
@@ -81,6 +93,12 @@ namespace Chaos_University
             grid[x_index, y_index] = newGamePiece;
         }
 
+        //Adds an object to the list of game pieces.
+        public void AddObject(Money newGamePiece)
+        {
+            monies.Add(newGamePiece);
+        }
+
         //Draws each object in the grid.
         public void Draw(SpriteBatch obj)
         {
@@ -90,6 +108,10 @@ namespace Chaos_University
                 {
                     grid[i, j].Draw(obj);
                 }
+            }
+            foreach (GamePiece gamePiece in monies)
+            {
+                gamePiece.Draw(obj);
             }
         }
 

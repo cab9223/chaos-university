@@ -91,6 +91,13 @@ namespace Chaos_University
             return false;
         }
 
+        //Decrements type and texture for pieces with multiple types or textures.
+        //Returns false by default. Objects that can be incremented like Tile return true.
+        public virtual bool DecrementType()
+        {
+            return false;
+        }
+
         //Checks for object collision.
         public bool CheckCollision(GamePiece obj)
         {
