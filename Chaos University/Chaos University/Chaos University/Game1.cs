@@ -33,6 +33,8 @@ namespace Chaos_University
         GameState current;          //State of the game (title, menu, playing, gameover, etc.)
 
         Vector2 menuPos;            //Position of the menu header
+        Vector2 gameOverPos;        //Position of the game over screen.
+        Vector2 levelCompPos;       //Position of the level complete screen.
         SpriteFont menuFont;        //Font of menu text
         SpriteFont headerFont;      //Font of header text
 
@@ -168,6 +170,7 @@ namespace Chaos_University
             playerChar.Tries--;                     //Reduce number of tries player has.
             playerChar.ParCount = 0;                //Reset par for player.
             playerChar.Moving = false;              //Halt player.
+            level.ActivateMoney();                  //Reset monies.
 
             //Reset all direction tiles.
             for (int b = 0; b < level.Height; ++b)
@@ -207,6 +210,8 @@ namespace Chaos_University
             headerFont = this.Content.Load<SpriteFont>("MenuHeaderFont");
 
             menuPos = headerFont.MeasureString("CHAOS UNIVERSITY");
+            gameOverPos = headerFont.MeasureString("GAME OVER");
+            levelCompPos = headerFont.MeasureString("LEVEL COMPLETE");
 
             // Order tile textures in order that they appear when clicked.
             tileTextures = new List<Texture2D>();
@@ -346,7 +351,7 @@ namespace Chaos_University
                                         playerChar.turn(3);
                                         break;
                                     case PieceState.Goal:
-                                        current = GameState.GameOver;
+                                        current = GameState.LevelComp;
                                         break;
                                 }
                             }
@@ -372,7 +377,13 @@ namespace Chaos_University
                         }
                     }
                     break;
-
+                //LEVEL COMPLETE
+                case GameState.LevelComp:
+                    if (keyboard.IsKeyDown(Keys.Enter) && keyboardPrev.IsKeyUp(Keys.Enter))
+                    {
+                        current = GameState.Title;
+                    }
+                    break;
                 //GAME OVER
                 case GameState.GameOver:
                     if (keyboard.IsKeyDown(Keys.Enter) && keyboardPrev.IsKeyUp(Keys.Enter))
@@ -403,7 +414,8 @@ namespace Chaos_University
             {
                 //TITLE SCREEN
                 case GameState.Title:
-                    spriteBatch.DrawString(headerFont,  //Draw Title
+                    //Draw Title
+                    spriteBatch.DrawString(headerFont,
                         "CHAOS UNIVERSITY",
                         new Vector2(GraphicsDevice.Viewport.Width / 2, 0),
                         Color.White,
@@ -412,13 +424,15 @@ namespace Chaos_University
                         new Vector2(1.2f, 1.0f),
                         SpriteEffects.None,
                         0);
-                    spriteBatch.DrawString(menuFont,    //Draw Directions.
+                    //Draw Directions.
+                    spriteBatch.DrawString(menuFont,
                         "Use the mouse to select tiles and change them to direction tiles.\n" +
                         "You can place tiles before or during player movement.\n" +
                         "You have a limited number of tries to place tiles.",
                         new Vector2(25, 100),
                         Color.White);
-                    spriteBatch.DrawString(menuFont,    //Draw Press Enter Prompt
+                    //Draw Press Enter Prompt
+                    spriteBatch.DrawString(menuFont,
                         "Press enter to continue.",
                         new Vector2(25, GraphicsDevice.Viewport.Height - 26),
                         Color.White);
@@ -430,49 +444,82 @@ namespace Chaos_University
 
                 //PLAYING
                 case GameState.Playing:
+                    //Draw Par UI Element.
                     if (playerChar.ParCount < level.Par)
                     {
-                        spriteBatch.DrawString(menuFont,    //Draw Par UI Element.
+                        spriteBatch.DrawString(menuFont,
                             String.Format("Par:   {0} of {1}", playerChar.ParCount, level.Par),
                             new Vector2(25, GraphicsDevice.Viewport.Height - 26),
                             Color.White);
                     }
+                    //Draw maxed out Par UI Element. Ternary expression stops display from going above par.
                     else
                     {
-                        spriteBatch.DrawString(menuFont,    //Draw maxed out Par UI Element. Ternary expression stops display from going above par.
+                        spriteBatch.DrawString(menuFont,    
                             String.Format("Par:   {0} of {1} (PAR REACHED)", playerChar.ParCount <= level.Par ? playerChar.ParCount : level.Par, level.Par),
                             new Vector2(25, GraphicsDevice.Viewport.Height - 26),
                             Color.White);
                     }
-                    spriteBatch.DrawString(menuFont,        //Draw Tries Counter.
+                    //Draw Tries Counter.
+                    spriteBatch.DrawString(menuFont,
                         String.Format("Tries: {0}", playerChar.Tries),
                         new Vector2(25, GraphicsDevice.Viewport.Height - 50),
                         Color.White);
-                    spriteBatch.DrawString(menuFont,        //Draw Enter Directions.
+                    //Draw Enter Directions.
+                    spriteBatch.DrawString(menuFont,
                         "Press Enter to start movement.",
                         new Vector2(420, GraphicsDevice.Viewport.Height - 26),
                         Color.White);
-                    spriteBatch.DrawString(menuFont,        //Draw Reset Directions.
+                    //Draw Reset Directions.
+                    spriteBatch.DrawString(menuFont,
                         "Press R to reset.",
                         new Vector2(420, GraphicsDevice.Viewport.Height - 50),
                         Color.White);
                     level.Draw(spriteBatch);
                     playerChar.Draw(spriteBatch);
+                    break;
 
-
+                //Level Complete feedback screen.
+                case GameState.LevelComp:
+                    //Draw LEVEL COMPLETE
+                    spriteBatch.DrawString(headerFont,
+                        "LEVEL COMPLETE",
+                        new Vector2(GraphicsDevice.Viewport.Width / 2, 0),
+                        Color.White,
+                        0.0f,
+                        new Vector2(levelCompPos.X / 2, 0),
+                        new Vector2(1.2f, 1.0f),
+                        SpriteEffects.None,
+                        0);
+                    //Draw Items collected.
+                    spriteBatch.DrawString(menuFont,
+                        String.Format("Items Collected: {0} of {1}", level.Monies.Count - level.GetMoneyCount(), level.Monies.Count),
+                        new Vector2(25, 100),
+                        Color.White);
+                    //Draw Press Enter Prompt
+                    spriteBatch.DrawString(menuFont,
+                        "Press enter to continue.",
+                        new Vector2(25, GraphicsDevice.Viewport.Height - 26),
+                        Color.White);
                     break;
 
                 //GAME OVER
                 case GameState.GameOver:
-                    spriteBatch.DrawString(headerFont,  //Draw Title
+                    //Draw GAME OVER
+                    spriteBatch.DrawString(headerFont,
                         "GAME OVER",
                         new Vector2(GraphicsDevice.Viewport.Width / 2, 0),
                         Color.White,
                         0.0f,
-                        new Vector2(menuPos.X / 2, 0),
+                        new Vector2(gameOverPos.X / 2, 0),
                         new Vector2(1.2f, 1.0f),
                         SpriteEffects.None,
                         0);
+                    //Draw Press Enter Prompt
+                    spriteBatch.DrawString(menuFont,
+                        "Press enter to continue.",
+                        new Vector2(25, GraphicsDevice.Viewport.Height - 26),
+                        Color.White);
                     break;
             }
 

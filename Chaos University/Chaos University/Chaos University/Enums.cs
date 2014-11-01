@@ -9,8 +9,8 @@ namespace Chaos_University
     {
         Title,
         Menus,
-        PlacingTiles,
         Playing,
+        LevelComp,
         GameOver
     }
 

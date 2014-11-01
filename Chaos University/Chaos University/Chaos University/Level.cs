@@ -16,7 +16,7 @@ namespace Chaos_University
     {
         private GamePiece[,] grid;          //Grid of game pieces
         private int gamePieceSize;          //Height of width of a game piece
-        private List<Money> monies;    //List of non-grid objects on map.
+        private List<Money> monies;         //List of non-grid objects on map. (currently exclusively monies).
         public List<Money> Monies
         {
             get
@@ -93,7 +93,7 @@ namespace Chaos_University
             grid[x_index, y_index] = newGamePiece;
         }
 
-        //Adds an object to the list of game pieces.
+        //Adds a money to the list of game monies.
         public void AddObject(Money newGamePiece)
         {
             monies.Add(newGamePiece);
@@ -113,6 +113,27 @@ namespace Chaos_University
             {
                 gamePiece.Draw(obj);
             }
+        }
+
+        //Activate all monies
+        public void ActivateMoney()
+        {
+            foreach (Money countedMoney in monies)
+            {
+                countedMoney.Active = true;
+            }
+        }
+
+        //Returns number of active monies
+        public int GetMoneyCount()
+        {
+            int count = 0;
+            foreach(Money countedMoney in monies)
+            {
+                if (countedMoney.Active)
+                    count++;
+            }
+            return count;
         }
 
         //Returns a specific piece in the grid.
