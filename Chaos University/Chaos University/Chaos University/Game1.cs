@@ -14,7 +14,6 @@ namespace Chaos_University
 {
     /// <summary>
     /// This is the main type for your game
-    /// TESTING BRANCHING
     /// </summary>
     public class Game1 : Microsoft.Xna.Framework.Game
     {
@@ -39,8 +38,12 @@ namespace Chaos_University
         Texture2D gridWest;
         Texture2D gridWall;
         Texture2D gridFloor;
+        List<Texture2D> tileTextures;
+        List<Texture2D> wallTextures;
+        List<Texture2D> playerTextures;
 
         //Base game methods below...
+        int playerMove;
         Player playerChar;
         GameState current;
 
@@ -79,111 +82,49 @@ namespace Chaos_University
                 //mapfiles will be one line long to avoid dealing with newlines. Also, assuming mapfile resides in bin.
                 input = new StreamReader(file);
                 string line = "";
-                line = input.ReadLine();
 
-                string[] indexs = line.Split(' ');
-
-                int tempWidth = Int32.Parse(indexs[0]);
-                int tempHeight = Int32.Parse(indexs[1]);
+                int tempWidth = int.Parse(input.ReadLine());
+                int tempHeight = int.Parse(input.ReadLine());
+                int columnNumber;
+                int lineNumber = 0;
 
                 level = new Level(tempWidth, tempHeight, GlobalVar.TILESIZE);
 
-                line = input.ReadLine();
-
-                //makes an array based of split on [space]. format is (classType,Xcord,Ycord)
-                string[] fullMap = line.Split(' ');
-
-                //gets total number of objects from mapfile
-                int mapSize = fullMap.Length;
-
-                int loopCount = 0;
-
-                //will loop through all objects in map file and create new class objects based on fullMap[] string
-                while (loopCount != mapSize)
+                while((line = input.ReadLine()) != null)
                 {
-                    //classCord now holds info as such: [0] class name [1] Xcord [2] Ycord | Possible [3] for direction
-                    string[] classCord = fullMap[loopCount].Split(',');
-
-                    string className = classCord[0];
-
-                    //if array has a 4th element for direction, will do special things. Not fully useable till .pngs are made
-                    /* int checkDir = classCord.Length;
-
-                     if (checkDir == 4)
-                     {
-                         if (className == "player")
-                         {
-                             int TempX = Int32.Parse(classCord[1]);
-                             int TempY = Int32.Parse(classCord[2]);
-                             int Direction = Int32.Parse(classCord[3]);
-
-                             Player player = new Player(TempX, TempY, Direction, name, something.png);
-                         }
-                      
-                         if (calssName == "guard")
-                         {
-                             int TempX = Int32.Parse(classCord[1]);
-                             int TempY = Int32.Parse(classCord[2]);
-                             int Direction = Int32.Parse(classCord[3]);
-                      
-                             Enemy guard = new Enemy(TempX, TempY, Direction, name, something.png);
-                     }
-                     
-                     */
-
-                    //creates new class objects depending on classname at classCord[0]
-
-                    if (className == "player")
+                    columnNumber = 0;
+                    foreach(char block in line)
                     {
-                        int TempX = Int32.Parse(classCord[1]);
-                        int TempY = Int32.Parse(classCord[2]);
-                        int Direction = Int32.Parse(classCord[3]);
-
-                        Player playerChar = new Player(TempX, TempY, Direction);
+                        switch(block)
+                        {
+                            default:
+                                level.SetTile(columnNumber, lineNumber, new Tile(
+                                    columnNumber * GlobalVar.TILESIZE,
+                                    lineNumber * GlobalVar.TILESIZE,
+                                    tileTextures));
+                                break;
+                            case '1':
+                                level.SetTile(columnNumber, lineNumber, new Wall(
+                                    columnNumber * GlobalVar.TILESIZE,
+                                    lineNumber * GlobalVar.TILESIZE,
+                                    wallTextures));
+                                break;
+                            case 'X':
+                                level.SetTile(columnNumber, lineNumber, new Tile(
+                                    columnNumber * GlobalVar.TILESIZE,
+                                    lineNumber * GlobalVar.TILESIZE,
+                                    tileTextures));
+                                playerChar = new Player(
+                                    columnNumber * GlobalVar.TILESIZE,
+                                    lineNumber * GlobalVar.TILESIZE,
+                                    0,
+                                    playerTextures);
+                                break;
+                        }
+                        columnNumber++;
                     }
-
-                    if (className == "wall")
-                    {
-                        int TempX = Int32.Parse(classCord[1]);
-                        int TempY = Int32.Parse(classCord[2]);
-
-                        level.SetTile(TempX, TempY, new Wall(TempX * GlobalVar.TILESIZE, TempY * GlobalVar.TILESIZE));
-                        // will most likly add this to a list or something like that
-
-                    }
-
-                    if (className == "money") //Money now takes 3 arguments
-                    {
-                        int TempX = Int32.Parse(classCord[1]);
-                        int TempY = Int32.Parse(classCord[2]);
-                        //int amount = Int32.Parse(classCord[3]);
-
-                        //level.SetTile(TempX, TempY, new Money(TempX * GlobalVar.TILESIZE, TempY * GlobalVar.TILESIZE, amount));
-                        //This now takes an amount int, if any adjustments need to be made
-                    }
-
-                    if (className == "goal")
-                    {
-                        int TempX = Int32.Parse(classCord[1]);
-                        int TempY = Int32.Parse(classCord[2]);
-
-                        level.SetTile(TempX, TempY, new Goal(TempX * GlobalVar.TILESIZE, TempY * GlobalVar.TILESIZE));
-                    }
-
-                    if (className == "trap") //Trap now takes 3 arguments
-                    {
-                        int TempX = Int32.Parse(classCord[1]);
-                        int TempY = Int32.Parse(classCord[2]);
-                        string type = classCord[3];
-
-                        level.SetTile(TempX, TempY, new Traps(TempX * GlobalVar.TILESIZE, TempY * GlobalVar.TILESIZE, "MvtTrap"));
-                        //This now takes trap type string, if you need to make any adjustments
-                    }
-
-                    loopCount++;
+                    lineNumber++;
                 }
-                //closes reader
-                input.Close();
             }
             //Close if File Not Found. (Change to send an error message?)
             catch(FileNotFoundException)
@@ -206,16 +147,7 @@ namespace Chaos_University
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            this.LoadLevel(1);
-            playerChar = new Player(0, 0, 0);
-
             // TODO: use this.Content to load your game content here
-            // Order player textures from lowest to highest. (Alex wishes this was a robot.)
-            playerChar.CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Body"));
-            playerChar.CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Vest"));
-            playerChar.CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Backpack"));
-            playerChar.CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Head"));
-            playerChar.CurrentTexture.Add(this.Content.Load<Texture2D>("Default_Bandana"));
 
             menuFont = this.Content.Load<SpriteFont>("MenuFont");
             headerFont = this.Content.Load<SpriteFont>("MenuHeaderFont");
@@ -229,37 +161,25 @@ namespace Chaos_University
             gridWall = this.Content.Load<Texture2D>("Default_Tile");
             gridFloor = this.Content.Load<Texture2D>("Default_Wall");
 
-            for (int j = 0; j < level.Width; j++)
-            {
-                for (int i = 0; i < level.Height; i++)
-                {
-                    //If trap.
-                    if (level.GetGamePiece(i, j).Type == "MvtTrap")
-                    {
-                        level.GetGamePiece(i, j).CurrentTexture.Add(gridFloor);
-                    }
-                    //If tile.
-                    else if (level.GetGamePiece(i, j).Type == "Tile")
-                    {
-                        level.GetGamePiece(i, j).CurrentTexture.Add(gridFloor);
-                        level.GetGamePiece(i, j).CurrentTexture.Add(gridNorth);
-                        level.GetGamePiece(i, j).CurrentTexture.Add(gridEast);
-                        level.GetGamePiece(i, j).CurrentTexture.Add(gridSouth);
-                        level.GetGamePiece(i, j).CurrentTexture.Add(gridWest);
-                    }
-                    //If wall.
-                    else if (level.GetGamePiece(i, j).Type == "Wall")
-                    {
-                        level.GetGamePiece(i, j).CurrentTexture.Add(gridWall);
-                    }
-                    //If unhandled object type, make it a tile.
-                    else
-                    {
-                        level.SetTile(i, j, new Tile(i * GlobalVar.TILESIZE, j * GlobalVar.TILESIZE));
-                        level.GetGamePiece(i, j).CurrentTexture.Add(gridFloor);
-                    }
-                }
-            }
+            // Order player textures from lowest to highest. (Alex wishes this was a robot.)
+            playerTextures = new List<Texture2D>();
+            playerTextures.Add(this.Content.Load<Texture2D>("Default_Body"));
+            playerTextures.Add(this.Content.Load<Texture2D>("Default_Vest"));
+            playerTextures.Add(this.Content.Load<Texture2D>("Default_Backpack"));
+            playerTextures.Add(this.Content.Load<Texture2D>("Default_Head"));
+            playerTextures.Add(this.Content.Load<Texture2D>("Default_Bandana"));
+
+            tileTextures = new List<Texture2D>();
+            tileTextures.Add(gridFloor);
+            tileTextures.Add(gridNorth);
+            tileTextures.Add(gridEast);
+            tileTextures.Add(gridSouth);
+            tileTextures.Add(gridWest);
+
+            wallTextures = new List<Texture2D>();
+            wallTextures.Add(gridWall);
+
+            this.LoadLevel(1);
         }
 
         /// <summary>
@@ -322,23 +242,79 @@ namespace Chaos_University
 
                 //RUNNING SEQUENCE
                 case GameState.Playing:
-                    // Collision detection, for playing the game.
-                    // We probably want this to hold for a second then move the player by GlobalVar.TileSize pixels.
-                    // Holding for a second so that it's actually visible what happens- and it's not like we have a reason to
-                    // code this thing to take real-time input.
-                    /*for (int j = 0; j < (GlobalVar.GAMEWIDTH / GlobalVar.TILESIZE); j++)
+                    playerMove = (int)(50 * (float)gameTime.ElapsedGameTime.TotalSeconds);
+
+                    switch (playerChar.Direction)
                     {
-                        for (int i = 0; i < (GlobalVar.GAMEHEIGHT / GlobalVar.TILESIZE); i++)
+                        case 0:
+                            playerChar.PositionRect = new Rectangle(
+                                playerChar.PositionRect.X,
+                                playerChar.PositionRect.Y - 1,
+                                playerChar.PositionRect.Width,
+                                playerChar.PositionRect.Height);
+                            break;
+
+                        case 1:
+                            playerChar.PositionRect = new Rectangle(
+                                playerChar.PositionRect.X + 1,
+                                playerChar.PositionRect.Y,
+                                playerChar.PositionRect.Width,
+                                playerChar.PositionRect.Height);
+                            break;
+
+                        case 2:
+                            playerChar.PositionRect = new Rectangle(
+                                playerChar.PositionRect.X,
+                                playerChar.PositionRect.Y + 1,
+                                playerChar.PositionRect.Width,
+                                playerChar.PositionRect.Height);
+                            break;
+
+                        case 3:
+                            playerChar.PositionRect = new Rectangle(
+                                playerChar.PositionRect.X - 1,
+                                playerChar.PositionRect.Y,
+                                playerChar.PositionRect.Width,
+                                playerChar.PositionRect.Height);
+                            break;
+                    }
+
+                    /*
+                    int tempX = (int)(playerChar.PositionRect.X / GlobalVar.TILESIZE);
+                    int tempY = (int)(playerChar.PositionRect.Y / GlobalVar.TILESIZE);
+
+                    GamePiece subPiece = level.GetGamePiece(tempX, tempY)
+                     */
+
+                    for (int j = 0; j < level.Height; ++j)
+                    {
+                        for (int i = 0; i < level.Height; ++i)
                         {
-                            if (playerChar.CheckPosition(level.GetGamePiece(i, j)))
+                            if(level.GetGamePiece(i,j).PositionRect.Center == playerChar.PositionRect.Center)
                             {
-                                //tileGrid[i, j].ThingIn.HitTrap(playerChar);
+                                GamePiece subPiece = level.GetGamePiece(i, j);
+
+                                switch (subPiece.TileState)
+                                {
+                                    case TileState.Floor:
+                                        break;
+                                    case TileState.North:
+                                        playerChar.turn(0);
+                                        break;
+                                    case TileState.East:
+                                        playerChar.turn(1);
+                                        break;
+                                    case TileState.South:
+                                        playerChar.turn(2);
+                                        break;
+                                    case TileState.West:
+                                        playerChar.turn(3);
+                                        break;
+                                }
                             }
                         }
-                    }*/
+                    }
 
-                    // Don't do anything else for another second.
-                    System.Threading.Thread.Sleep(1000);
                     break;
 
                 //GAME OVER

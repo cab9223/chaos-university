@@ -13,12 +13,6 @@ namespace Chaos_University
 {
     abstract class MoveableGamePiece : GamePiece
     {
-        public MoveableGamePiece(int x, int y, int dir) //Constructor
-            : base(x, y)
-        {
-            direction = dir;
-        }
-
         // standard 4-direction setup.
         // 0 = Up, 1 = Right, 2 = Down, 3 = Left
         private int direction;
@@ -42,21 +36,24 @@ namespace Chaos_University
             }
         }
 
-        //Don't think this is needed. Am now using stuff that was gone over in class 10/26 to change position.
-        /*public int X //Property easily sets Position Rectangles X value
+        private Vector2 vector;
+        public Vector2 Vector
         {
-            get { return positionRect.X; }
-            set { positionRect.X = value; }
+            get
+            {
+                return vector;
+            }
+            set
+            {
+                vector = value;
+            }
         }
 
-        public int Y //Property easily sets Position Rectangles Y value
+        public MoveableGamePiece(int x, int y, int dir, List<Texture2D> textures) //Constructor
+            : base(x, y, textures)
         {
-            get { return positionRect.Y; }
-            set { positionRect.Y = value; }
-        }*/
-
-
-        public abstract void Move();
-        
+            direction = dir;
+            vector = new Vector2(0, -1);
+        }
     }
 }

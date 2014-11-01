@@ -13,4 +13,14 @@ namespace Chaos_University
         Playing,
         GameOver
     }
+
+    public enum TileState
+    {
+        Floor,
+        North,
+        East,
+        South,
+        West,
+        Wall
+    }
 }

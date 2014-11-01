@@ -27,14 +27,6 @@ namespace Chaos_University
             height = _height;
             gamePieceSize = _gamePieceSize;
             grid = new GamePiece[_width, _height];
-
-            for (int j = 0; j < _width; j++)
-            {
-                for (int i = 0; i < _height; i++)
-                {
-                    grid[i, j] = new Tile(i * GlobalVar.TILESIZE, j * GlobalVar.TILESIZE);
-                }
-            }
         }
 
         public void SetTile(int x_index, int y_index, GamePiece newGamePiece)

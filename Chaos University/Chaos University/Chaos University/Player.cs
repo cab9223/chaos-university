@@ -12,136 +12,71 @@ using System.IO;
 
 namespace Chaos_University
 {
-
     // Stuff here is pretty self-explanitory, the imageFile thing is for future implementation of image handling stuff.
     class Player : MoveableGamePiece
     {
         public string PlrName { get; set; } //Players name
-
-        public int Money { get; set; } //Players cash
-
-        public int Score { get; set; } //Perhaps points accumulated, maybe
         
         //public Majors PlrClass { get; set; } sets major, only for actual use if we implement a major system.
 
-        public Player(int x, int y, int direction) //Constructor
-            : base(x, y, direction)
+        public Player(int x, int y, int direction, List<Texture2D> textures) //Constructor
+            : base(x, y, direction, textures)
         {
             //PlrName = name;  //sets player name
+            Console.WriteLine(PositionRect.ToString());
         }
-
-
-        // Checks position with a single object.
-        public bool CheckPosition(GamePiece thing)
-        {
-            if ((this.PositionRect.X / GlobalVar.TILESIZE == thing.PositionRect.X / GlobalVar.TILESIZE) && (this.PositionRect.Y / GlobalVar.TILESIZE == thing.PositionRect.Y / GlobalVar.TILESIZE))
-            {
-                return true;
-            }
-
-            else
-            {
-                return false;
-            }
-        }
-
-
-        public bool ReduceMoney(int costs) //Reduces money after stage or purchase, if money is negative then returns true for a gameover state
-        {
-            Money = Money - costs;
-
-            if (Money <= 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
 
         public override void Draw(SpriteBatch obj) //Draws player using base draw method
         {             
             StreamReader reader = new StreamReader(TitleContainer.OpenStream("Color.txt"));
             int readColor = Int32.Parse(reader.ReadLine());
-            Rectangle temp;
-            //Draws the five parts of the character on top of each other.
+            //Draws all parts of the character on top of each other.
             switch(readColor)
             {
                 default:
-                    /*
-                    // Draws body.
-                    obj.Draw(CurrentTexture[0], PositionRect, Color.White);
-
-                    //Draws backpack.
-                    temp = new Rectangle(
-                        (PositionRect.X + PositionRect.Right) / 2 + CurrentTexture[4].Width,
-                        PositionRect.Bottom + CurrentTexture[4].Height,
-                        CurrentTexture[4].Width,
-                        CurrentTexture[4].Height);
-                    obj.Draw(CurrentTexture[4], temp, Color.White);
-
-                    // Draws vest.
-                    temp = new Rectangle(
-                        (PositionRect.X + PositionRect.Right)/2 + CurrentTexture[1].Width,
-                        (PositionRect.Y + PositionRect.Bottom)/2 + CurrentTexture[1].Height,
-                        CurrentTexture[1].Width,
-                        CurrentTexture[1].Height);
-
-                    obj.Draw(CurrentTexture[1], temp, Color.White);
-
-                    // Draws head.
-                    temp = new Rectangle(
-                        (PositionRect.X + PositionRect.Right)/2 + CurrentTexture[2].Width,
-                        (PositionRect.Y + PositionRect.Bottom)/2 + CurrentTexture[2].Height,
-                        CurrentTexture[2].Width,
-                        CurrentTexture[2].Height);
-
-                    obj.Draw(CurrentTexture[2], temp, Color.White);
-
-                    // Draws bandana.
-                     */
-
                     //Draws Everything.
-                    temp = new Rectangle(
-                        (PositionRect.X + PositionRect.Right)/2 + CurrentTexture[3].Width,
-                        (PositionRect.Y + PositionRect.Bottom)/2 + CurrentTexture[3].Height,
-                        CurrentTexture[3].Width,
-                        CurrentTexture[3].Height);
-
-                    foreach(Texture2D texture in CurrentTexture)
-                        obj.Draw(texture, temp, Color.White);
+                    foreach (Texture2D texture in listTextures)
+                    {
+                        obj.Draw(
+                            texture,
+                            new Rectangle(
+                                PositionRect.X + PositionRect.Width / 2,
+                                PositionRect.Y + PositionRect.Height / 2,
+                                PositionRect.Width,
+                                PositionRect.Height),
+                            null,
+                            Color.White,
+                            (float)(Math.Atan2(Vector.Y, Vector.X) + Math.PI / 2),
+                            new Vector2(texture.Width / 2, texture.Height / 2),
+                            SpriteEffects.None,
+                            0.0f);
+                    }
                     break;
             }
         }
 
-        // Movement. Switch by direction. Will want to execute one update per seconde, or adjust rate of movement.
-        public override void Move()
+        public void turn(int newDirection)
         {
-            Rectangle temp = PositionRect;
-
-            switch (Direction)
-            {                    
+            switch(newDirection)
+            {
                 case 0:
-                    temp.Y += GlobalVar.TILESIZE;
+                    Vector = new Vector2(0, -1);
+                    Direction = 0;
                     break;
-
                 case 1:
-                    temp.X -= GlobalVar.TILESIZE;
+                    Vector = new Vector2(1, 0);
+                    Direction = 1;
                     break;
-
                 case 2:
-                    temp.Y -= GlobalVar.TILESIZE;
+                    Vector = new Vector2(0, 1);
+                    Direction = 2;
                     break;
-
                 case 3:
-                    temp.X += GlobalVar.TILESIZE;
+                    Vector = new Vector2(-1, 0);
+                    Direction = 3;
                     break;
             }
-
-            PositionRect = temp;
+            Console.WriteLine(Math.Atan2(Vector.Y, Vector.X) + Math.PI / 2);
         }
-
     }
 }
