@@ -85,9 +85,10 @@ namespace Chaos_University
         }
 
         //Increments type and texture for pieces with multiple types or textures.
-        public virtual void IncrementType()
+        //Returns false by default. Objects that can be incremented like Tile return true.
+        public virtual bool IncrementType()
         {
-            IndexTexture = 0;
+            return false;
         }
 
         //Checks for object collision.

@@ -148,6 +148,38 @@ namespace Chaos_University
             }
         }
 
+        // Failure state.
+        private void Fail()
+        {
+            playerChar.PositionRect = playerStart;  //Reset Player Location.
+            playerChar.turn(0);                     //Reset Player Direction.
+            playerChar.Tries--;                     //Reduce number of tries player has.
+            playerChar.ParCount = 0;                //Reset par for player.
+            playerChar.Moving = false;              //Halt player.
+
+            //Reset all direction tiles.
+            for (int b = 0; b < level.Height; ++b)
+            {
+                for (int a = 0; a < level.Width; ++a)
+                {
+                    if (level.GetGamePiece(a, b).PieceState == PieceState.North ||
+                        level.GetGamePiece(a, b).PieceState == PieceState.East ||
+                        level.GetGamePiece(a, b).PieceState == PieceState.South ||
+                        level.GetGamePiece(a, b).PieceState == PieceState.West)
+                    {
+                        level.GetGamePiece(a, b).PieceState = PieceState.Floor;
+                        level.GetGamePiece(a, b).IndexTexture = 0;
+                    }
+                }
+            }
+
+            //Induce Game over if player tries = 0;
+            if (playerChar.Tries == 0)
+            {
+                current = GameState.GameOver;
+            }
+        }
+
         /// <summary>
         /// LoadContent will be called once per game and is the place to load
         /// all of your content.
@@ -238,23 +270,30 @@ namespace Chaos_University
                         {
                             int clickNowX = mouse.X / GlobalVar.TILESIZE;
                             int clickNowY = mouse.Y / GlobalVar.TILESIZE;
-                            //Change tile at mouse location.
-                            level.GetGamePiece(clickNowX, clickNowY).IncrementType();
-                            //Increment parCount if tile changed is a new tile.
-                            if(clickNowX != clickPrevX || clickNowY != clickPrevY)
+                            //Change tile at mouse location. True if Increment could have occured.
+                            if (level.GetGamePiece(clickNowX, clickNowY).IncrementType())
                             {
-                                clickPrevX = clickNowX;
-                                clickPrevY = clickNowY;
-                                playerChar.ParCount++;
+                                //Increment parCount if tile changed is a new tile.
+                                if (clickNowX != clickPrevX || clickNowY != clickPrevY)
+                                {
+                                    clickPrevX = clickNowX;
+                                    clickPrevY = clickNowY;
+                                    playerChar.ParCount++;
+                                }
                             }
                         }
                         catch (IndexOutOfRangeException) { }    //Catch and ignore exception that mouse is beyond map.
                     }
 
+                    //Keyboard buttons.
                     //Pressing enter makes the player start move.
                     if(keyboard.IsKeyDown(Keys.Enter) && keyboardPrev.IsKeyUp(Keys.Enter) && !playerChar.Moving)
                     {
                         playerChar.Moving = true;
+                    }
+                    if(keyboard.IsKeyDown(Keys.R) && keyboardPrev.IsKeyUp(Keys.R))
+                    {
+                        this.Fail();
                     }
 
                     //Move Player
@@ -297,33 +336,7 @@ namespace Chaos_University
                                 //Check if player collided with it.
                                 if(level.GetGamePiece(i,j).CheckCollision(playerChar))
                                 {
-                                    playerChar.PositionRect = playerStart;
-                                    playerChar.turn(0);
-                                    playerChar.Tries--;
-                                    playerChar.ParCount = 0;
-                                    playerChar.Moving = false;
-
-                                    //Reset all direction tiles.
-                                    for (int b = 0; b < level.Height; ++b)
-                                    {
-                                        for (int a = 0; a < level.Width; ++a)
-                                        {
-                                            if(level.GetGamePiece(a, b).PieceState == PieceState.North ||
-                                                level.GetGamePiece(a, b).PieceState == PieceState.East ||
-                                                level.GetGamePiece(a, b).PieceState == PieceState.South ||
-                                                level.GetGamePiece(a, b).PieceState == PieceState.West)
-                                            {
-                                                level.GetGamePiece(a, b).PieceState = PieceState.Floor;
-                                                level.GetGamePiece(a, b).IndexTexture = 0;
-                                            }
-                                        }
-                                    }
-
-                                    //Induce Game over if player tries = 0;
-                                    if(playerChar.Tries == 0)
-                                    {
-                                        current = GameState.GameOver;
-                                    }
+                                    this.Fail();
                                 }
                             }
                         }
@@ -369,6 +382,12 @@ namespace Chaos_University
                         new Vector2(1.2f, 1.0f),
                         SpriteEffects.None,
                         0);
+                    spriteBatch.DrawString(menuFont,    //Draw Directions.
+                        "Use the mouse to select tiles and change them to direction tiles.\n" +
+                        "You can place tiles before or during player movement.\n" +
+                        "You have a limited number of tries to place tiles.",
+                        new Vector2(25, 100),
+                        Color.White);
                     spriteBatch.DrawString(menuFont,    //Draw Press Enter Prompt
                         "Press enter to continue.",
                         new Vector2(25, GraphicsDevice.Viewport.Height - 26),
@@ -391,7 +410,7 @@ namespace Chaos_University
                     else
                     {
                         spriteBatch.DrawString(menuFont,    //Draw maxed out Par UI Element.
-                            String.Format("Par:   {0} of {1} (CANNOT CHANGE ADDITIONAL TILES.)", playerChar.ParCount, level.Par),
+                            String.Format("Par:   {0} of {1} (PAR REACHED)", playerChar.ParCount, level.Par),
                             new Vector2(25, GraphicsDevice.Viewport.Height - 26),
                             Color.White);
                     }
@@ -399,8 +418,17 @@ namespace Chaos_University
                         String.Format("Tries: {0}", playerChar.Tries),
                         new Vector2(25, GraphicsDevice.Viewport.Height - 50),
                         Color.White);
+                    spriteBatch.DrawString(menuFont,        //Draw Enter Directions.
+                        "Press Enter to start movement.",
+                        new Vector2(420, GraphicsDevice.Viewport.Height - 26),
+                        Color.White);
+                    spriteBatch.DrawString(menuFont,        //Draw Reset Directions.
+                        "Press R to reset.",
+                        new Vector2(420, GraphicsDevice.Viewport.Height - 50),
+                        Color.White);
                     level.Draw(spriteBatch);
                     playerChar.Draw(spriteBatch);
+
                     break;
 
                 //GAME OVER

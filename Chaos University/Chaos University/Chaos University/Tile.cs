@@ -23,7 +23,7 @@ namespace Chaos_University
         }
 
         //Increment floor type to a different type.
-        public override void IncrementType()
+        public override bool IncrementType()
         {
             switch(PieceState)
             {
@@ -48,6 +48,7 @@ namespace Chaos_University
                     IndexTexture = 0;
                     break;
             }
+            return true;
         }
     }
 }
