@@ -17,16 +17,24 @@ namespace Chaos_University
         public int Difficulty { get; set; }
 
 
-        public Enemy(int x, int y, int dir, string imageFile) //Constructor
+        public Enemy(int x, int y, int dir) //Constructor
             : base(x, y, dir)
         {
-            
+            Difficulty = 0;
         }
 
 
-        public void Attack() //Method for attacking player
+        public bool Attack(Player obj) //Method for attacking player
         {
-            //Stub
+            if (this.CheckCollision(obj) == true)
+            {
+                //Maybe add an effect or sound to say the guard caught the player
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
 
@@ -35,8 +43,36 @@ namespace Chaos_University
             switch (Difficulty)
             {
                 case 0:
-
                     //Simple back and forth partol, stops at cirtain distance or wall
+
+                    Move();
+                    //Commented this out for now because im not sure how we are using the wall pieces for detection\
+
+                    //if (this.CheckCollision("Wall") == false)
+                    //{
+                    //    switch (Direction)
+                    //    {
+                    //        case 0:
+                    //            Direction = 2;
+                    //            Move();
+                    //            break;
+
+                    //        case 1:
+                    //            Direction = 3;
+                    //            Move();
+                    //            break;
+
+                    //        case 2:
+                    //            Direction = 0;
+                    //            Move();
+                    //            break;
+
+                    //        case 3:
+                    //            Direction = 1;
+                    //            Move();
+                    //            break;
+                    //    } 
+                    //}
                     break;
                 case 1:
                     //Moves in any direction based on an algorithm, stops at walls, can hit traps
@@ -67,10 +103,11 @@ namespace Chaos_University
         }
 
 
-        public override void Draw(SpriteBatch obj) //Draws player using base draw
+        public override void Draw(SpriteBatch obj) //Draws Enemy
         {
-            base.Draw(obj);
+            obj.Draw(this.CurrentTexture[Direction], positionRect, Color.White);
         }
+
 
         public override void Move()
         {
