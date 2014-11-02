@@ -43,7 +43,6 @@ namespace Chaos_University
             switch (Difficulty)
             {
                 case 0:
-
                     //Simple back and forth partol, stops at cirtain distance or wall
 
                     Move();
