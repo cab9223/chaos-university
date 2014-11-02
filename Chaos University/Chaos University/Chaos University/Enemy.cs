@@ -35,6 +35,7 @@ namespace Chaos_University
             switch (Difficulty)
             {
                 case 0:
+
                     //Simple back and forth partol, stops at cirtain distance or wall
                     break;
                 case 1:
@@ -73,7 +74,29 @@ namespace Chaos_University
 
         public override void Move()
         {
-            throw new NotImplementedException();
+            Rectangle temp = PositionRect;
+
+            switch (Direction)
+            {
+                case 0:
+                    temp.Y += GlobalVar.TILESIZE;
+                    break;
+
+                case 1:
+                    temp.X -= GlobalVar.TILESIZE;
+                    break;
+
+                case 2:
+                    temp.Y -= GlobalVar.TILESIZE;
+                    break;
+
+                case 3:
+                    temp.X += GlobalVar.TILESIZE;
+                    break;
+            }
+
+            PositionRect = temp;
+            //throw new NotImplementedException();
         }
     }
 }
