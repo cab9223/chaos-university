@@ -17,8 +17,8 @@ namespace Chaos_University
         public int Difficulty { get; set; }
 
 
-        public Enemy(int x, int y, int dir) //Constructor
-            : base(x, y, dir)
+        public Enemy(int x, int y, int dir, List<Texture2D> textures) //Constructor
+            : base(x, y, dir, textures)
         {
             Difficulty = 0;
         }
@@ -45,8 +45,9 @@ namespace Chaos_University
                 case 0:
                     //Simple back and forth partol, stops at cirtain distance or wall
 
-                    Move();
-                    //Commented this out for now because im not sure how we are using the wall pieces for detection\
+
+                    //Move(distance);
+                    ////Commented this out for now because im not sure how we are using the wall pieces for detection!
 
                     //if (this.CheckCollision("Wall") == false)
                     //{
@@ -84,56 +85,51 @@ namespace Chaos_University
         }
 
 
-        public bool CheckCollision(GamePiece obj)//Method Checks to see if enemy hits something
-        {
-            /*if (obj.positionRect.Intersects(this.positionRect))
-            {
-                return true;
-            }
-            return false;*/
-            if ((this.PositionRect.X / GlobalVar.TILESIZE == obj.PositionRect.X / GlobalVar.TILESIZE) && (this.PositionRect.Y / GlobalVar.TILESIZE == obj.PositionRect.Y / GlobalVar.TILESIZE))
-            {
-                return true;
-            }
+        //public bool CheckCollision(GamePiece obj)//Method Checks to see if enemy hits something
+        //{
+            
+        //    if ((this.PositionRect.X / GlobalVar.TILESIZE == obj.PositionRect.X / GlobalVar.TILESIZE) && (this.PositionRect.Y / GlobalVar.TILESIZE == obj.PositionRect.Y / GlobalVar.TILESIZE))
+        //    {
+        //        return true;
+        //    }
 
-            else
-            {
-                return false;
-            }
-        }
+        //    else
+        //    {
+        //        return false;
+        //    }
+        //}
 
 
         public override void Draw(SpriteBatch obj) //Draws Enemy
         {
-            obj.Draw(this.CurrentTexture[Direction], positionRect, Color.White);
+            obj.Draw(this.listTextures[Direction], PositionRect, Color.White);
         }
 
 
-        public override void Move()
+        public override void Move(int distance)
         {
             Rectangle temp = PositionRect;
 
             switch (Direction)
             {
                 case 0:
-                    temp.Y += GlobalVar.TILESIZE;
+                    temp.Y += distance;
                     break;
 
                 case 1:
-                    temp.X -= GlobalVar.TILESIZE;
+                    temp.X -= distance;
                     break;
 
                 case 2:
-                    temp.Y -= GlobalVar.TILESIZE;
+                    temp.Y -= distance;
                     break;
 
                 case 3:
-                    temp.X += GlobalVar.TILESIZE;
+                    temp.X += distance;
                     break;
             }
 
             PositionRect = temp;
-            //throw new NotImplementedException();
         }
     }
 }
