@@ -12,15 +12,72 @@ using Microsoft.Xna.Framework.Media;
 namespace Chaos_University
 {
 
-    // Pretty sure we will need a tile class to represent stationary things that take up a spot.
+    // Floor tiles.
     class Tile : GamePiece
     {
-        public Tile(int x, int y) //Constructor
-            : base(x, y)
+        //Constructor.
+        public Tile(int x, int y, List<Texture2D> textures) //Constructor
+            : base(x, y, textures)
         {
-            Type = "Tile";
+            PieceState = PieceState.Floor;
+        }
 
-            //Nothing yet
+        //Increment floor type to a different type.
+        public override bool IncrementType()
+        {
+            switch(PieceState)
+            {
+                case PieceState.Floor:
+                    PieceState = PieceState.North;
+                    IndexTexture++;
+                    break;
+                case PieceState.North:
+                    PieceState = PieceState.East;
+                    IndexTexture++;
+                    break;
+                case PieceState.East:
+                    PieceState = PieceState.South;
+                    IndexTexture++;
+                    break;
+                case PieceState.South:
+                    PieceState = PieceState.West;
+                    IndexTexture++;
+                    break;
+                case PieceState.West:
+                    PieceState = PieceState.Floor;
+                    IndexTexture = 0;
+                    break;
+            }
+            return true;
+        }
+
+        //Decrement floor type to a different type.
+        public override bool DecrementType()
+        {
+            switch (PieceState)
+            {
+                case PieceState.Floor:
+                    PieceState = PieceState.West;
+                    IndexTexture--;
+                    break;
+                case PieceState.North:
+                    PieceState = PieceState.Floor;
+                    IndexTexture = 0;
+                    break;
+                case PieceState.East:
+                    PieceState = PieceState.North;
+                    IndexTexture--;
+                    break;
+                case PieceState.South:
+                    PieceState = PieceState.East;
+                    IndexTexture--;
+                    break;
+                case PieceState.West:
+                    PieceState = PieceState.South;
+                    IndexTexture --;
+                    break;
+            }
+            return true;
         }
     }
 }

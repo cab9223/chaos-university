@@ -9,8 +9,20 @@ namespace Chaos_University
     {
         Title,
         Menus,
-        PlacingTiles,
         Playing,
+        LevelComp,
         GameOver
+    }
+
+    public enum PieceState
+    {
+        Floor,
+        North,
+        East,
+        South,
+        West,
+        Wall,
+        Goal,
+        Collect
     }
 }

@@ -13,15 +13,26 @@ namespace Chaos_University
 {
     abstract class GamePiece
     {
-        public List<Texture2D> CurrentTexture { get; set; } //All GamePiece images
+        //List of textures the object uses.
+        public List<Texture2D> listTextures { get; set; } //All GamePiece images
 
-        public string Type { get; set; }
+        //Index of the current texture of the object.
+        private int indexTexture;
+        public int IndexTexture
+        {
+            get
+            {
+                return indexTexture;
+            }
 
-        public int indexTexture;
+            set
+            {
+                indexTexture = value;
+            }
+        }
 
-        // Tentative direction things. Two rectangles- one for position, one for spot on grid has been discussed.
-        // Am going with a single rectangle for position, will divide by the size of a tile and ignore the remainder for spot on grid.
-        public Rectangle positionRect;
+        // Rectangle boundary of object.
+        private Rectangle positionRect;
         public Rectangle PositionRect
         {
             get
@@ -34,32 +45,67 @@ namespace Chaos_University
                 positionRect = value;
             }
         }
-        
-        // Base constructor that everything else will draw from.
-        public GamePiece(int x, int y)
+
+        //State of piece with multiple types.
+        private PieceState pieceState;
+        public PieceState PieceState
         {
-            //will need to do a try-catch block for loading the image file for this object.
-            
-            //Old constructor will give a runtime error(PositionRect initialized to nothing). Remove note once we have character setup working.
+            get
+            {
+                return pieceState;
+            }
+            set
+            {
+                pieceState = value;
+            }
+        }
+
+        // Constructor that establishes textures.
+        public GamePiece(int x, int y, List<Texture2D> textures)
+        {
             positionRect = new Rectangle(x, y, GlobalVar.TILESIZE, GlobalVar.TILESIZE);
 
-            CurrentTexture = new List<Texture2D>();
+            listTextures = textures;
             indexTexture = 0;
         }
 
-        public virtual void Draw(SpriteBatch obj) //Draws any gameobject to screen
+        // Constructor that does not establish textures.
+        public GamePiece(int x, int y)
         {
-            obj.Draw(this.CurrentTexture[indexTexture], positionRect, Color.White);
+            positionRect = new Rectangle(x, y, GlobalVar.TILESIZE, GlobalVar.TILESIZE);
+
+            listTextures = new List<Texture2D>();
+            indexTexture = 0;
         }
 
-        public virtual void IncrementType()
+        //Draws any gameobject to screen
+        public virtual void Draw(SpriteBatch obj)
         {
-            if (indexTexture != CurrentTexture.Count() - 1)
-                indexTexture++;
-            else
-                indexTexture = 0;
+            obj.Draw(this.listTextures[indexTexture], positionRect, Color.White);
         }
 
-        //public abstract bool Collide();
+        //Increments type and texture for pieces with multiple types or textures.
+        //Returns false by default. Objects that can be incremented like Tile return true.
+        public virtual bool IncrementType()
+        {
+            return false;
+        }
+
+        //Decrements type and texture for pieces with multiple types or textures.
+        //Returns false by default. Objects that can be incremented like Tile return true.
+        public virtual bool DecrementType()
+        {
+            return false;
+        }
+
+        //Checks for object collision.
+        public bool CheckCollision(GamePiece obj)
+        {
+            if (obj.PositionRect.Intersects(this.PositionRect))
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }

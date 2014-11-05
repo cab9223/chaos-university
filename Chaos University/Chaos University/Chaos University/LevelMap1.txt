@@ -1,2 +1,8 @@
-7 7
-wall,0,0, wall,1,0, wall,2,0 wall,3,0 wall,4,0 wall,5,0 wall,6,0 wall,0,1 money,2,1 wall,3,1 goal,5,1 wall,6,1 wall,0,2 wall,5,2 wall,6,2 wall,0,3 wall,6,3 wall,0,4 wall,6,4 wall,0,5 player,1,5,0 wall,6,4 wall,0,6 wall,1,6 wall,2,6 wall,3,6 wall,4,6 wall,5,6 wall,6,6
+7
+5
+4
+1111111
+100MM01
+1001111
+1X0F111
+1111111

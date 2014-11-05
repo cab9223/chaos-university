@@ -14,38 +14,39 @@ namespace Chaos_University
 {
     class Money : GamePiece
     {
-        public bool Active { get; set; }//Is this money currently active on screen
-
-        public int Amount { set; get; } //The value of the money object
-
-
-        public Money(int x, int y, int amount) //Constructor
-            : base(x, y)
+        //true if the money appears active in game.
+        private bool active;
+        public bool Active
         {
-            Amount = amount;
-        }
-
-
-        public bool CheckCollision(GamePiece obj)//Method Checks to see if player got the money
-        {
-            if (Active == true)
+            get
             {
-                if (obj.positionRect.Intersects(this.positionRect))
-                {
-                    Active = false;
-                    return true;
-                }
+                return active;
             }
-            return false;
+            set
+            {
+                active = value;
+            }
         }
 
-
-        public override void Draw(SpriteBatch obj)//Draws to screen Money if it is active
+        //Constructor
+        public Money(int x, int y, List<Texture2D> textures)
+            : base(x, y, textures)
         {
-            if (Active == true)
-            {
+            PositionRect = new Rectangle(
+                PositionRect.X + (PositionRect.Width - textures[0].Width) / 2,
+                PositionRect.Y + (PositionRect.Height - textures[0].Height) / 2,
+                textures[0].Width,
+                textures[0].Height);
+            PieceState = PieceState.Collect;
+            active = true;
+        }
+
+        //Money is only drawn if active.
+        public override void Draw(SpriteBatch obj)
+        {
+            if(active)
                 base.Draw(obj);
-            }
         }
     }
 }
+

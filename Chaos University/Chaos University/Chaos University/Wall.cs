@@ -14,25 +14,11 @@ namespace Chaos_University
 {
     class Wall : GamePiece
     {
-
-        public Wall(int x, int y) //Constructor
-            : base(x, y) 
+        //Constructor
+        public Wall(int x, int y, List<Texture2D> textures)
+            : base(x, y, textures)
         {
-            Type = "Wall";
-
-            //Nothing yet
+            PieceState = PieceState.Wall;
         }
-
-
-        public bool CheckCollision(GamePiece obj)//Method Checks to see if player hit a wall
-        {
-            if (obj.positionRect.Intersects(this.positionRect))
-            {
-                return true;
-            }
-            return false;
-        }
-
-
     }
 }

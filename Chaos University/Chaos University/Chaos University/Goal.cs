@@ -2,33 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.GamerServices;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 
 namespace Chaos_University
 {
     class Goal : GamePiece
     {
-
-        public Goal(int x, int y) //Constructor
-            : base(x, y)
+        //Constructor
+        public Goal(int x, int y, List<Texture2D> textures)
+            : base(x, y, textures)
         {
-            //Nothing yet
+            PieceState = PieceState.Goal;
         }
-
-
-        public bool CheckCollision(GamePiece obj)//Method Checks to see if player reached the goal
-        {
-            if (obj.positionRect.Intersects(this.positionRect))
-            {
-                return true;
-            }
-            return false;
-        }
-
-
-        public void LevelComplete() //Method to end level and transition to menu
-        {
-            //stub
-        }
-
     }
 }
