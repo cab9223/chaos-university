@@ -78,16 +78,13 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
-<<<<<<< HEAD
     <Compile Include="Enemy.cs" />
-=======
     <Compile Include="CharacterCreator.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="CharacterCreator.Designer.cs">
       <DependentUpon>CharacterCreator.cs</DependentUpon>
     </Compile>
->>>>>>> e60a41c21f63df276fcf3ce5eb3643f114205441
     <Compile Include="Money.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="GamePiece.cs" />
