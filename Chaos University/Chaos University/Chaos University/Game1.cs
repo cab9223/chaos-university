@@ -198,6 +198,13 @@ namespace Chaos_University
                 current = GameState.GameOver;
             }
         }
+        
+        // will create a new instance of the character creator and display it.
+        public void LoadCharacterCreator()
+        {
+            CharacterCreator characterCreator = new CharacterCreator();
+            characterCreator.Show();
+        }
 
         /// <summary>
         /// LoadContent will be called once per game and is the place to load
