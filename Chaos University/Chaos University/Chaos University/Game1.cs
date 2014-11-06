@@ -416,7 +416,7 @@ namespace Chaos_University
                     /*make generic*/ninjaChar.Move((int)(100 * (float)gameTime.ElapsedGameTime.TotalSeconds));
 
                     //Move Guard
-                    guard.Move((int)(100 * (float)gameTime.ElapsedGameTime.TotalSeconds));
+                    //guard.Move((int)(100 * (float)gameTime.ElapsedGameTime.TotalSeconds));
 
                     //Guard attack player, failed attempt
                     //if (guard.Attack(playerChar) == true)
@@ -448,7 +448,7 @@ namespace Chaos_University
                                             ninjaChar.turn(2);
                                             break;
                                         case PieceState.West:
-                                            ninjaChar.turn(0);
+                                            ninjaChar.turn(3);
                                             break;
                                         case PieceState.Goal:
                                             current = GameState.LevelComp;
