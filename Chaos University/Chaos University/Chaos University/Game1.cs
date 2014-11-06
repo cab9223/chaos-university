@@ -29,7 +29,7 @@ namespace Chaos_University
         int clickPrevY;             //Y index of previous tile changed.
         Level level;                //Current level of the game.
         Player ninjaChar;          //Player
-        Rectangle playerStart;      //Player starting position.
+        Rectangle ninjaStart;      //Player starting position.
         Enemy guard;                //Guard
         Rectangle guardStart;       //Guard starting position.
         GameState current;          //State of the game (title, menu, playing, gameover, etc.)
@@ -149,7 +149,7 @@ namespace Chaos_University
                                     lineNumber * GlobalVar.TILESIZE,
                                     0,
                                     playerTextures);
-                                playerStart = ninjaChar.PositionRect;
+                                ninjaStart = ninjaChar.PositionRect;
 
                                 guard = new Enemy(
                                     2 * GlobalVar.TILESIZE,
@@ -179,7 +179,7 @@ namespace Chaos_University
         // Failure state.
         private void Fail()
         {
-            ninjaChar.PositionRect = playerStart;  //Reset Player Location.
+            ninjaChar.PositionRect = ninjaStart;  //Reset Player Location.
             ninjaChar.turn(0);                     //Reset Player Direction.
             ninjaChar.Tries--;                     //Reduce number of tries player has.
             ninjaChar.ParCount = 0;                //Reset par for player.
