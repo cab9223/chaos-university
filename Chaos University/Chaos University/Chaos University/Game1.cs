@@ -49,6 +49,7 @@ namespace Chaos_University
         List<Texture2D> wallTextures;
         List<Texture2D> goalTextures;
         List<Texture2D> playerTextures;
+        List<Texture2D> guardTextures;
         List<Texture2D> moneyTextures;
 
         //3 variables to determine presence of particular classes.
@@ -146,8 +147,20 @@ namespace Chaos_University
                                     lineNumber * GlobalVar.TILESIZE,
                                     goalTextures));
                                 break;
-                            //X = Player and guard start and tile.
+                            //X = Guard start and tile.
                             case 'X':
+                                level.SetTile(columnNumber, lineNumber, new Tile(
+                                    columnNumber * GlobalVar.TILESIZE,
+                                    lineNumber * GlobalVar.TILESIZE,
+                                    tileTextures));
+                                guard = new Enemy(
+                                    columnNumber * GlobalVar.TILESIZE,
+                                    lineNumber * GlobalVar.TILESIZE,
+                                    0,
+                                    guardTextures);
+                                guard.Turn(0);
+                                guardStart = guard.PositionRect;
+                                break;
                             //N = Ninja start and tile.
                             case 'N':
                                 isNinja = true;
@@ -195,14 +208,8 @@ namespace Chaos_University
                                     Player.Major.Assault);
                                 assaultStart = assaultChar.PositionRect;
                                 ninjaStart = ninjaChar.PositionRect;
-
-                                guard = new Enemy(
-                                    2 * GlobalVar.TILESIZE,
-                                    1 * GlobalVar.TILESIZE,
-                                    2,
-                                    playerTextures);
-                                guardStart = guard.PositionRect;
                                 break;
+
                         }
                         columnNumber++;
                     }
@@ -232,19 +239,19 @@ namespace Chaos_University
             ninjaChar.Moving = false;              //Halt player.
             level.ActivateMoney();                  //Reset monies.
 
-            reconChar.PositionRect = ninjaStart;  //Reset Player Location.
-            reconChar.turn(0);                     //Reset Player Direction.
-            reconChar.Tries--;                     //Reduce number of tries player has.
-            reconChar.ParCount = 0;                //Reset par for player.
-            reconChar.Moving = false;              //Halt player.
-            level.ActivateMoney();                  //Reset monies.
+            //reconChar.PositionRect = ninjaStart;  //Reset Player Location.
+            //reconChar.turn(0);                     //Reset Player Direction.
+            //reconChar.Tries--;                     //Reduce number of tries player has.
+            //reconChar.ParCount = 0;                //Reset par for player.
+            //reconChar.Moving = false;              //Halt player.
+            //level.ActivateMoney();                  //Reset monies.
 
-            assaultChar.PositionRect = ninjaStart;  //Reset Player Location.
-            assaultChar.turn(0);                     //Reset Player Direction.
-            assaultChar.Tries--;                     //Reduce number of tries player has.
-            assaultChar.ParCount = 0;                //Reset par for player.
-            assaultChar.Moving = false;              //Halt player.
-            level.ActivateMoney();                  //Reset monies.
+            //assaultChar.PositionRect = ninjaStart;  //Reset Player Location.
+            //assaultChar.turn(0);                     //Reset Player Direction.
+            //assaultChar.Tries--;                     //Reduce number of tries player has.
+            //assaultChar.ParCount = 0;                //Reset par for player.
+            //assaultChar.Moving = false;              //Halt player.
+            //level.ActivateMoney();                  //Reset monies.
 
             //Reset all direction tiles.
             for (int b = 0; b < level.Height; ++b)
@@ -324,6 +331,9 @@ namespace Chaos_University
             playerTextures.Add(this.Content.Load<Texture2D>("Default_Backpack"));
             playerTextures.Add(this.Content.Load<Texture2D>("Default_Head"));
             playerTextures.Add(this.Content.Load<Texture2D>("Default_Bandana"));
+
+            guardTextures = new List<Texture2D>();
+            guardTextures.Add(this.Content.Load<Texture2D>("Default_Guard"));
 
             this.LoadLevel(1);
             this.LoadCharacterCreator();
@@ -416,7 +426,7 @@ namespace Chaos_University
                     /*make generic*/ninjaChar.Move((int)(100 * (float)gameTime.ElapsedGameTime.TotalSeconds));
 
                     //Move Guard
-                    //guard.Move((int)(100 * (float)gameTime.ElapsedGameTime.TotalSeconds));
+                    guard.Move((int)(100 * (float)gameTime.ElapsedGameTime.TotalSeconds));
 
                     //Guard attack player, failed attempt
                     //if (guard.Attack(playerChar) == true)
@@ -457,24 +467,24 @@ namespace Chaos_University
                                 }
 
                             //If game piece is a wall.
-                            if (level.GetGamePiece(i, j).PieceState == PieceState.Wall)
-                            {
-                                //Check if player collided with it.
-                                if (level.GetGamePiece(i, j).CheckCollision(ninjaChar))
+                                if (level.GetGamePiece(i, j).PieceState == PieceState.Wall)
                                 {
-                                    this.Fail();
+                                    //Check if player collided with it.
+                                    if (level.GetGamePiece(i, j).CheckCollision(ninjaChar))
+                                    {
+                                        this.Fail();
+                                    }
                                 }
-                            }
 
                             //If game piece is a wall.
-                            if (level.GetGamePiece(i, j).PieceState == PieceState.Wall)
-                            {
-                                //Check if enemy collided with it.
-                                if (level.GetGamePiece(i, j).CheckCollision(guard))
+                                if (level.GetGamePiece(i, j).PieceState == PieceState.Wall)
                                 {
-                                    guard.Patrol(0);
+                                    //Check if enemy collided with it.
+                                    if (level.GetGamePiece(i, j).CheckCollision(guard))
+                                    {
+                                        guard.Patrol(0);
+                                    }
                                 }
-                            }
 
                         }
 
@@ -588,7 +598,7 @@ namespace Chaos_University
                         Color.White);
                     level.Draw(spriteBatch);
                     ninjaChar.Draw(spriteBatch);
-                    //guard.Draw(spriteBatch);
+                    guard.Draw(spriteBatch);
                     break;
 
                 //Level Complete feedback screen.

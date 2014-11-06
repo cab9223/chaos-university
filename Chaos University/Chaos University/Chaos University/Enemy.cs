@@ -52,19 +52,23 @@ namespace Chaos_University
                     switch (Direction)
                     {
                         case 0:
-                            Direction = 2;
+                            Turn(2);
+                            //Direction = 2;
                             break;
 
                         case 1:
-                            Direction = 3;
+                            Turn(3);
+                            //Direction = 3;
                             break;
 
                         case 2:
-                            Direction = 0;
+                            Turn(0);
+                            //Direction = 0;
                             break;
 
                         case 3:
-                            Direction = 1;
+                            Turn(1);
+                            //Direction = 1;
                             break;
                     } 
                     break;
@@ -99,7 +103,16 @@ namespace Chaos_University
 
         public override void Draw(SpriteBatch obj) //Draws Enemy
         {
-            obj.Draw(this.listTextures[Direction], PositionRect, Color.White);
+            //obj.Draw(this.listTextures[0], PositionRect, Color.White);
+
+            obj.Draw(listTextures[0],
+                    new Rectangle(PositionRect.X + PositionRect.Width / 2, PositionRect.Y + PositionRect.Height / 2, PositionRect.Width, PositionRect.Height),
+                    null,
+                    Color.White,
+                    (float)(Math.Atan2(Vector.Y, Vector.X) + Math.PI / 2),
+                    new Vector2(listTextures[0].Width / 2, listTextures[0].Height / 2),
+                    SpriteEffects.None,
+                    0.0f);
         }
 
 
@@ -127,6 +140,31 @@ namespace Chaos_University
             }
 
             PositionRect = temp;
+        }
+
+
+        //Turns Player to face a new direction based on standard direction numbers.
+        public void Turn(int newDirection)
+        {
+            switch (newDirection)
+            {
+                case 0:
+                    Vector = new Vector2(0, 1);
+                    Direction = 0;
+                    break;
+                case 1:
+                    Vector = new Vector2(-1, 0);
+                    Direction = 1;
+                    break;
+                case 2:
+                    Vector = new Vector2(0, -1);
+                    Direction = 2;
+                    break;
+                case 3:
+                    Vector = new Vector2(1, 0);
+                    Direction = 3;
+                    break;
+            }
         }
     }
 }
