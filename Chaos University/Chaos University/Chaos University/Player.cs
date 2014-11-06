@@ -64,7 +64,6 @@ namespace Chaos_University
         }
 
         //Constructor
-        public Player(int x, int y, int direction, List<Texture2D> textures)
         public Player(int x, int y, int direction, List<Texture2D> textures, Major myMajor)
             : base(x, y, direction, textures)
         {
@@ -78,14 +77,10 @@ namespace Chaos_University
 
         //Draws all player components.
         public override void Draw(SpriteBatch obj) //Draws player using base draw method
-        {             
-            StreamReader reader = new StreamReader(TitleContainer.OpenStream("Color.txt"));
-            int readColor = Int32.Parse(reader.ReadLine());
         {
             //Draws all parts of the character on top of each other.
-            switch(readColor)
             obj.Draw(listTextures[0],
-                new Rectangle(PositionRect.X + PositionRect.Width / 2,PositionRect.Y + PositionRect.Height / 2,PositionRect.Width,PositionRect.Height),
+                new Rectangle(PositionRect.X + PositionRect.Width / 2, PositionRect.Y + PositionRect.Height / 2, PositionRect.Width, PositionRect.Height),
                 null,
                 GlobalVar.bodyColor,
                 (float)(Math.Atan2(Vector.Y, Vector.X) + Math.PI / 2),
@@ -95,25 +90,6 @@ namespace Chaos_University
 
             if (ThisMajor == Major.Assault)
             {
-                default:
-                    //Draws Everything.
-                    foreach (Texture2D texture in listTextures)
-                    {
-                        obj.Draw(
-                            texture,
-                            new Rectangle(
-                                PositionRect.X + PositionRect.Width / 2,
-                                PositionRect.Y + PositionRect.Height / 2,
-                                PositionRect.Width,
-                                PositionRect.Height),
-                            null,
-                            Color.White,
-                            (float)(Math.Atan2(Vector.Y, Vector.X) + Math.PI / 2),
-                            new Vector2(texture.Width / 2, texture.Height / 2),
-                            SpriteEffects.None,
-                            0.0f);
-                    }
-                    break;
                 obj.Draw(listTextures[1],
                     new Rectangle(PositionRect.X + PositionRect.Width / 2, PositionRect.Y + PositionRect.Height / 2, PositionRect.Width, PositionRect.Height),
                     null,
@@ -204,7 +180,7 @@ namespace Chaos_University
         //Turns Player to face a new direction based on standard direction numbers.
         public void turn(int newDirection)
         {
-            switch(newDirection)
+            switch (newDirection)
             {
                 case 0:
                     Vector = new Vector2(0, -1);
