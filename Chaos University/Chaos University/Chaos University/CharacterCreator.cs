@@ -5,6 +5,13 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.GamerServices;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using System.Windows.Forms;
 
 namespace Chaos_University
@@ -278,16 +285,19 @@ namespace Chaos_University
             if (comboBox1.SelectedIndex == 3)
             {
                 GlobalVar.headColor = Color.FromArgb(255, headR, headG, headB);
+                GlobalVar.headColor = Color.FromNonPremultiplied(headR, headG, headB, 255);
             }
 
             if (comboBox2.SelectedIndex == 3)
             {
                 GlobalVar.bodyColor = Color.FromArgb(255, bodyR, bodyG, bodyB);
+                GlobalVar.bodyColor = Color.FromNonPremultiplied(bodyR, bodyG, bodyB, 255);
             }
 
             if (comboBox3.SelectedIndex == 3)
             {
                 GlobalVar.gearColor = Color.FromArgb(255, gearR, gearG, gearB);
+                GlobalVar.gearColor = Color.FromNonPremultiplied(gearR, gearG, gearB, 255);
             }
             this.Hide();
         }

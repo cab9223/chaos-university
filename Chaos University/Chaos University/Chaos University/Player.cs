@@ -15,6 +15,15 @@ namespace Chaos_University
     // Stuff here is pretty self-explanitory, the imageFile thing is for future implementation of image handling stuff.
     class Player : MoveableGamePiece
     {
+        public enum Major
+        {
+            Ninja,
+            Assault,
+            Recon
+        }
+
+        public Major ThisMajor { get; set; }
+
         private int tries;
         public int Tries
         {
@@ -56,6 +65,7 @@ namespace Chaos_University
 
         //Constructor
         public Player(int x, int y, int direction, List<Texture2D> textures)
+        public Player(int x, int y, int direction, List<Texture2D> textures, Major myMajor)
             : base(x, y, direction, textures)
         {
             //PlrName = name;  //sets player name
@@ -63,6 +73,7 @@ namespace Chaos_University
             moving = false;
             tries = 3;
             parCount = 0;
+            ThisMajor = myMajor;
         }
 
         //Draws all player components.
@@ -70,8 +81,19 @@ namespace Chaos_University
         {             
             StreamReader reader = new StreamReader(TitleContainer.OpenStream("Color.txt"));
             int readColor = Int32.Parse(reader.ReadLine());
+        {
             //Draws all parts of the character on top of each other.
             switch(readColor)
+            obj.Draw(listTextures[0],
+                new Rectangle(PositionRect.X + PositionRect.Width / 2,PositionRect.Y + PositionRect.Height / 2,PositionRect.Width,PositionRect.Height),
+                null,
+                GlobalVar.bodyColor,
+                (float)(Math.Atan2(Vector.Y, Vector.X) + Math.PI / 2),
+                new Vector2(listTextures[0].Width / 2, listTextures[0].Height / 2),
+                SpriteEffects.None,
+                0.0f);
+
+            if (ThisMajor == Major.Assault)
             {
                 default:
                     //Draws Everything.
@@ -92,7 +114,49 @@ namespace Chaos_University
                             0.0f);
                     }
                     break;
+                obj.Draw(listTextures[1],
+                    new Rectangle(PositionRect.X + PositionRect.Width / 2, PositionRect.Y + PositionRect.Height / 2, PositionRect.Width, PositionRect.Height),
+                    null,
+                    GlobalVar.gearColor,
+                    (float)(Math.Atan2(Vector.Y, Vector.X) + Math.PI / 2),
+                    new Vector2(listTextures[1].Width / 2, listTextures[1].Height / 2),
+                    SpriteEffects.None,
+                    0.0f);
             }
+
+            if (ThisMajor == Major.Recon)
+            {
+                obj.Draw(listTextures[2],
+                    new Rectangle(PositionRect.X + PositionRect.Width / 2, PositionRect.Y + PositionRect.Height / 2, PositionRect.Width, PositionRect.Height),
+                    null,
+                    GlobalVar.gearColor,
+                    (float)(Math.Atan2(Vector.Y, Vector.X) + Math.PI / 2),
+                    new Vector2(listTextures[2].Width / 2, listTextures[2].Height / 2),
+                    SpriteEffects.None,
+                    0.0f);
+            }
+
+            obj.Draw(listTextures[3],
+                new Rectangle(PositionRect.X + PositionRect.Width / 2, PositionRect.Y + PositionRect.Height / 2, PositionRect.Width, PositionRect.Height),
+                null,
+                GlobalVar.headColor,
+                (float)(Math.Atan2(Vector.Y, Vector.X) + Math.PI / 2),
+                new Vector2(listTextures[3].Width / 2, listTextures[3].Height / 2),
+                SpriteEffects.None,
+                0.0f);
+
+            if (ThisMajor == Major.Ninja)
+            {
+                obj.Draw(listTextures[4],
+                    new Rectangle(PositionRect.X + PositionRect.Width / 2, PositionRect.Y + PositionRect.Height / 2, PositionRect.Width, PositionRect.Height),
+                    null,
+                    GlobalVar.gearColor,
+                    (float)(Math.Atan2(Vector.Y, Vector.X) + Math.PI / 2),
+                    new Vector2(listTextures[4].Width / 2, listTextures[4].Height / 2),
+                    SpriteEffects.None,
+                    0.0f);
+            }
+
         }
 
         //Move Player
