@@ -28,8 +28,10 @@ namespace Chaos_University
         int clickPrevX;             //X index of previous tile changed.
         int clickPrevY;             //Y index of previous tile changed.
         Level level;                //Current level of the game.
-        Player playerChar;          //Player
+        Player ninjaChar;          //Player
         Rectangle playerStart;      //Player starting position.
+        Enemy guard;                //Guard
+        Rectangle guardStart;       //Guard starting position.
         GameState current;          //State of the game (title, menu, playing, gameover, etc.)
 
         Vector2 menuPos;            //Position of the menu header
@@ -135,18 +137,26 @@ namespace Chaos_University
                                     lineNumber * GlobalVar.TILESIZE,
                                     goalTextures));
                                 break;
-                            //X = Player start and tile.
+                            //X = Player and guard start and tile.
                             case 'X':
                                 level.SetTile(columnNumber, lineNumber, new Tile(
                                     columnNumber * GlobalVar.TILESIZE,
                                     lineNumber * GlobalVar.TILESIZE,
                                     tileTextures));
-                                playerChar = new Player(
+
+                                ninjaChar = new Player(
                                     columnNumber * GlobalVar.TILESIZE,
                                     lineNumber * GlobalVar.TILESIZE,
                                     0,
                                     playerTextures);
-                                playerStart = playerChar.PositionRect;
+                                playerStart = ninjaChar.PositionRect;
+
+                                guard = new Enemy(
+                                    2 * GlobalVar.TILESIZE,
+                                    1 * GlobalVar.TILESIZE,
+                                    2,
+                                    playerTextures);
+                                guardStart = guard.PositionRect;
                                 break;
                         }
                         columnNumber++;
@@ -169,11 +179,11 @@ namespace Chaos_University
         // Failure state.
         private void Fail()
         {
-            playerChar.PositionRect = playerStart;  //Reset Player Location.
-            playerChar.turn(0);                     //Reset Player Direction.
-            playerChar.Tries--;                     //Reduce number of tries player has.
-            playerChar.ParCount = 0;                //Reset par for player.
-            playerChar.Moving = false;              //Halt player.
+            ninjaChar.PositionRect = playerStart;  //Reset Player Location.
+            ninjaChar.turn(0);                     //Reset Player Direction.
+            ninjaChar.Tries--;                     //Reduce number of tries player has.
+            ninjaChar.ParCount = 0;                //Reset par for player.
+            ninjaChar.Moving = false;              //Halt player.
             level.ActivateMoney();                  //Reset monies.
 
             //Reset all direction tiles.
@@ -193,7 +203,7 @@ namespace Chaos_University
             }
 
             //Induce Game over if player tries = 0;
-            if (playerChar.Tries == 0)
+            if (ninjaChar.Tries == 0)
             {
                 current = GameState.GameOver;
             }
@@ -303,7 +313,7 @@ namespace Chaos_University
                 //PLACING TILES
                 case GameState.Playing:
                     //Mouse click to change tiles. Click fails beyond par.
-                    if (mouse.LeftButton == ButtonState.Pressed && mousePrev.LeftButton == ButtonState.Released && playerChar.ParCount <= level.Par)
+                    if (mouse.LeftButton == ButtonState.Pressed && mousePrev.LeftButton == ButtonState.Released && ninjaChar.ParCount <= level.Par)
                     {
                         try
                         {
@@ -315,11 +325,11 @@ namespace Chaos_University
                                 //Increment parCount if tile changed is a new tile.
                                 if (clickNowX != clickPrevX || clickNowY != clickPrevY)
                                 {
-                                    playerChar.ParCount++;
+                                    ninjaChar.ParCount++;
                                     clickPrevX = clickNowX;
                                     clickPrevY = clickNowY;
                                     //Reverses any click beyond par.
-                                    if (playerChar.ParCount == level.Par + 1)
+                                    if (ninjaChar.ParCount == level.Par + 1)
                                     {
                                         level.GetGamePiece(clickPrevX, clickPrevY).DecrementType();
                                     }
@@ -331,9 +341,9 @@ namespace Chaos_University
 
                     //Keyboard buttons.
                     //Pressing enter makes the player start move.
-                    if(keyboard.IsKeyDown(Keys.Enter) && keyboardPrev.IsKeyUp(Keys.Enter) && !playerChar.Moving)
+                    if(keyboard.IsKeyDown(Keys.Enter) && keyboardPrev.IsKeyUp(Keys.Enter) && !ninjaChar.Moving)
                     {
-                        playerChar.Moving = true;
+                        ninjaChar.Moving = true;
                     }
                     if(keyboard.IsKeyDown(Keys.R) && keyboardPrev.IsKeyUp(Keys.R))
                     {
@@ -341,7 +351,16 @@ namespace Chaos_University
                     }
 
                     //Move Player
-                    playerChar.Move((int)(100 * (float)gameTime.ElapsedGameTime.TotalSeconds));
+                    ninjaChar.Move((int)(100 * (float)gameTime.ElapsedGameTime.TotalSeconds));
+
+                    //Move Guard
+                    guard.Move((int)(100 * (float)gameTime.ElapsedGameTime.TotalSeconds));
+
+                    //Guard attack player, failed attempt
+                    //if (guard.Attack(playerChar) == true)
+                    //{
+                    //    this.Fail();
+                    //}
 
                     //For all gamepieces in level grid, check for direcion changes or collisions.
                     for (int j = 0; j < level.Height; ++j)
@@ -349,7 +368,7 @@ namespace Chaos_University
                         for (int i = 0; i < level.Width; ++i)
                         {
                             //If player on direction tile.
-                            if(level.GetGamePiece(i,j).PositionRect.Center == playerChar.PositionRect.Center)
+                            if(level.GetGamePiece(i,j).PositionRect.Center == ninjaChar.PositionRect.Center)
                             {
                                 //Turn player based on tile direction.
                                 switch (level.GetGamePiece(i, j).PieceState)
@@ -357,16 +376,16 @@ namespace Chaos_University
                                     case PieceState.Floor:
                                         break;
                                     case PieceState.North:
-                                        playerChar.turn(0);
+                                        ninjaChar.turn(0);
                                         break;
                                     case PieceState.East:
-                                        playerChar.turn(1);
+                                        ninjaChar.turn(1);
                                         break;
                                     case PieceState.South:
-                                        playerChar.turn(2);
+                                        ninjaChar.turn(2);
                                         break;
                                     case PieceState.West:
-                                        playerChar.turn(3);
+                                        ninjaChar.turn(3);
                                         break;
                                     case PieceState.Goal:
                                         current = GameState.LevelComp;
@@ -378,17 +397,28 @@ namespace Chaos_University
                             if(level.GetGamePiece(i,j).PieceState == PieceState.Wall)
                             {
                                 //Check if player collided with it.
-                                if(level.GetGamePiece(i,j).CheckCollision(playerChar))
+                                if(level.GetGamePiece(i,j).CheckCollision(ninjaChar))
                                 {
                                     this.Fail();
                                 }
                             }
+
+                            //If game piece is a wall.
+                            if (level.GetGamePiece(i, j).PieceState == PieceState.Wall)
+                            {
+                                //Check if enemy collided with it.
+                                if (level.GetGamePiece(i, j).CheckCollision(guard))
+                                {
+                                    guard.Patrol(0);
+                                }
+                            }
+
                         }
 
                         //For all Game Pieces in level object list, check for collision.
                         foreach (Money gamePiece in level.Monies)
                         {
-                            if(gamePiece.CheckCollision(playerChar))
+                            if(gamePiece.CheckCollision(ninjaChar))
                             {
                                 gamePiece.Active = false;
                             }
@@ -463,10 +493,10 @@ namespace Chaos_University
                 //PLAYING
                 case GameState.Playing:
                     //Draw Par UI Element.
-                    if (playerChar.ParCount < level.Par)
+                    if (ninjaChar.ParCount < level.Par)
                     {
                         spriteBatch.DrawString(menuFont,
-                            String.Format("Par:   {0} of {1}", playerChar.ParCount, level.Par),
+                            String.Format("Par:   {0} of {1}", ninjaChar.ParCount, level.Par),
                             new Vector2(25, GraphicsDevice.Viewport.Height - 26),
                             Color.White);
                     }
@@ -474,13 +504,13 @@ namespace Chaos_University
                     else
                     {
                         spriteBatch.DrawString(menuFont,    
-                            String.Format("Par:   {0} of {1} (PAR REACHED)", playerChar.ParCount <= level.Par ? playerChar.ParCount : level.Par, level.Par),
+                            String.Format("Par:   {0} of {1} (PAR REACHED)", ninjaChar.ParCount <= level.Par ? ninjaChar.ParCount : level.Par, level.Par),
                             new Vector2(25, GraphicsDevice.Viewport.Height - 26),
                             Color.White);
                     }
                     //Draw Tries Counter.
                     spriteBatch.DrawString(menuFont,
-                        String.Format("Tries: {0}", playerChar.Tries),
+                        String.Format("Tries: {0}", ninjaChar.Tries),
                         new Vector2(25, GraphicsDevice.Viewport.Height - 50),
                         Color.White);
                     //Draw Enter Directions.
@@ -494,7 +524,8 @@ namespace Chaos_University
                         new Vector2(420, GraphicsDevice.Viewport.Height - 50),
                         Color.White);
                     level.Draw(spriteBatch);
-                    playerChar.Draw(spriteBatch);
+                    ninjaChar.Draw(spriteBatch);
+                    //guard.Draw(spriteBatch);
                     break;
 
                 //Level Complete feedback screen.
