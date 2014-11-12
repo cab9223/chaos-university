@@ -30,9 +30,8 @@ namespace Chaos_University
         public static Color bodyColor = Color.White;
         public static Color gearColor = Color.White;
 
-
-
-
+        public static int ParCount = 0;
+        public static int Tries = 3;
 
     }
 }

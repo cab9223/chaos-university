@@ -24,32 +24,6 @@ namespace Chaos_University
 
         public Major ThisMajor { get; set; }
 
-        private int tries;
-        public int Tries
-        {
-            get
-            {
-                return tries;
-            }
-            set
-            {
-                tries = value;
-            }
-        }
-
-        private int parCount;
-        public int ParCount
-        {
-            get
-            {
-                return parCount;
-            }
-            set
-            {
-                parCount = value;
-            }
-        }
-
         private bool moving;
         public bool Moving
         {
@@ -70,8 +44,6 @@ namespace Chaos_University
             //PlrName = name;  //sets player name
             Console.WriteLine(PositionRect.ToString());
             moving = false;
-            tries = 3;
-            parCount = 0;
             ThisMajor = myMajor;
         }
 

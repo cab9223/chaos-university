@@ -30,9 +30,6 @@
     <Reference Include="Microsoft.Xna.Framework.Content.Pipeline.VideoImporters, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Color.txt">
-      <Name>Color</Name>
-    </None>
     <Compile Include="Default_Backpack.png">
       <Name>Default_Backpack</Name>
       <Importer>TextureImporter</Importer>
@@ -102,11 +99,6 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="LevelMap1.txt">
-      <Name>LevelMap1</Name>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Default_Goal.png">

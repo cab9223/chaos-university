@@ -234,8 +234,8 @@ namespace Chaos_University
             //Am leaving for now, but we'll need to redo this stuff.
             ninjaChar.PositionRect = ninjaStart;  //Reset Player Location.
             ninjaChar.turn(0);                     //Reset Player Direction.
-            ninjaChar.Tries--;                     //Reduce number of tries player has.
-            ninjaChar.ParCount = 0;                //Reset par for player.
+            GlobalVar.Tries--;                     //Reduce number of tries player has.
+            GlobalVar.ParCount = 0;                //Reset par for player.
             ninjaChar.Moving = false;              //Halt player.
             level.ActivateMoney();                  //Reset monies.
 
@@ -270,7 +270,7 @@ namespace Chaos_University
             }
 
             //Induce Game over if player tries = 0;
-            if (ninjaChar.Tries == 0)
+            if (GlobalVar.Tries == 0)
             {
                 current = GameState.GameOver;
             }
@@ -384,7 +384,7 @@ namespace Chaos_University
                 //PLACING TILES
                 case GameState.Playing:
                     //Mouse click to change tiles. Click fails beyond par.
-                    if (mouse.LeftButton == ButtonState.Pressed && mousePrev.LeftButton == ButtonState.Released && ninjaChar.ParCount <= level.Par)
+                    if (mouse.LeftButton == ButtonState.Pressed && mousePrev.LeftButton == ButtonState.Released && GlobalVar.ParCount <= level.Par)
                     {
                         try
                         {
@@ -396,11 +396,11 @@ namespace Chaos_University
                                 //Increment parCount if tile changed is a new tile.
                                 if (clickNowX != clickPrevX || clickNowY != clickPrevY)
                                 {
-                                    ninjaChar.ParCount++;
+                                    GlobalVar.ParCount++;
                                     clickPrevX = clickNowX;
                                     clickPrevY = clickNowY;
                                     //Reverses any click beyond par.
-                                    if (ninjaChar.ParCount == level.Par + 1)
+                                    if (GlobalVar.ParCount == level.Par + 1)
                                     {
                                         level.GetGamePiece(clickPrevX, clickPrevY).DecrementType();
                                     }
@@ -566,10 +566,10 @@ namespace Chaos_University
                 //PLAYING
                 case GameState.Playing:
                     //Draw Par UI Element.
-                    if (/*make generic*/ninjaChar.ParCount < level.Par)
+                    if (/*make generic*/GlobalVar.ParCount < level.Par)
                     {
                         spriteBatch.DrawString(menuFont,
-                            String.Format("Par:   {0} of {1}", /*make generic*/ninjaChar.ParCount, level.Par),
+                            String.Format("Par:   {0} of {1}", /*make generic*/GlobalVar.ParCount, level.Par),
                             new Vector2(25, GraphicsDevice.Viewport.Height - 26),
                             Color.White);
                     }
@@ -577,13 +577,13 @@ namespace Chaos_University
                     else
                     {
                         spriteBatch.DrawString(menuFont,
-                            String.Format("Par:   {0} of {1} (PAR REACHED)", /*make generic*/ninjaChar.ParCount <= level.Par ? ninjaChar.ParCount : level.Par, level.Par),
+                            String.Format("Par:   {0} of {1} (PAR REACHED)", /*make generic*/GlobalVar.ParCount <= level.Par ? GlobalVar.ParCount : level.Par, level.Par),
                             new Vector2(25, GraphicsDevice.Viewport.Height - 26),
                             Color.White);
                     }
                     //Draw Tries Counter.
                     spriteBatch.DrawString(menuFont,
-                        String.Format("Tries: {0}", ninjaChar.Tries),
+                        String.Format("Tries: {0}", GlobalVar.Tries),
                         new Vector2(25, GraphicsDevice.Viewport.Height - 50),
                         Color.White);
                     //Draw Enter Directions.
