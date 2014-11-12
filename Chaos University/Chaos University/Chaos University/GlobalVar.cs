@@ -26,9 +26,7 @@ namespace Chaos_University
         public static int TILESIZE = 50;
 
         //Colors that CaracterCreator edits, set to white(no tint) by default
-        public static Color headColor = Color.White;
-        public static Color bodyColor = Color.White;
-        public static Color gearColor = Color.White;
+        public static Int16[] ColorsSplit = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
         public static int ParCount = 0;
         public static int Tries = 3;

@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Text;
+using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -19,6 +20,10 @@ namespace Chaos_University
     {
         public CharacterCreator()
         {
+            path = Directory.GetCurrentDirectory() + "/Colors.txt";
+            StreamReader ogColorFile = new StreamReader(path);
+            ogColors = ogColorFile.ReadLine();
+            ogColorFile.Close();
             InitializeComponent();
         }
 
@@ -28,10 +33,9 @@ namespace Chaos_University
         //Color customGear;
 
         //orginal colors from globalvar before edit
-        Color ogHead = GlobalVar.headColor;
-        Color ogBody = GlobalVar.bodyColor;
-        Color ogGear = GlobalVar.gearColor;
-
+        string path;
+        string ogColors;
+        
         // holds ints for each RGB value for each piece.
         int headR;
         int headG;
@@ -53,15 +57,21 @@ namespace Chaos_University
             switch (index)
             {
                 case 0:
-                    GlobalVar.headColor = Color.Red;
+                    textBox1.Text = "255";
+                    textBox2.Text = "0";
+                    textBox3.Text = "0";
                     break;
 
                 case 1:
-                    GlobalVar.headColor = Color.Green;
+                    textBox1.Text = "0";
+                    textBox2.Text = "255";
+                    textBox3.Text = "0";
                     break;
 
                 case 2:
-                    GlobalVar.headColor = Color.Blue;
+                    textBox1.Text = "0";
+                    textBox2.Text = "0";
+                    textBox3.Text = "255";
                     break;
 
                 case 3:
@@ -76,15 +86,21 @@ namespace Chaos_University
             switch (index)
             {
                 case 0:
-                    GlobalVar.bodyColor = Color.Red;
+                    textBox4.Text = "255";
+                    textBox5.Text = "0";
+                    textBox6.Text = "0";
                     break;
 
                 case 1:
-                    GlobalVar.bodyColor = Color.Green;
+                    textBox4.Text = "0";
+                    textBox5.Text = "255";
+                    textBox6.Text = "0";
                     break;
 
                 case 2:
-                    GlobalVar.bodyColor = Color.Blue;
+                    textBox4.Text = "0";
+                    textBox5.Text = "0";
+                    textBox6.Text = "255";
                     break;
 
                 case 3:
@@ -100,15 +116,21 @@ namespace Chaos_University
             switch (index)
             {
                 case 0:
-                    GlobalVar.gearColor = Color.Red;
+                    textBox7.Text = "255";
+                    textBox8.Text = "0";
+                    textBox9.Text = "0";
                     break;
 
                 case 1:
-                    GlobalVar.gearColor = Color.Green;
+                    textBox7.Text = "0";
+                    textBox8.Text = "255";
+                    textBox9.Text = "0";
                     break;
 
                 case 2:
-                    GlobalVar.gearColor = Color.Blue;
+                    textBox7.Text = "0";
+                    textBox8.Text = "0";
+                    textBox9.Text = "255";
                     break;
 
                 case 3:
@@ -281,28 +303,47 @@ namespace Chaos_University
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (comboBox1.SelectedIndex == 3)
+            // overwrite previous values in file
+            StreamWriter writer = new StreamWriter(path, false);
+
+            writer.WriteLine(headR + "," + headG + "," + headB + "," +
+                bodyR + "," + bodyG + "," + bodyB + "," +
+                gearR + "," + gearG + "," + gearB);
+
+            writer.Close();
+
+            //read the file
+            StreamReader reader = new StreamReader(path);
+
+            string[] stringColors = reader.ReadLine().Split(',');
+
+            GlobalVar.ColorsSplit = new Int16[stringColors.Length];
+
+            //match the values
+            for (int i = 0; i < stringColors.Length; i++)
             {
-                GlobalVar.headColor = Color.FromNonPremultiplied(headR, headG, headB, 255);
+                GlobalVar.ColorsSplit[i] = Int16.Parse(stringColors[i]);
             }
 
-            if (comboBox2.SelectedIndex == 3)
-            {
-                GlobalVar.bodyColor = Color.FromNonPremultiplied(bodyR, bodyG, bodyB, 255);
-            }
+            reader.Close();
 
-            if (comboBox3.SelectedIndex == 3)
-            {
-                GlobalVar.gearColor = Color.FromNonPremultiplied(gearR, gearG, gearB, 255);
-            }
             this.Hide();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            GlobalVar.headColor = ogHead;
-            GlobalVar.bodyColor = ogBody;
-            GlobalVar.gearColor = ogGear;
+            // use old values
+            string[] stringColors = ogColors.Split(',');
+
+            // parse all this stuff again.
+            GlobalVar.ColorsSplit = new Int16[stringColors.Length];
+
+            for (int i = 0; i < stringColors.Length; i++)
+            {
+                GlobalVar.ColorsSplit[i] = Int16.Parse(stringColors[i]);
+            }
+            
+
             this.Hide();
         }
 
