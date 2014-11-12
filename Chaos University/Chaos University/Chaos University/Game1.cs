@@ -239,6 +239,9 @@ namespace Chaos_University
             GlobalVar.ParCount = 0;                //Reset par for player.
             ninjaChar.Moving = false;              //Halt player.
             level.ActivateMoney();                  //Reset monies.
+            indicator.Active = false;               //Reset indicator.
+            clickPrevX = -1;                    //Reset clickPrev at a nonexistent index.
+            clickPrevY = -1;                    //Reset clickPrev at a nonexistent index.
 
             //reconChar.PositionRect = ninjaStart;  //Reset Player Location.
             //reconChar.turn(0);                     //Reset Player Direction.
@@ -308,7 +311,7 @@ namespace Chaos_University
             //Single indicator.
             List<Texture2D> indicatorTextureTemp = new List<Texture2D>();
             indicatorTextureTemp.Add(this.Content.Load<Texture2D>("Indicator"));
-            indicator = new Indicator(-100, -100, indicatorTextureTemp);
+            indicator = new Indicator(0, 0, indicatorTextureTemp);
 
             // Order tile textures in order that they appear when clicked.
             tileTextures = new List<Texture2D>();
@@ -402,7 +405,8 @@ namespace Chaos_University
                                 //Increment parCount if tile changed is a new tile.
                                 if (clickNowX != clickPrevX || clickNowY != clickPrevY)
                                 {
-                                    indicator.PositionRect = new Rectangle(
+                                    indicator.Active = true;                    //Activate indicator at changed tile.
+                                    indicator.PositionRect = new Rectangle(     //Move indicator to changed tile.
                                         clickNowX * GlobalVar.TILESIZE,
                                         clickNowY * GlobalVar.TILESIZE,
                                         GlobalVar.TILESIZE,

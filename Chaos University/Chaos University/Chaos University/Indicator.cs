@@ -14,10 +14,25 @@ namespace Chaos_University
 {
     class Indicator : GamePiece
     {
+        private bool active;
+        public bool Active
+        {
+            get { return active; }
+            set { active = value; }
+        }
+
         public Indicator(int x, int y, List<Texture2D> textures)
             : base(x, y, textures)
         {
             PieceState = PieceState.Indicator;
+            active = false;
+        }
+
+        //Indicator is only drawn if active.
+        public override void Draw(SpriteBatch obj)
+        {
+            if (active)
+                base.Draw(obj);
         }
     }
 }
