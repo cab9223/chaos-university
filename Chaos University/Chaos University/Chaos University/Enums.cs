@@ -16,6 +16,7 @@ namespace Chaos_University
 
     public enum PieceState
     {
+        Indicator,
         Floor,
         North,
         East,

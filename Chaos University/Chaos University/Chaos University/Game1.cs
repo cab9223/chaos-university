@@ -37,6 +37,7 @@ namespace Chaos_University
         Enemy guard;                //Guard
         Rectangle guardStart;       //Guard starting position.
         GameState current;          //State of the game (title, menu, playing, gameover, etc.)
+        Indicator indicator;        //Indicator of currently selected tile.
 
         Vector2 menuPos;            //Position of the menu header
         Vector2 gameOverPos;        //Position of the game over screen.
@@ -304,6 +305,11 @@ namespace Chaos_University
             music = new List<Song>();
             music.Add(this.Content.Load<Song>("MainTheme"));
 
+            //Single indicator.
+            List<Texture2D> indicatorTextureTemp = new List<Texture2D>();
+            indicatorTextureTemp.Add(this.Content.Load<Texture2D>("Indicator"));
+            indicator = new Indicator(-100, -100, indicatorTextureTemp);
+
             // Order tile textures in order that they appear when clicked.
             tileTextures = new List<Texture2D>();
             tileTextures.Add(this.Content.Load<Texture2D>("Default_Tile"));
@@ -396,6 +402,11 @@ namespace Chaos_University
                                 //Increment parCount if tile changed is a new tile.
                                 if (clickNowX != clickPrevX || clickNowY != clickPrevY)
                                 {
+                                    indicator.PositionRect = new Rectangle(
+                                        clickNowX * GlobalVar.TILESIZE,
+                                        clickNowY * GlobalVar.TILESIZE,
+                                        GlobalVar.TILESIZE,
+                                        GlobalVar.TILESIZE);
                                     GlobalVar.ParCount++;
                                     clickPrevX = clickNowX;
                                     clickPrevY = clickNowY;
@@ -599,6 +610,7 @@ namespace Chaos_University
                     level.Draw(spriteBatch);
                     ninjaChar.Draw(spriteBatch);
                     guard.Draw(spriteBatch);
+                    indicator.Draw(spriteBatch);
                     break;
 
                 //Level Complete feedback screen.
