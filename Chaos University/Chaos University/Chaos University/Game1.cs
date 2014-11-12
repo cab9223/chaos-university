@@ -613,7 +613,7 @@ namespace Chaos_University
                         Color.White);
                     level.Draw(spriteBatch);
                     ninjaChar.Draw(spriteBatch);
-                    guard.Draw(spriteBatch);
+                    //guard.Draw(spriteBatch);
                     indicator.Draw(spriteBatch);
                     break;
 
