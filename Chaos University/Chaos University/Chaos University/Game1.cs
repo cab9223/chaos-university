@@ -441,7 +441,7 @@ namespace Chaos_University
                     /*make generic*/ninjaChar.Move((int)(100 * (float)gameTime.ElapsedGameTime.TotalSeconds));
 
                     //Move Guard
-                    guard.Move((int)(100 * (float)gameTime.ElapsedGameTime.TotalSeconds));
+                    //guard.Move((int)(100 * (float)gameTime.ElapsedGameTime.TotalSeconds));
 
                     //Guard attack player, failed attempt
                     //if (guard.Attack(playerChar) == true)
