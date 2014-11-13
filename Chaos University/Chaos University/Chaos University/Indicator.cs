@@ -29,10 +29,10 @@ namespace Chaos_University
         }
 
         //Indicator is only drawn if active.
-        public override void Draw(SpriteBatch obj)
+        public override void Draw(SpriteBatch obj, int offX, int offY)
         {
             if (active)
-                base.Draw(obj);
+                base.Draw(obj, offX, offY);
         }
     }
 }

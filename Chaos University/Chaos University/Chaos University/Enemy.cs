@@ -128,7 +128,7 @@ namespace Chaos_University
         }
 
 
-        public override void Draw(SpriteBatch obj) //Draws Enemy
+        public override void Draw(SpriteBatch obj, int offX, int offY) //Draws Enemy
         {
             //obj.Draw(this.listTextures[0], PositionRect, Color.White);
 

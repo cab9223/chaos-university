@@ -100,18 +100,18 @@ namespace Chaos_University
         }
 
         //Draws each object in the grid.
-        public void Draw(SpriteBatch obj)
+        public void Draw(SpriteBatch obj, int offX, int offY)
         {
             for (int j = 0; j < Height; ++j)
             {
                 for (int i = 0; i < Width; ++i)
                 {
-                    grid[i, j].Draw(obj);
+                    grid[i, j].Draw(obj, offX, offY);
                 }
             }
             foreach (GamePiece gamePiece in monies)
             {
-                gamePiece.Draw(obj);
+                gamePiece.Draw(obj, offX, offY);
             }
         }
 

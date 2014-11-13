@@ -48,11 +48,17 @@ namespace Chaos_University
         }
 
         //Draws all player components.
-        public override void Draw(SpriteBatch obj) //Draws player using base draw method
+        public override void Draw(SpriteBatch obj, int offX, int offY) //Draws player using base draw method
         {
+            Rectangle offsetRect = new Rectangle(
+                PositionRect.X + offX,
+                PositionRect.Y + offY,
+                PositionRect.Width,
+                PositionRect.Height);
+
             //Draws all parts of the character on top of each other.
             obj.Draw(listTextures[0],
-                new Rectangle(PositionRect.X + PositionRect.Width / 2, PositionRect.Y + PositionRect.Height / 2, PositionRect.Width, PositionRect.Height),
+                new Rectangle(offsetRect.X + offsetRect.Width / 2, offsetRect.Y + offsetRect.Height / 2, offsetRect.Width, offsetRect.Height),
                 null,
                 Color.FromNonPremultiplied(GlobalVar.ColorsSplit[0],GlobalVar.ColorsSplit[1],GlobalVar.ColorsSplit[2], 255),
                 (float)(Math.Atan2(Vector.Y, Vector.X) + Math.PI / 2),
@@ -63,7 +69,7 @@ namespace Chaos_University
             if (ThisMajor == Major.Assault)
             {
                 obj.Draw(listTextures[1],
-                    new Rectangle(PositionRect.X + PositionRect.Width / 2, PositionRect.Y + PositionRect.Height / 2, PositionRect.Width, PositionRect.Height),
+                    new Rectangle(offsetRect.X + offsetRect.Width / 2, offsetRect.Y + offsetRect.Height / 2, offsetRect.Width, offsetRect.Height),
                     null,
                     Color.FromNonPremultiplied(GlobalVar.ColorsSplit[6], GlobalVar.ColorsSplit[7], GlobalVar.ColorsSplit[8], 255),
                     (float)(Math.Atan2(Vector.Y, Vector.X) + Math.PI / 2),
@@ -75,7 +81,7 @@ namespace Chaos_University
             if (ThisMajor == Major.Recon)
             {
                 obj.Draw(listTextures[2],
-                    new Rectangle(PositionRect.X + PositionRect.Width / 2, PositionRect.Y + PositionRect.Height / 2, PositionRect.Width, PositionRect.Height),
+                    new Rectangle(offsetRect.X + offsetRect.Width / 2, offsetRect.Y + offsetRect.Height / 2, offsetRect.Width, offsetRect.Height),
                     null,
                     Color.FromNonPremultiplied(GlobalVar.ColorsSplit[6], GlobalVar.ColorsSplit[7], GlobalVar.ColorsSplit[8], 255),
                     (float)(Math.Atan2(Vector.Y, Vector.X) + Math.PI / 2),
@@ -85,7 +91,7 @@ namespace Chaos_University
             }
 
             obj.Draw(listTextures[3],
-                new Rectangle(PositionRect.X + PositionRect.Width / 2, PositionRect.Y + PositionRect.Height / 2, PositionRect.Width, PositionRect.Height),
+                new Rectangle(offsetRect.X + offsetRect.Width / 2, offsetRect.Y + offsetRect.Height / 2, offsetRect.Width, offsetRect.Height),
                 null,
                     Color.FromNonPremultiplied(GlobalVar.ColorsSplit[3], GlobalVar.ColorsSplit[4], GlobalVar.ColorsSplit[5], 255),
                 (float)(Math.Atan2(Vector.Y, Vector.X) + Math.PI / 2),
@@ -96,7 +102,7 @@ namespace Chaos_University
             if (ThisMajor == Major.Ninja)
             {
                 obj.Draw(listTextures[4],
-                    new Rectangle(PositionRect.X + PositionRect.Width / 2, PositionRect.Y + PositionRect.Height / 2, PositionRect.Width, PositionRect.Height),
+                    new Rectangle(offsetRect.X + offsetRect.Width / 2, offsetRect.Y + offsetRect.Height / 2, offsetRect.Width, offsetRect.Height),
                     null,
                     Color.FromNonPremultiplied(GlobalVar.ColorsSplit[6], GlobalVar.ColorsSplit[7], GlobalVar.ColorsSplit[8], 255),
                     (float)(Math.Atan2(Vector.Y, Vector.X) + Math.PI / 2),

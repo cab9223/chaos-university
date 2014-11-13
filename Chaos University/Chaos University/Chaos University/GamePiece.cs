@@ -79,9 +79,14 @@ namespace Chaos_University
         }
 
         //Draws any gameobject to screen
-        public virtual void Draw(SpriteBatch obj)
+        public virtual void Draw(SpriteBatch obj, int offX, int offY)
         {
-            obj.Draw(this.listTextures[indexTexture], positionRect, Color.White);
+            Rectangle offsetRect = new Rectangle(
+                positionRect.X + offX,
+                positionRect.Y + offY,
+                positionRect.Width,
+                positionRect.Height);
+            obj.Draw(this.listTextures[indexTexture], offsetRect, Color.White);
         }
 
         //Increments type and texture for pieces with multiple types or textures.

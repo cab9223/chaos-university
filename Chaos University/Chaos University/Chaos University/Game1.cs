@@ -44,6 +44,8 @@ namespace Chaos_University
         Vector2 levelCompPos;       //Position of the level complete screen.
         SpriteFont menuFont;        //Font of menu text
         SpriteFont headerFont;      //Font of header text
+        int camX;                   //X offset of view.
+        int camY;                   //Y offset of view.
 
         //Textures
         List<Texture2D> tileTextures;
@@ -82,6 +84,8 @@ namespace Chaos_University
 
             clickPrevX = -1;                //Start clickPrev at a nonexistent index.
             clickPrevY = -1;
+            camX = 0;
+            camY = 0;
 
             base.Initialize();
         }
@@ -233,15 +237,17 @@ namespace Chaos_University
         private void Fail()
         {
             //Am leaving for now, but we'll need to redo this stuff.
-            ninjaChar.PositionRect = ninjaStart;  //Reset Player Location.
-            ninjaChar.turn(0);                     //Reset Player Direction.
-            GlobalVar.Tries--;                     //Reduce number of tries player has.
-            GlobalVar.ParCount = 0;                //Reset par for player.
-            ninjaChar.Moving = false;              //Halt player.
+            ninjaChar.PositionRect = ninjaStart;    //Reset Player Location.
+            ninjaChar.turn(0);                      //Reset Player Direction.
+            GlobalVar.Tries--;                      //Reduce number of tries player has.
+            GlobalVar.ParCount = 0;                 //Reset par for player.
+            ninjaChar.Moving = false;               //Halt player.
             level.ActivateMoney();                  //Reset monies.
             indicator.Active = false;               //Reset indicator.
-            clickPrevX = -1;                    //Reset clickPrev at a nonexistent index.
-            clickPrevY = -1;                    //Reset clickPrev at a nonexistent index.
+            clickPrevX = -1;                        //Reset clickPrev at a nonexistent index.
+            clickPrevY = -1;                        //Reset clickPrev at a nonexistent index.
+            camX = 0;                               //Reset view.
+            camY = 0;                               //Reset view.
 
             //reconChar.PositionRect = ninjaStart;  //Reset Player Location.
             //reconChar.turn(0);                     //Reset Player Direction.
@@ -397,8 +403,8 @@ namespace Chaos_University
                     {
                         try
                         {
-                            int clickNowX = mouse.X / GlobalVar.TILESIZE;
-                            int clickNowY = mouse.Y / GlobalVar.TILESIZE;
+                            int clickNowX = (mouse.X - camX) / GlobalVar.TILESIZE;
+                            int clickNowY = (mouse.Y - camY) / GlobalVar.TILESIZE;
                             //Change tile at mouse location. True if Increment could have occured.
                             if (level.GetGamePiece(clickNowX, clickNowY).IncrementType())
                             {
@@ -432,9 +438,35 @@ namespace Chaos_University
                     {
                         ninjaChar.Moving = true;
                     }
+
+                    //Reset
                     if (keyboard.IsKeyDown(Keys.R) && keyboardPrev.IsKeyUp(Keys.R))
                     {
                         this.Fail();
+                    }
+
+                    //Move view Up.
+                    if (keyboard.IsKeyDown(Keys.W) || keyboard.IsKeyDown(Keys.Up))
+                    {
+                        camY -= (int)(150 * (float)gameTime.ElapsedGameTime.TotalSeconds);
+                    }
+
+                    //Move view Right.
+                    if (keyboard.IsKeyDown(Keys.D) || keyboard.IsKeyDown(Keys.Right))
+                    {
+                        camX += (int)(150 * (float)gameTime.ElapsedGameTime.TotalSeconds);
+                    }
+
+                    //Move view Down.
+                    if (keyboard.IsKeyDown(Keys.S) || keyboard.IsKeyDown(Keys.Down))
+                    {
+                        camY += (int)(150 * (float)gameTime.ElapsedGameTime.TotalSeconds);
+                    }
+
+                    //Move view Left.
+                    if (keyboard.IsKeyDown(Keys.A) || keyboard.IsKeyDown(Keys.Left))
+                    {
+                        camX -= (int)(150 * (float)gameTime.ElapsedGameTime.TotalSeconds);
                     }
 
                     //Move Player
@@ -611,10 +643,10 @@ namespace Chaos_University
                         "Press R to reset.",
                         new Vector2(420, GraphicsDevice.Viewport.Height - 50),
                         Color.White);
-                    level.Draw(spriteBatch);
-                    ninjaChar.Draw(spriteBatch);
+                    level.Draw(spriteBatch, camX, camY);
+                    ninjaChar.Draw(spriteBatch, camX, camY);
                     //guard.Draw(spriteBatch);
-                    indicator.Draw(spriteBatch);
+                    indicator.Draw(spriteBatch, camX, camY);
                     break;
 
                 //Level Complete feedback screen.
