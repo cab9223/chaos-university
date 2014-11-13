@@ -104,13 +104,22 @@ namespace Chaos_University
                 input = new StreamReader(file);
                 string line = "";
 
+                //Read map height, width, and par. Establish level.
                 int tempWidth = int.Parse(input.ReadLine());    //Width of map from file.
                 int tempHeight = int.Parse(input.ReadLine());   //Height of map from file.
                 int levelPar = int.Parse(input.ReadLine());     //Par of level from file.
-                int columnNumber;                               //Counter for each column being written.
-                int lineNumber = 0;                             //Counter for each row/line being written.
-
                 level = new Level(tempWidth, tempHeight, GlobalVar.TILESIZE, levelPar);     //Establish level.
+
+                //Read character directions.
+                Queue<int> charDirs = new Queue<int>();
+                foreach(char dir in input.ReadLine())
+                {
+                    charDirs.Enqueue(int.Parse(dir.ToString()));
+                }
+
+                //Counters for reading map blocks.
+                int columnNumber;       //Counter for each column being written.
+                int lineNumber = 0;     //Counter for each row/line being written.
 
                 //While a line is to be read.
                 while((line = input.ReadLine()) != null)
@@ -176,7 +185,7 @@ namespace Chaos_University
                                 ninjaChar = new Player(
                                     columnNumber * GlobalVar.TILESIZE,
                                     lineNumber * GlobalVar.TILESIZE,
-                                    0,
+                                    charDirs.Dequeue(),
                                     playerTextures,
                                     Player.Major.Ninja);
                                 ninjaStart = ninjaChar.PositionRect;
@@ -192,7 +201,7 @@ namespace Chaos_University
                                 reconChar = new Player(
                                     columnNumber * GlobalVar.TILESIZE,
                                     lineNumber * GlobalVar.TILESIZE,
-                                    0,
+                                    charDirs.Dequeue(),
                                     playerTextures,
                                     Player.Major.Recon);
                                 reconStart = reconChar.PositionRect;
@@ -208,18 +217,19 @@ namespace Chaos_University
                                 assaultChar = new Player(
                                     columnNumber * GlobalVar.TILESIZE,
                                     lineNumber * GlobalVar.TILESIZE,
-                                    0,
+                                    charDirs.Dequeue(),
                                     playerTextures,
                                     Player.Major.Assault);
                                 assaultStart = assaultChar.PositionRect;
                                 ninjaStart = ninjaChar.PositionRect;
                                 break;
-
                         }
                         columnNumber++;
                     }
                     lineNumber++;
                 }
+
+                input.Close();
             }
             //Close if File Not Found. (Change to send an error message?)
             catch(FileNotFoundException)
@@ -231,6 +241,13 @@ namespace Chaos_University
             {
                 this.Exit();
             }
+        }
+
+        // will create a new instance of the character creator and display it.
+        public void LoadCharacterCreator()
+        {
+            CharacterCreator characterCreator = new CharacterCreator();
+            characterCreator.Show();
         }
 
         // Failure state.
@@ -286,11 +303,80 @@ namespace Chaos_University
             }
         }
 
-        // will create a new instance of the character creator and display it.
-        public void LoadCharacterCreator()
+        private void CheckGameMouse()
         {
-            CharacterCreator characterCreator = new CharacterCreator();
-            characterCreator.Show();
+            //Mouse click to change tiles. Click fails beyond par.
+            if (mouse.LeftButton == ButtonState.Pressed && mousePrev.LeftButton == ButtonState.Released && GlobalVar.ParCount <= level.Par)
+            {
+                try
+                {
+                    int clickNowX = (mouse.X - camX) / GlobalVar.TILESIZE;
+                    int clickNowY = (mouse.Y - camY) / GlobalVar.TILESIZE;
+                    //Change tile at mouse location. True if Increment could have occured.
+                    if (level.GetGamePiece(clickNowX, clickNowY).IncrementType())
+                    {
+                        //Increment parCount if tile changed is a new tile.
+                        if (clickNowX != clickPrevX || clickNowY != clickPrevY)
+                        {
+                            indicator.Active = true;                    //Activate indicator at changed tile.
+                            indicator.PositionRect = new Rectangle(     //Move indicator to changed tile.
+                                clickNowX * GlobalVar.TILESIZE,
+                                clickNowY * GlobalVar.TILESIZE,
+                                GlobalVar.TILESIZE,
+                                GlobalVar.TILESIZE);
+                            GlobalVar.ParCount++;
+                            clickPrevX = clickNowX;
+                            clickPrevY = clickNowY;
+                            //Reverses any click beyond par.
+                            if (GlobalVar.ParCount == level.Par + 1)
+                            {
+                                level.GetGamePiece(clickPrevX, clickPrevY).DecrementType();
+                            }
+                        }
+                    }
+                }
+                catch (IndexOutOfRangeException) { }    //Catch and ignore exception that mouse is beyond map.
+            }
+        }
+
+        private void CheckGameKeyboard(double elapsedTime)
+        {
+            //Keyboard buttons.
+            //Pressing enter makes the player start move.
+            if (keyboard.IsKeyDown(Keys.Enter) && keyboardPrev.IsKeyUp(Keys.Enter) && !ninjaChar.Moving)
+            {
+                ninjaChar.Moving = true;
+            }
+
+            //Reset
+            if (keyboard.IsKeyDown(Keys.R) && keyboardPrev.IsKeyUp(Keys.R))
+            {
+                this.Fail();
+            }
+
+            //Move view Up.
+            if (keyboard.IsKeyDown(Keys.W) || keyboard.IsKeyDown(Keys.Up))
+            {
+                camY += (int)(150 * (float)elapsedTime);
+            }
+
+            //Move view Right.
+            if (keyboard.IsKeyDown(Keys.D) || keyboard.IsKeyDown(Keys.Right))
+            {
+                camX -= (int)(150 * (float)elapsedTime);
+            }
+
+            //Move view Down.
+            if (keyboard.IsKeyDown(Keys.S) || keyboard.IsKeyDown(Keys.Down))
+            {
+                camY -= (int)(150 * (float)elapsedTime);
+            }
+
+            //Move view Left.
+            if (keyboard.IsKeyDown(Keys.A) || keyboard.IsKeyDown(Keys.Left))
+            {
+                camX += (int)(150 * (float)elapsedTime);
+            }
         }
 
         /// <summary>
@@ -396,78 +482,10 @@ namespace Chaos_University
                 case GameState.Menus:
                     break;
 
-                //PLACING TILES
+                //PLAYING GAME
                 case GameState.Playing:
-                    //Mouse click to change tiles. Click fails beyond par.
-                    if (mouse.LeftButton == ButtonState.Pressed && mousePrev.LeftButton == ButtonState.Released && GlobalVar.ParCount <= level.Par)
-                    {
-                        try
-                        {
-                            int clickNowX = (mouse.X - camX) / GlobalVar.TILESIZE;
-                            int clickNowY = (mouse.Y - camY) / GlobalVar.TILESIZE;
-                            //Change tile at mouse location. True if Increment could have occured.
-                            if (level.GetGamePiece(clickNowX, clickNowY).IncrementType())
-                            {
-                                //Increment parCount if tile changed is a new tile.
-                                if (clickNowX != clickPrevX || clickNowY != clickPrevY)
-                                {
-                                    indicator.Active = true;                    //Activate indicator at changed tile.
-                                    indicator.PositionRect = new Rectangle(     //Move indicator to changed tile.
-                                        clickNowX * GlobalVar.TILESIZE,
-                                        clickNowY * GlobalVar.TILESIZE,
-                                        GlobalVar.TILESIZE,
-                                        GlobalVar.TILESIZE);
-                                    GlobalVar.ParCount++;
-                                    clickPrevX = clickNowX;
-                                    clickPrevY = clickNowY;
-                                    //Reverses any click beyond par.
-                                    if (GlobalVar.ParCount == level.Par + 1)
-                                    {
-                                        level.GetGamePiece(clickPrevX, clickPrevY).DecrementType();
-                                    }
-                                }
-                            }
-                        }
-                        catch (IndexOutOfRangeException) { }    //Catch and ignore exception that mouse is beyond map.
-                    }
-
-                    //Redo for multiple classes
-                    //Keyboard buttons.
-                    //Pressing enter makes the player start move.
-                    if (keyboard.IsKeyDown(Keys.Enter) && keyboardPrev.IsKeyUp(Keys.Enter) && !ninjaChar.Moving)
-                    {
-                        ninjaChar.Moving = true;
-                    }
-
-                    //Reset
-                    if (keyboard.IsKeyDown(Keys.R) && keyboardPrev.IsKeyUp(Keys.R))
-                    {
-                        this.Fail();
-                    }
-
-                    //Move view Up.
-                    if (keyboard.IsKeyDown(Keys.W) || keyboard.IsKeyDown(Keys.Up))
-                    {
-                        camY -= (int)(150 * (float)gameTime.ElapsedGameTime.TotalSeconds);
-                    }
-
-                    //Move view Right.
-                    if (keyboard.IsKeyDown(Keys.D) || keyboard.IsKeyDown(Keys.Right))
-                    {
-                        camX += (int)(150 * (float)gameTime.ElapsedGameTime.TotalSeconds);
-                    }
-
-                    //Move view Down.
-                    if (keyboard.IsKeyDown(Keys.S) || keyboard.IsKeyDown(Keys.Down))
-                    {
-                        camY += (int)(150 * (float)gameTime.ElapsedGameTime.TotalSeconds);
-                    }
-
-                    //Move view Left.
-                    if (keyboard.IsKeyDown(Keys.A) || keyboard.IsKeyDown(Keys.Left))
-                    {
-                        camX -= (int)(150 * (float)gameTime.ElapsedGameTime.TotalSeconds);
-                    }
+                    this.CheckGameMouse();
+                    this.CheckGameKeyboard(gameTime.ElapsedGameTime.TotalSeconds);
 
                     //Move Player
                     /*make generic*/ninjaChar.Move((int)(100 * (float)gameTime.ElapsedGameTime.TotalSeconds));
@@ -488,51 +506,48 @@ namespace Chaos_University
                         for (int i = 0; i < level.Width; ++i)
                         {
                             //If player on direction tile.
-                                if (level.GetGamePiece(i, j).PositionRect.Center == ninjaChar.PositionRect.Center)
+                            if (level.GetGamePiece(i, j).PositionRect.Center == ninjaChar.PositionRect.Center)
+                            {
+                                //Turn player based on tile direction.
+                                switch (level.GetGamePiece(i, j).PieceState)
                                 {
-                                    //Turn player based on tile direction.
-                                    switch (level.GetGamePiece(i, j).PieceState)
-                                    {
-                                        case PieceState.Floor:
-                                            break;
-                                        case PieceState.North:
-                                            ninjaChar.turn(0);
-                                            break;
-                                        case PieceState.East:
-                                            ninjaChar.turn(1);
-                                            break;
-                                        case PieceState.South:
-                                            ninjaChar.turn(2);
-                                            break;
-                                        case PieceState.West:
-                                            ninjaChar.turn(3);
-                                            break;
-                                        case PieceState.Goal:
-                                            current = GameState.LevelComp;
-                                            break;
-                                    }
+                                    case PieceState.Floor:
+                                        break;
+                                    case PieceState.North:
+                                        ninjaChar.turn(0);
+                                        break;
+                                    case PieceState.East:
+                                        ninjaChar.turn(1);
+                                        break;
+                                    case PieceState.South:
+                                        ninjaChar.turn(2);
+                                        break;
+                                    case PieceState.West:
+                                        ninjaChar.turn(3);
+                                        break;
+                                    case PieceState.Goal:
+                                        current = GameState.LevelComp;
+                                        break;
                                 }
+                            }
 
                             //If game piece is a wall.
-                                if (level.GetGamePiece(i, j).PieceState == PieceState.Wall)
+                            if (level.GetGamePiece(i, j).PieceState == PieceState.Wall)
+                            {
+                                //Check if player collided with it.
+                                if (level.GetGamePiece(i, j).CheckCollision(ninjaChar))
                                 {
-                                    //Check if player collided with it.
-                                    if (level.GetGamePiece(i, j).CheckCollision(ninjaChar))
-                                    {
-                                        this.Fail();
-                                    }
+                                    this.Fail();
                                 }
 
-                            //If game piece is a wall.
-                                if (level.GetGamePiece(i, j).PieceState == PieceState.Wall)
+                                /*
+                                //Check if enemy collided with it.
+                                if (level.GetGamePiece(i, j).CheckCollision(guard))
                                 {
-                                    //Check if enemy collided with it.
-                                    if (level.GetGamePiece(i, j).CheckCollision(guard))
-                                    {
-                                        guard.Patrol(0);
-                                    }
+                                    guard.Patrol(0);
                                 }
-
+                                */
+                            }        
                         }
 
                         //For all Game Pieces in level object list, check for collision.
@@ -560,7 +575,6 @@ namespace Chaos_University
                     }
                     break;
             }
-
             mousePrev = Mouse.GetState();
             keyboardPrev = Keyboard.GetState();
 

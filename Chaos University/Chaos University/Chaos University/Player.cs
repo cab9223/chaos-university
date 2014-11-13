@@ -42,9 +42,29 @@ namespace Chaos_University
             : base(x, y, direction, textures)
         {
             //PlrName = name;  //sets player name
-            Console.WriteLine(PositionRect.ToString());
             moving = false;
             ThisMajor = myMajor;
+
+            //Face initial direction
+            switch (direction)
+            {
+                case 0:
+                    Vector = new Vector2(0, -1);
+                    Direction = 0;
+                    break;
+                case 1:
+                    Vector = new Vector2(1, 0);
+                    Direction = 1;
+                    break;
+                case 2:
+                    Vector = new Vector2(0, 1);
+                    Direction = 2;
+                    break;
+                case 3:
+                    Vector = new Vector2(-1, 0);
+                    Direction = 3;
+                    break;
+            }
         }
 
         //Draws all player components.
