@@ -63,6 +63,11 @@ namespace Chaos_University
         //Songs
         List<Song> music;
 
+        //Videos
+
+        Video introVideo;
+        VideoPlayer videoPlayer = new VideoPlayer();
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -79,7 +84,7 @@ namespace Chaos_University
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            current = GameState.Title;      // Establish starting game state.
+            current = GameState.Intro;      // Establish starting game state.
             this.IsMouseVisible = true;     // Make mouse visible on screen.
 
             clickPrevX = -1;                //Start clickPrev at a nonexistent index.
@@ -400,6 +405,9 @@ namespace Chaos_University
             music = new List<Song>();
             music.Add(this.Content.Load<Song>("MainTheme"));
 
+            
+            introVideo = this.Content.Load<Video>("Intro");
+
             //Single indicator.
             List<Texture2D> indicatorTextureTemp = new List<Texture2D>();
             indicatorTextureTemp.Add(this.Content.Load<Texture2D>("Indicator"));
@@ -466,8 +474,35 @@ namespace Chaos_University
 
             switch (current)
             {
+               //Intro Animation
+                case GameState.Intro:
+                    
+                    //Waits total lenght of video (in this case, 6 sec)
+                    if (gameTime.TotalGameTime.Seconds < 6)
+                    {
+                        videoPlayer.Play(introVideo);
+                        videoPlayer.IsLooped = false;
+                    }
+                    else
+                    {
+                        videoPlayer.Stop();
+                        current = GameState.Title;
+                    }
+
+                    // Can skip Intro Animation
+                    if (keyboard.IsKeyDown(Keys.Enter) && keyboardPrev.IsKeyUp(Keys.Enter)) //Press enter to play.
+                    {
+                        videoPlayer.IsLooped = false;
+                        videoPlayer.Stop();
+                        current = GameState.Title;
+                    }
+                    break;
+                
+                
                 //TITLE SCREEN
                 case GameState.Title:
+
+                         
                     if (keyboard.IsKeyDown(Keys.Enter) && keyboardPrev.IsKeyUp(Keys.Enter)) //Press enter to play.
                     {
                         current = GameState.Playing;
@@ -594,6 +629,11 @@ namespace Chaos_University
 
             switch (current)
             {
+                //Intro Animation
+                case GameState.Intro:
+                    spriteBatch.Draw(videoPlayer.GetTexture(), new Rectangle(0, 0, introVideo.Width, introVideo.Height), Color.White);
+                    break;
+                               
                 //TITLE SCREEN
                 case GameState.Title:
                     //Draw Title
@@ -618,6 +658,7 @@ namespace Chaos_University
                         "Press enter to continue.",
                         new Vector2(25, GraphicsDevice.Viewport.Height - 26),
                         Color.White);
+                   
                     break;
 
                 //MENU SCREEN

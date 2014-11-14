@@ -7,6 +7,7 @@ namespace Chaos_University
 {
     public enum GameState
     {
+        Intro,
         Title,
         Menus,
         Playing,
