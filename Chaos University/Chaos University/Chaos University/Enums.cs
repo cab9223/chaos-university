@@ -9,7 +9,6 @@ namespace Chaos_University
     {
         Intro,
         Title,
-        Menus,
         Playing,
         LevelComp,
         GameOver

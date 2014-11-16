@@ -20,25 +20,26 @@ namespace Chaos_University
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        //Gamestate + Level stuff.
+        GameState current;          //State of the game (title, menu, playing, gameover, etc.)
+        int indexLevel;             //Current level index.
+        Level level;                //Current level of the game.
+        List<Level> levels;         //List of levels.
+        
+        //Input stuff.
         MouseState mouse;           //Current mouse state
         MouseState mousePrev;       //Previous mouse state
         KeyboardState keyboard;     //Keyboard state
         KeyboardState keyboardPrev; //Keyboard state previous
-
         int clickPrevX;             //X index of previous tile changed.
         int clickPrevY;             //Y index of previous tile changed.
-        Level level;                //Current level of the game.
-        Player ninjaChar;          //ninja
-        Rectangle ninjaStart;      //ninja starting position.
-        Player reconChar;          //recon
-        Rectangle reconStart;      //recon starting position.
-        Player assaultChar;          //assault
-        Rectangle assaultStart;      //assault starting position.
+
+        //Player stuff.
         Enemy guard;                //Guard
         Rectangle guardStart;       //Guard starting position.
-        GameState current;          //State of the game (title, menu, playing, gameover, etc.)
         Indicator indicator;        //Indicator of currently selected tile.
 
+        //Other things.
         Vector2 menuPos;            //Position of the menu header
         Vector2 gameOverPos;        //Position of the game over screen.
         Vector2 levelCompPos;       //Position of the level complete screen.
@@ -55,24 +56,17 @@ namespace Chaos_University
         List<Texture2D> guardTextures;
         List<Texture2D> moneyTextures;
 
-        //3 variables to determine presence of particular classes.
-        bool isNinja = false;
-        bool isRecon = false;
-        bool isAssault = false;
-
         //Songs
         List<Song> music;
 
         //Videos
-
         Video introVideo;
-        VideoPlayer videoPlayer = new VideoPlayer();
+        VideoPlayer videoPlayer;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-
         }
 
         /// <summary>
@@ -86,7 +80,10 @@ namespace Chaos_University
             // TODO: Add your initialization logic here
             current = GameState.Intro;      // Establish starting game state.
             this.IsMouseVisible = true;     // Make mouse visible on screen.
+            videoPlayer = new VideoPlayer();
+            levels = new List<Level>();
 
+            indexLevel = -1;
             clickPrevX = -1;                //Start clickPrev at a nonexistent index.
             clickPrevY = -1;
             camX = 0;
@@ -95,11 +92,12 @@ namespace Chaos_University
             base.Initialize();
         }
 
-        // Loads a level. Requires integer for specific file name.
-        private void LoadLevel(int newLevel)
+        // Loads a new level and return it. Requires integer for specific file name.
+        private Level LoadLevel(int levelNum)
         {
             //concatanates "LevelMap" and passed int to find map file.
-            string file = "LevelMap" + newLevel + ".txt";
+            string file = "LevelMap" + levelNum + ".txt";
+            Level newLevel = new Level(0, 0, 0, 0); //New Level with default values to satisfy compiler.
             
             //makes new stream reader
             StreamReader input;
@@ -109,11 +107,11 @@ namespace Chaos_University
                 input = new StreamReader(file);
                 string line = "";
 
-                //Read map height, width, and par. Establish level.
+                //Read map height, width, and par. Establish newLevel.
                 int tempWidth = int.Parse(input.ReadLine());    //Width of map from file.
                 int tempHeight = int.Parse(input.ReadLine());   //Height of map from file.
-                int levelPar = int.Parse(input.ReadLine());     //Par of level from file.
-                level = new Level(tempWidth, tempHeight, GlobalVar.TILESIZE, levelPar);     //Establish level.
+                int newLevelPar = int.Parse(input.ReadLine());  //Par of newLevel from file.
+                newLevel = new Level(tempWidth, tempHeight, GlobalVar.TILESIZE, newLevelPar);     //Establish newLevel.
 
                 //Read character directions.
                 Queue<int> charDirs = new Queue<int>();
@@ -136,39 +134,39 @@ namespace Chaos_University
                         {
                             //Any unknown piece becomes a tile.
                             default:
-                                level.SetTile(columnNumber, lineNumber, new Tile(
+                                newLevel.SetTile(columnNumber, lineNumber, new Tile(
                                     columnNumber * GlobalVar.TILESIZE,
                                     lineNumber * GlobalVar.TILESIZE,
                                     tileTextures));
                                 break;
                             //1 = Wall.
                             case '1':
-                                level.SetTile(columnNumber, lineNumber, new Wall(
+                                newLevel.SetTile(columnNumber, lineNumber, new Wall(
                                     columnNumber * GlobalVar.TILESIZE,
                                     lineNumber * GlobalVar.TILESIZE,
                                     wallTextures));
                                 break;
                             //M = Moneh
                             case 'M':
-                                level.SetTile(columnNumber, lineNumber, new Tile(
+                                newLevel.SetTile(columnNumber, lineNumber, new Tile(
                                     columnNumber * GlobalVar.TILESIZE,
                                     lineNumber * GlobalVar.TILESIZE,
                                     tileTextures));
-                                level.AddObject(new Money(
+                                newLevel.AddObject(new Money(
                                     columnNumber * GlobalVar.TILESIZE,
                                     lineNumber * GlobalVar.TILESIZE,
                                     moneyTextures));
                                 break;
                             //F = Goal
                             case 'F':
-                                level.SetTile(columnNumber, lineNumber, new Goal(
+                                newLevel.SetTile(columnNumber, lineNumber, new Goal(
                                     columnNumber * GlobalVar.TILESIZE,
                                     lineNumber * GlobalVar.TILESIZE,
                                     goalTextures));
                                 break;
                             //X = Guard start and tile.
                             case 'X':
-                                level.SetTile(columnNumber, lineNumber, new Tile(
+                                newLevel.SetTile(columnNumber, lineNumber, new Tile(
                                     columnNumber * GlobalVar.TILESIZE,
                                     lineNumber * GlobalVar.TILESIZE,
                                     tileTextures));
@@ -182,51 +180,45 @@ namespace Chaos_University
                                 break;
                             //N = Ninja start and tile.
                             case 'N':
-                                isNinja = true;
-                                level.SetTile(columnNumber, lineNumber, new Tile(
+                                newLevel.SetTile(columnNumber, lineNumber, new Tile(
                                     columnNumber * GlobalVar.TILESIZE,
                                     lineNumber * GlobalVar.TILESIZE,
                                     tileTextures));
-                                ninjaChar = new Player(
+                                newLevel.Ninja = new Player(
                                     columnNumber * GlobalVar.TILESIZE,
                                     lineNumber * GlobalVar.TILESIZE,
                                     charDirs.Dequeue(),
                                     playerTextures,
                                     Player.Major.Ninja);
-                                ninjaStart = ninjaChar.PositionRect;
+                                newLevel.StartNinja = newLevel.Ninja.PositionRect;
                                 break;
-
-                            //R = Recon start and tile
+                            //R = Recon
                             case 'R':
-                                isRecon = true;
-                                level.SetTile(columnNumber, lineNumber, new Tile(
+                                newLevel.SetTile(columnNumber, lineNumber, new Tile(
                                     columnNumber * GlobalVar.TILESIZE,
                                     lineNumber * GlobalVar.TILESIZE,
                                     tileTextures));
-                                reconChar = new Player(
+                                newLevel.Recon = new Player(
                                     columnNumber * GlobalVar.TILESIZE,
                                     lineNumber * GlobalVar.TILESIZE,
                                     charDirs.Dequeue(),
                                     playerTextures,
-                                    Player.Major.Recon);
-                                reconStart = reconChar.PositionRect;
+                                    Player.Major.Ninja);
+                                newLevel.StartRecon = newLevel.Recon.PositionRect;
                                 break;
-
-                            //A = Assault start and tile
+                            //A = Assault
                             case 'A':
-                                isAssault = true;
-                                level.SetTile(columnNumber, lineNumber, new Tile(
+                                newLevel.SetTile(columnNumber, lineNumber, new Tile(
                                     columnNumber * GlobalVar.TILESIZE,
                                     lineNumber * GlobalVar.TILESIZE,
                                     tileTextures));
-                                assaultChar = new Player(
+                                newLevel.Assault = new Player(
                                     columnNumber * GlobalVar.TILESIZE,
                                     lineNumber * GlobalVar.TILESIZE,
                                     charDirs.Dequeue(),
                                     playerTextures,
-                                    Player.Major.Assault);
-                                assaultStart = assaultChar.PositionRect;
-                                ninjaStart = ninjaChar.PositionRect;
+                                    Player.Major.Ninja);
+                                newLevel.StartAssault = newLevel.Assault.PositionRect;
                                 break;
                         }
                         columnNumber++;
@@ -246,6 +238,8 @@ namespace Chaos_University
             {
                 this.Exit();
             }
+
+            return newLevel;
         }
 
         // will create a new instance of the character creator and display it.
@@ -259,17 +253,17 @@ namespace Chaos_University
         private void Fail()
         {
             //Am leaving for now, but we'll need to redo this stuff.
-            ninjaChar.PositionRect = ninjaStart;    //Reset Player Location.
-            ninjaChar.turn(0);                      //Reset Player Direction.
-            GlobalVar.Tries--;                      //Reduce number of tries player has.
-            GlobalVar.ParCount = 0;                 //Reset par for player.
-            ninjaChar.Moving = false;               //Halt player.
-            level.ActivateMoney();                  //Reset monies.
-            indicator.Active = false;               //Reset indicator.
-            clickPrevX = -1;                        //Reset clickPrev at a nonexistent index.
-            clickPrevY = -1;                        //Reset clickPrev at a nonexistent index.
-            camX = 0;                               //Reset view.
-            camY = 0;                               //Reset view.
+            level.Ninja.PositionRect = level.StartNinja;    //Reset Player Location.
+            level.Ninja.turn(0);                            //Reset Player Direction.
+            GlobalVar.Tries--;                              //Reduce number of tries player has.
+            GlobalVar.ParCount = 0;                         //Reset par for player.
+            level.Ninja.Moving = false;                     //Halt player.
+            level.ActivateMoney();                          //Reset monies.
+            indicator.Active = false;                       //Reset indicator.
+            clickPrevX = -1;                                //Reset clickPrev at a nonexistent index.
+            clickPrevY = -1;                                //Reset clickPrev at a nonexistent index.
+            camX = 0;                                       //Reset view.
+            camY = 0;                                       //Reset view.
 
             //reconChar.PositionRect = ninjaStart;  //Reset Player Location.
             //reconChar.turn(0);                     //Reset Player Direction.
@@ -304,14 +298,15 @@ namespace Chaos_University
             //Induce Game over if player tries = 0;
             if (GlobalVar.Tries == 0)
             {
-                current = GameState.GameOver;
+                //current = GameState.GameOver;
             }
         }
 
+        //Checks the state of the mouse and performs appropriate actions.
         private void CheckGameMouse()
         {
             //Mouse click to change tiles. Click fails beyond par.
-            if (mouse.LeftButton == ButtonState.Pressed && mousePrev.LeftButton == ButtonState.Released && GlobalVar.ParCount <= level.Par)
+            if (mouse.LeftButton == ButtonState.Pressed && mousePrev.LeftButton == ButtonState.Released)
             {
                 try
                 {
@@ -344,13 +339,14 @@ namespace Chaos_University
             }
         }
 
+        //Checks the state of the keyboard and performs appropriate actions.
         private void CheckGameKeyboard(double elapsedTime)
         {
             //Keyboard buttons.
             //Pressing enter makes the player start move.
-            if (keyboard.IsKeyDown(Keys.Enter) && keyboardPrev.IsKeyUp(Keys.Enter) && !ninjaChar.Moving)
+            if (keyboard.IsKeyDown(Keys.Enter) && keyboardPrev.IsKeyUp(Keys.Enter) && !level.Ninja.Moving)
             {
-                ninjaChar.Moving = true;
+                level.Ninja.Moving = true;
             }
 
             //Reset
@@ -382,6 +378,13 @@ namespace Chaos_University
             {
                 camX += (int)(150 * (float)elapsedTime);
             }
+        }
+
+        private void IncrementLevel()
+        {
+            indexLevel++;
+            Console.WriteLine(indexLevel);
+            level = levels[indexLevel];
         }
 
         /// <summary>
@@ -444,7 +447,10 @@ namespace Chaos_University
             guardTextures = new List<Texture2D>();
             guardTextures.Add(this.Content.Load<Texture2D>("Default_Guard"));
 
-            this.LoadLevel(1);
+            for (int i = 1; i <= GlobalVar.LevelCount; ++i)
+            {
+                levels.Add(this.LoadLevel(i));
+            }
             this.LoadCharacterCreator();
         }
 
@@ -476,7 +482,6 @@ namespace Chaos_University
             {
                //Intro Animation
                 case GameState.Intro:
-                    
                     //Waits total lenght of video (in this case, 6 sec)
                     if (gameTime.TotalGameTime.Seconds < 6)
                     {
@@ -501,20 +506,16 @@ namespace Chaos_University
                 
                 //TITLE SCREEN
                 case GameState.Title:
-
-                         
                     if (keyboard.IsKeyDown(Keys.Enter) && keyboardPrev.IsKeyUp(Keys.Enter)) //Press enter to play.
                     {
-                        current = GameState.Playing;
-
                         //Play sound. Do this only to type change.
                         MediaPlayer.Play(music[0]);
 
-                    }
-                    break;
+                        //First level.
+                        this.IncrementLevel();
 
-                //MENU SCREEN
-                case GameState.Menus:
+                        current = GameState.Playing;
+                    }
                     break;
 
                 //PLAYING GAME
@@ -523,7 +524,7 @@ namespace Chaos_University
                     this.CheckGameKeyboard(gameTime.ElapsedGameTime.TotalSeconds);
 
                     //Move Player
-                    /*make generic*/ninjaChar.Move((int)(100 * (float)gameTime.ElapsedGameTime.TotalSeconds));
+                    level.Ninja.Move((int)(100 * (float)gameTime.ElapsedGameTime.TotalSeconds));
 
                     //Move Guard
                     //guard.Move((int)(100 * (float)gameTime.ElapsedGameTime.TotalSeconds));
@@ -541,7 +542,7 @@ namespace Chaos_University
                         for (int i = 0; i < level.Width; ++i)
                         {
                             //If player on direction tile.
-                            if (level.GetGamePiece(i, j).PositionRect.Center == ninjaChar.PositionRect.Center)
+                            if (level.GetGamePiece(i, j).PositionRect.Center == level.Ninja.PositionRect.Center)
                             {
                                 //Turn player based on tile direction.
                                 switch (level.GetGamePiece(i, j).PieceState)
@@ -549,16 +550,16 @@ namespace Chaos_University
                                     case PieceState.Floor:
                                         break;
                                     case PieceState.North:
-                                        ninjaChar.turn(0);
+                                        level.Ninja.turn(0);
                                         break;
                                     case PieceState.East:
-                                        ninjaChar.turn(1);
+                                        level.Ninja.turn(1);
                                         break;
                                     case PieceState.South:
-                                        ninjaChar.turn(2);
+                                        level.Ninja.turn(2);
                                         break;
                                     case PieceState.West:
-                                        ninjaChar.turn(3);
+                                        level.Ninja.turn(3);
                                         break;
                                     case PieceState.Goal:
                                         current = GameState.LevelComp;
@@ -570,7 +571,7 @@ namespace Chaos_University
                             if (level.GetGamePiece(i, j).PieceState == PieceState.Wall)
                             {
                                 //Check if player collided with it.
-                                if (level.GetGamePiece(i, j).CheckCollision(ninjaChar))
+                                if (level.GetGamePiece(i, j).CheckCollision(level.Ninja))
                                 {
                                     this.Fail();
                                 }
@@ -588,7 +589,7 @@ namespace Chaos_University
                         //For all Game Pieces in level object list, check for collision.
                         foreach (Money gamePiece in level.Monies)
                         {
-                            if (gamePiece.CheckCollision(ninjaChar))
+                            if (gamePiece.CheckCollision(level.Ninja))
                             {
                                 gamePiece.Active = false;
                             }
@@ -599,7 +600,10 @@ namespace Chaos_University
                 case GameState.LevelComp:
                     if (keyboard.IsKeyDown(Keys.Enter) && keyboardPrev.IsKeyUp(Keys.Enter))
                     {
-                        current = GameState.Title;
+                        //Increment level
+                        this.IncrementLevel();
+
+                        current = GameState.Playing;
                     }
                     break;
                 //GAME OVER
@@ -661,10 +665,6 @@ namespace Chaos_University
                    
                     break;
 
-                //MENU SCREEN
-                case GameState.Menus:
-                    break;
-
                 //PLAYING
                 case GameState.Playing:
                     //Draw Par UI Element.
@@ -699,7 +699,7 @@ namespace Chaos_University
                         new Vector2(420, GraphicsDevice.Viewport.Height - 50),
                         Color.White);
                     level.Draw(spriteBatch, camX, camY);
-                    ninjaChar.Draw(spriteBatch, camX, camY);
+                    level.Ninja.Draw(spriteBatch, camX, camY);
                     //guard.Draw(spriteBatch);
                     indicator.Draw(spriteBatch, camX, camY);
                     break;

@@ -17,10 +17,8 @@ namespace Chaos_University
     {
         // All the variables that we'll need
 
-        // These two let us change the width and height of the game at-will, without messing up
-        // our other equations. 
-        public static int GAMEWIDTH = 800;
-        public static int GAMEHEIGHT = 600;
+        //Number of levels.
+        public static int LevelCount = 5;
 
         // Allows us to edit the size of a single tile- also useful for a bunch of other things that have been startedo n.
         public static int TILESIZE = 50;

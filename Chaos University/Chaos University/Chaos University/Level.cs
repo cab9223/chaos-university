@@ -17,6 +17,49 @@ namespace Chaos_University
         private GamePiece[,] grid;          //Grid of game pieces
         private int gamePieceSize;          //Height of width of a game piece
         private List<Money> monies;         //List of non-grid objects on map. (currently exclusively monies).
+
+        private Rectangle startNinja;             //Location at which ninja starts.
+        public Rectangle StartNinja
+        {
+            get { return startNinja; }
+            set { startNinja = value; }
+        }
+
+        private Rectangle startRecon;             //Location at which recon starts.
+        public Rectangle StartRecon
+        {
+            get { return startRecon; }
+            set { startRecon = value; }
+        }
+
+        private Rectangle startAssault;            //Location at which- yeah, yeah, you get the idea.
+        public Rectangle StartAssault
+        {
+            get { return startAssault; }
+            set { startAssault = value; }
+        }
+
+        private Player ninja;
+        public Player Ninja
+        {
+            get { return ninja; }
+            set { ninja = value; }
+        }
+
+        private Player recon;
+        public Player Recon
+        {
+            get { return recon; }
+            set { recon = value; }
+        }
+
+        private Player assault;
+        public Player Assault
+        {
+            get { return assault; }
+            set { assault = value; }
+        }
+
         public List<Money> Monies
         {
             get
