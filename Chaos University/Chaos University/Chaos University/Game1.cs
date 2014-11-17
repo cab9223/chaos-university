@@ -295,12 +295,12 @@ namespace Chaos_University
         //Succeed state.
         private void Success()
         {
+            GlobalVar.ParCount = 0;                             //Rest par.
             indicator.Active = false;                           //Reset indicator.
             clickPrevX = -1;                                    //Reset clickPrev at a nonexistent index.
             clickPrevY = -1;                                    //Reset clickPrev at a nonexistent index.
             camX = 0;                                           //Reset view.
             camY = 0;                                           //Reset view.
-            GlobalVar.ParCount = 0;                             //Reste Par.
         }
 
         //Checks the state of the mouse and performs appropriate actions.
@@ -702,10 +702,21 @@ namespace Chaos_University
                 //PLAYING
                 case GameState.Playing:
                     //Draw Par UI Element.
-                    spriteBatch.DrawString(menuFont,
-                        String.Format("Par:   {0} of {1} (PAR REACHED)", GlobalVar.ParCount, level.Par),
-                        new Vector2(25, GraphicsDevice.Viewport.Height - 26),
-                        Color.White);
+                    if (GlobalVar.ParCount < level.Par || GlobalVar.ParCount < 1)
+                    {
+                        spriteBatch.DrawString(menuFont,
+                            String.Format("Par: {0} of {1}", GlobalVar.ParCount, level.Par),
+                            new Vector2(25, GraphicsDevice.Viewport.Height - 26),
+                            Color.White);
+                    }
+                    //Draw maxed out Par UI Element. Ternary expression stops display from going above par.
+                    else
+                    {
+                        spriteBatch.DrawString(menuFont,
+                            String.Format("Par: {0} of {1} (PAR REACHED)", GlobalVar.ParCount, level.Par),
+                            new Vector2(25, GraphicsDevice.Viewport.Height - 26),
+                            Color.White);
+                    }
                     //Draw Enter Directions.
                     spriteBatch.DrawString(menuFont,
                         "Press Enter to start movement.",
