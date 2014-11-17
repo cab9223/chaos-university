@@ -564,7 +564,7 @@ namespace Chaos_University
                     if (keyboard.IsKeyDown(Keys.Enter) && keyboardPrev.IsKeyUp(Keys.Enter)) //Press enter to play.
                     {
                         //Play sound. Do this only to type change.
-                        //MediaPlayer.Play(music[0]);
+                        MediaPlayer.Play(music[0]);
 
                         //First level.
                         this.IncrementLevel();
