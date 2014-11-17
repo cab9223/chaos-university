@@ -36,6 +36,7 @@ namespace Chaos_University
 
         //Player stuff.
         Enemy guard;                //Guard
+        bool isGuard;               //Active Guard
         Rectangle guardStart;       //Guard starting position.
         Indicator indicator;        //Indicator of currently selected tile.
 
@@ -85,6 +86,7 @@ namespace Chaos_University
             videoPlayer = new VideoPlayer();
             levels = new List<Level>();
 
+
             indexLevel = -1;
             clickPrevX = -1;                //Start clickPrev at a nonexistent index.
             clickPrevY = -1;
@@ -92,6 +94,7 @@ namespace Chaos_University
             camY = 0;
             camXCenter = 0;
             camYCenter = 0;
+            isGuard = false;
 
             base.Initialize();
         }
@@ -102,6 +105,7 @@ namespace Chaos_University
             //concatanates "LevelMap" and passed int to find map file.
             string file = "LevelMap" + levelNum + ".txt";
             Level newLevel = new Level(0, 0, 0, 0); //New Level with default values to satisfy compiler.
+            
             
             //makes new stream reader
             StreamReader input;
@@ -168,20 +172,6 @@ namespace Chaos_University
                                     lineNumber * GlobalVar.TILESIZE,
                                     goalTextures));
                                 break;
-                            //X = Guard start and tile.
-                            case 'X':
-                                newLevel.SetTile(columnNumber, lineNumber, new Tile(
-                                    columnNumber * GlobalVar.TILESIZE,
-                                    lineNumber * GlobalVar.TILESIZE,
-                                    tileTextures));
-                                guard = new Enemy(
-                                    columnNumber * GlobalVar.TILESIZE,
-                                    lineNumber * GlobalVar.TILESIZE,
-                                    0,
-                                    guardTextures);
-                                guard.Turn(0);
-                                guardStart = guard.PositionRect;
-                                break;
                             //N = Ninja start and tile.
                             case 'N':
                                 newLevel.SetTile(columnNumber, lineNumber, new Tile(
@@ -226,6 +216,23 @@ namespace Chaos_University
                                     Player.Major.Assault);
                                 newLevel.StartAssault = newLevel.Assault.PositionRect;
                                 newLevel.IsAssault = true;
+                                break;
+                            //X = Guard start and tile.
+                            case 'X':
+                                int dirr = charDirs.Dequeue();
+                                newLevel.SetTile(columnNumber, lineNumber, new Tile(
+                                    columnNumber * GlobalVar.TILESIZE,
+                                    lineNumber * GlobalVar.TILESIZE,
+                                    tileTextures));
+                                guard = new Enemy(
+                                    columnNumber * GlobalVar.TILESIZE,
+                                    lineNumber * GlobalVar.TILESIZE,
+                                    dirr,
+                                    guardTextures);
+                                guard.Turn(dirr);
+                                guard.Turn(dirr);
+                                guardStart = guard.PositionRect;
+                                isGuard = true;
                                 break;
                         }
                         columnNumber++;
@@ -608,15 +615,42 @@ namespace Chaos_University
                             50));
                     }
 
-                    //Move Guard
-                    //guard.Move((int)(100 * (float)gameTime.ElapsedGameTime.TotalSeconds));
 
-                    //Guard attack player, failed attempt
-                    //if (guard.Attack(playerChar) == true)
-                    //{
-                    //    this.Fail();
-                    //}
+                    //Guard Updates
+                    if (isGuard == true)
+                    {
+                        //Move Guard
+                        guard.Move((int)(
+                            100 *
+                            GlobalVar.TILESIZE *
+                            (float)gameTime.ElapsedGameTime.TotalSeconds /
+                            50));
 
+                        //Guard attack player
+                        if (guard.Attack(level.Ninja) == true)
+                        {
+                            this.Fail();
+                        }
+
+                        //Guard Wall detection
+                        for (int j = 0; j < level.Height; ++j)
+                        {
+                            for (int i = 0; i < level.Width; ++i)
+                            {
+                                if (level.GetGamePiece(i, j).PieceState == PieceState.Wall)
+                                {
+                                    //Check if enemy collided with it.
+                                    if (level.GetGamePiece(i, j).CheckCollision(guard))
+                                    {
+                                        guard.Patrol(0);
+                                    }
+
+                                }
+                            }
+                        }
+                    }
+
+                    
                     //Gonna have to redo this for multiple classes                    
                     //For all gamepieces in level grid, check for direcion changes or collisions.
                     switch(level.CheckCollisions())
@@ -731,8 +765,11 @@ namespace Chaos_University
                         Color.White);
                     level.Draw(spriteBatch, camX, camY);
                     level.Ninja.Draw(spriteBatch, camX, camY);
-                    //guard.Draw(spriteBatch);
                     indicator.Draw(spriteBatch, camX, camY);
+                    if (isGuard == true)
+                    {
+                        guard.Draw(spriteBatch, camX, camY);
+                    }
                     break;
 
                 //Level Complete feedback screen.

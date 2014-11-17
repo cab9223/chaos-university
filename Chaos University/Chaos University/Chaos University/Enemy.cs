@@ -16,6 +16,8 @@ namespace Chaos_University
     {
         public int Difficulty { get; set; }
 
+        public bool IsActive { get; set; } //For guard death
+
         private Rectangle detectRect;
         public Rectangle DetectRect
         {
@@ -35,6 +37,8 @@ namespace Chaos_University
             : base(x, y, dir, textures)
         {
             Difficulty = 0;
+
+            IsActive = false;
 
             if (dir == 0 || dir == 2)
             {
@@ -131,9 +135,8 @@ namespace Chaos_University
         public override void Draw(SpriteBatch obj, int offX, int offY) //Draws Enemy
         {
             //obj.Draw(this.listTextures[0], PositionRect, Color.White);
-
             obj.Draw(listTextures[0],
-                    new Rectangle(PositionRect.X + PositionRect.Width / 2, PositionRect.Y + PositionRect.Height / 2, PositionRect.Width, PositionRect.Height),
+                    new Rectangle((PositionRect.X + PositionRect.Width / 2) + offX, (PositionRect.Y + PositionRect.Height / 2) + offY, PositionRect.Width, PositionRect.Height),
                     null,
                     Color.White,
                     (float)(Math.Atan2(Vector.Y, Vector.X) + Math.PI / 2),
@@ -184,7 +187,7 @@ namespace Chaos_University
         }
 
 
-        //Turns Player to face a new direction based on standard direction numbers.
+        //Turns Enemy to face a new direction based on standard direction numbers.
         public void Turn(int newDirection)
         {
             switch (newDirection)

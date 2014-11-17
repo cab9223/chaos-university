@@ -40,6 +40,7 @@ namespace Chaos_University
             set { assault = value; }
         }
 
+
         //LEVEL PLAYERS START POSITION
         private Rectangle startNinja;             //Location at which ninja starts.
         public Rectangle StartNinja
@@ -344,14 +345,6 @@ namespace Chaos_University
                         {
                             condition = 2;
                         }
-
-                        /*
-                        //Check if enemy collided with it.
-                        if (this.GetGamePiece(i, j).CheckCollision(guard))
-                        {
-                            guard.Patrol(0);
-                        }
-                        */
                     }
                 }
 
