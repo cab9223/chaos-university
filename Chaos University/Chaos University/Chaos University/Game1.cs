@@ -47,6 +47,8 @@ namespace Chaos_University
         SpriteFont headerFont;      //Font of header text
         int camX;                   //X offset of view.
         int camY;                   //Y offset of view.
+        int camXCenter;             //Current X center position of view.
+        int camYCenter;             //Current Y center position of view.
 
         //Textures
         List<Texture2D> tileTextures;
@@ -88,6 +90,8 @@ namespace Chaos_University
             clickPrevY = -1;
             camX = 0;
             camY = 0;
+            camXCenter = 0;
+            camYCenter = 0;
 
             base.Initialize();
         }
@@ -191,6 +195,7 @@ namespace Chaos_University
                                     playerTextures,
                                     Player.Major.Ninja);
                                 newLevel.StartNinja = newLevel.Ninja.PositionRect;
+                                newLevel.IsNinja = true;
                                 break;
                             //R = Recon
                             case 'R':
@@ -205,6 +210,7 @@ namespace Chaos_University
                                     playerTextures,
                                     Player.Major.Recon);
                                 newLevel.StartRecon = newLevel.Recon.PositionRect;
+                                newLevel.IsRecon = true;
                                 break;
                             //A = Assault
                             case 'A':
@@ -219,6 +225,7 @@ namespace Chaos_University
                                     playerTextures,
                                     Player.Major.Assault);
                                 newLevel.StartAssault = newLevel.Assault.PositionRect;
+                                newLevel.IsAssault = true;
                                 break;
                         }
                         columnNumber++;
@@ -253,27 +260,36 @@ namespace Chaos_University
         private void Fail()
         {
             //Ninja
-            level.Ninja.PositionRect = level.StartNinja;    //Reset Player Location.
-            level.Ninja.turn(level.RotNinja);               //Reset Player Direction.
-            level.Ninja.Moving = false;                     //Halt player.
+            if(level.IsNinja)
+            {
+                level.Ninja.PositionRect = level.StartNinja;    //Reset Player Location.
+                level.Ninja.turn(level.RotNinja);               //Reset Player Direction.
+                level.Ninja.Moving = false;                     //Halt player.
+            }
 
             //Recon
-            level.Recon.PositionRect = level.StartRecon;    //Reset Player Location.
-            level.Recon.turn(level.RotRecon);               //Reset Player Direction.
-            level.Recon.Moving = false;                     //Halt player.
+            if (level.IsRecon)
+            {
+                level.Recon.PositionRect = level.StartRecon;    //Reset Player Location.
+                level.Recon.turn(level.RotRecon);               //Reset Player Direction.
+                level.Recon.Moving = false;                     //Halt player.
+            }
 
             //Assault
-            level.Assault.PositionRect = level.StartAssault;    //Reset Player Location.
-            level.Assault.turn(level.RotAssault);               //Reset Player Direction.
-            level.Assault.Moving = false;                       //Halt player.
+            if (level.IsAssault)
+            {
+                level.Assault.PositionRect = level.StartAssault;    //Reset Player Location.
+                level.Assault.turn(level.RotAssault);               //Reset Player Direction.
+                level.Assault.Moving = false;                       //Halt player.
+            }
+
 
             GlobalVar.ParCount = 0;                             //Reset par for player.
             level.ActivateMoney();                              //Reset monies.
             indicator.Active = false;                           //Reset indicator.
             clickPrevX = -1;                                    //Reset clickPrev at a nonexistent index.
             clickPrevY = -1;                                    //Reset clickPrev at a nonexistent index.
-            camX = 0;                                           //Reset view.
-            camY = 0;                                           //Reset view.
+            this.CenterCamera();
 
             //Reset all direction tiles.
             for (int b = 0; b < level.Height; ++b)
@@ -295,12 +311,10 @@ namespace Chaos_University
         //Succeed state.
         private void Success()
         {
-            GlobalVar.ParCount = 0;                             //Rest par.
+            GlobalVar.ParCount = 0;                             //Reset par.
             indicator.Active = false;                           //Reset indicator.
             clickPrevX = -1;                                    //Reset clickPrev at a nonexistent index.
             clickPrevY = -1;                                    //Reset clickPrev at a nonexistent index.
-            camX = 0;                                           //Reset view.
-            camY = 0;                                           //Reset view.
         }
 
         //Checks the state of the mouse and performs appropriate actions.
@@ -412,11 +426,21 @@ namespace Chaos_University
             try
             {
                 level = levels[indexLevel];
+                camXCenter = (GraphicsDevice.Viewport.Width - level.Width * GlobalVar.TILESIZE) / 2;
+                camYCenter = (GraphicsDevice.Viewport.Height - level.Height * GlobalVar.TILESIZE) / 2;
+                this.CenterCamera();
             }
             catch(Exception)
             {
                 current = GameState.Title;
             }
+        }
+
+        //Centers the camera.
+        private void CenterCamera()
+        {
+            camX = camXCenter;  //Reset view.
+            camY = camYCenter;  //Reset view.
         }
 
         /// <summary>
@@ -509,6 +533,9 @@ namespace Chaos_University
             // TODO: Add your update logic here
             mouse = Mouse.GetState();
             keyboard = Keyboard.GetState();
+
+            Console.WriteLine(camX);
+            Console.WriteLine(camY);
 
             switch (current)
             {
@@ -628,6 +655,7 @@ namespace Chaos_University
                         }
                     }
                     break;
+
                 //LEVEL COMPLETE
                 case GameState.LevelComp:
                     if (keyboard.IsKeyDown(Keys.Enter) && keyboardPrev.IsKeyUp(Keys.Enter))
@@ -636,10 +664,10 @@ namespace Chaos_University
                         this.Success();
                         this.IncrementLevel();
 
-
                         current = GameState.Playing;
                     }
                     break;
+
                 //GAME OVER
                 case GameState.GameOver:
                     if (keyboard.IsKeyDown(Keys.Enter) && keyboardPrev.IsKeyUp(Keys.Enter))
@@ -749,6 +777,11 @@ namespace Chaos_University
                     spriteBatch.DrawString(menuFont,
                         String.Format("Items Collected: {0} of {1}", level.Monies.Count - level.GetMoneyCount(), level.Monies.Count),
                         new Vector2(25, 100),
+                        Color.White);
+                    //Draw Par
+                    spriteBatch.DrawString(menuFont,
+                        String.Format("Par: {0} of {1}", GlobalVar.ParCount, level.Par),
+                        new Vector2(25, 125),
                         Color.White);
                     //Draw Press Enter Prompt
                     spriteBatch.DrawString(menuFont,
