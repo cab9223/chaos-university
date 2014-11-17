@@ -27,7 +27,6 @@ namespace Chaos_University
         public static Int16[] ColorsSplit = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
         public static int ParCount = 0;
-        public static int Tries = 3;
 
     }
 }

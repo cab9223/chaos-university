@@ -58,7 +58,7 @@ namespace Chaos_University
             {
                 case PieceState.Floor:
                     PieceState = PieceState.West;
-                    IndexTexture--;
+                    IndexTexture = 4;
                     break;
                 case PieceState.North:
                     PieceState = PieceState.Floor;

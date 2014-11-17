@@ -290,12 +290,6 @@ namespace Chaos_University
                     }
                 }
             }
-
-            //Induce Game over if player tries = 0;
-            if (GlobalVar.Tries == 0)
-            {
-                //current = GameState.GameOver;
-            }
         }
 
         //Succeed state.
@@ -306,12 +300,13 @@ namespace Chaos_University
             clickPrevY = -1;                                    //Reset clickPrev at a nonexistent index.
             camX = 0;                                           //Reset view.
             camY = 0;                                           //Reset view.
+            GlobalVar.ParCount = 0;                             //Reste Par.
         }
 
         //Checks the state of the mouse and performs appropriate actions.
         private void CheckGameMouse()
         {
-            //Mouse click to change tiles. Click fails beyond par.
+            //LEFT MOUSE CLICK. Mouse click to change tiles. Click fails beyond par.
             if (mouse.LeftButton == ButtonState.Pressed && mousePrev.LeftButton == ButtonState.Released)
             {
                 try
@@ -333,11 +328,34 @@ namespace Chaos_University
                             GlobalVar.ParCount++;
                             clickPrevX = clickNowX;
                             clickPrevY = clickNowY;
-                            //Reverses any click beyond par.
-                            if (GlobalVar.ParCount == level.Par + 1)
-                            {
-                                level.GetGamePiece(clickPrevX, clickPrevY).DecrementType();
-                            }
+                        }
+                    }
+                }
+                catch (IndexOutOfRangeException) { }    //Catch and ignore exception that mouse is beyond map.
+            }
+
+            //RIGHT MOUSE CLICK. Mouse click to change tiles. Click fails beyond par.
+            if (mouse.RightButton == ButtonState.Pressed && mousePrev.RightButton == ButtonState.Released)
+            {
+                try
+                {
+                    int clickNowX = (mouse.X - camX) / GlobalVar.TILESIZE;
+                    int clickNowY = (mouse.Y - camY) / GlobalVar.TILESIZE;
+                    //Change tile at mouse location. True if Increment could have occured.
+                    if (level.GetGamePiece(clickNowX, clickNowY).DecrementType())
+                    {
+                        //Increment parCount if tile changed is a new tile.
+                        if (clickNowX != clickPrevX || clickNowY != clickPrevY)
+                        {
+                            indicator.Active = true;                    //Activate indicator at changed tile.
+                            indicator.PositionRect = new Rectangle(     //Move indicator to changed tile.
+                                clickNowX * GlobalVar.TILESIZE,
+                                clickNowY * GlobalVar.TILESIZE,
+                                GlobalVar.TILESIZE,
+                                GlobalVar.TILESIZE);
+                            GlobalVar.ParCount++;
+                            clickPrevX = clickNowX;
+                            clickPrevY = clickNowY;
                         }
                     }
                 }
@@ -684,25 +702,9 @@ namespace Chaos_University
                 //PLAYING
                 case GameState.Playing:
                     //Draw Par UI Element.
-                    if (/*make generic*/GlobalVar.ParCount < level.Par)
-                    {
-                        spriteBatch.DrawString(menuFont,
-                            String.Format("Par:   {0} of {1}", /*make generic*/GlobalVar.ParCount, level.Par),
-                            new Vector2(25, GraphicsDevice.Viewport.Height - 26),
-                            Color.White);
-                    }
-                    //Draw maxed out Par UI Element. Ternary expression stops display from going above par.
-                    else
-                    {
-                        spriteBatch.DrawString(menuFont,
-                            String.Format("Par:   {0} of {1} (PAR REACHED)", /*make generic*/GlobalVar.ParCount <= level.Par ? GlobalVar.ParCount : level.Par, level.Par),
-                            new Vector2(25, GraphicsDevice.Viewport.Height - 26),
-                            Color.White);
-                    }
-                    //Draw Tries Counter.
                     spriteBatch.DrawString(menuFont,
-                        String.Format("Tries: {0}", GlobalVar.Tries),
-                        new Vector2(25, GraphicsDevice.Viewport.Height - 50),
+                        String.Format("Par:   {0} of {1} (PAR REACHED)", GlobalVar.ParCount, level.Par),
+                        new Vector2(25, GraphicsDevice.Viewport.Height - 26),
                         Color.White);
                     //Draw Enter Directions.
                     spriteBatch.DrawString(menuFont,
