@@ -564,7 +564,7 @@ namespace Chaos_University
                     if (keyboard.IsKeyDown(Keys.Enter) && keyboardPrev.IsKeyUp(Keys.Enter)) //Press enter to play.
                     {
                         //Play sound. Do this only to type change.
-                        MediaPlayer.Play(music[0]);
+                        //MediaPlayer.Play(music[0]);
 
                         //First level.
                         this.IncrementLevel();
@@ -619,63 +619,14 @@ namespace Chaos_University
 
                     //Gonna have to redo this for multiple classes                    
                     //For all gamepieces in level grid, check for direcion changes or collisions.
-                    for (int j = 0; j < level.Height; ++j)
+                    switch(level.CheckCollisions())
                     {
-                        for (int i = 0; i < level.Width; ++i)
-                        {
-                            //If player on direction tile.
-                            if (level.GetGamePiece(i, j).PositionRect.Center == level.Ninja.PositionRect.Center)
-                            {
-                                //Turn player based on tile direction.
-                                switch (level.GetGamePiece(i, j).PieceState)
-                                {
-                                    case PieceState.Floor:
-                                        break;
-                                    case PieceState.North:
-                                        level.Ninja.turn(0);
-                                        break;
-                                    case PieceState.East:
-                                        level.Ninja.turn(1);
-                                        break;
-                                    case PieceState.South:
-                                        level.Ninja.turn(2);
-                                        break;
-                                    case PieceState.West:
-                                        level.Ninja.turn(3);
-                                        break;
-                                    case PieceState.Goal:
-                                        current = GameState.LevelComp;
-                                        break;
-                                }
-                            }
-
-                            //If game piece is a wall.
-                            if (level.GetGamePiece(i, j).PieceState == PieceState.Wall)
-                            {
-                                //Check if player collided with it.
-                                if (level.GetGamePiece(i, j).CheckCollision(level.Ninja))
-                                {
-                                    this.Fail();
-                                }
-
-                                /*
-                                //Check if enemy collided with it.
-                                if (level.GetGamePiece(i, j).CheckCollision(guard))
-                                {
-                                    guard.Patrol(0);
-                                }
-                                */
-                            }        
-                        }
-
-                        //For all Game Pieces in level object list, check for collision.
-                        foreach (Money gamePiece in level.Monies)
-                        {
-                            if (gamePiece.CheckCollision(level.Ninja))
-                            {
-                                gamePiece.Active = false;
-                            }
-                        }
+                        case 1:
+                            current = GameState.LevelComp;
+                            break;
+                        case 2:
+                            this.Fail();
+                            break;
                     }
                     break;
 

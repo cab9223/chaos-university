@@ -238,5 +238,134 @@ namespace Chaos_University
                 throw;
             }
         }
+
+        public int CheckCollisions()
+        {
+            //Condition:    0 = do nothing.
+            //              1 = Succeed.
+            //              2 = Fail.
+            int condition = 0;
+            for (int j = 0; j < this.Height; ++j)
+            {
+                for (int i = 0; i < this.Width; ++i)
+                {
+                    //If Ninja on direction tile.
+                    if (this.IsNinja)
+                    {
+                        if (this.GetGamePiece(i, j).PositionRect.Center == this.Ninja.PositionRect.Center)
+                        {
+                            //Turn player based on tile direction.
+                            switch (this.GetGamePiece(i, j).PieceState)
+                            {
+                                case PieceState.Floor:
+                                    break;
+                                case PieceState.North:
+                                    this.Ninja.turn(0);
+                                    break;
+                                case PieceState.East:
+                                    this.Ninja.turn(1);
+                                    break;
+                                case PieceState.South:
+                                    this.Ninja.turn(2);
+                                    break;
+                                case PieceState.West:
+                                    this.Ninja.turn(3);
+                                    break;
+                                case PieceState.Goal:
+                                    condition = 1;
+                                    break;
+                            }
+                        }
+                    }
+
+                    //If Recon on direction tile.
+                    if (this.IsRecon)
+                    {
+                        if (this.GetGamePiece(i, j).PositionRect.Center == this.Recon.PositionRect.Center)
+                        {
+                            //Turn player based on tile direction.
+                            switch (this.GetGamePiece(i, j).PieceState)
+                            {
+                                case PieceState.Floor:
+                                    break;
+                                case PieceState.North:
+                                    this.Recon.turn(0);
+                                    break;
+                                case PieceState.East:
+                                    this.Recon.turn(1);
+                                    break;
+                                case PieceState.South:
+                                    this.Recon.turn(2);
+                                    break;
+                                case PieceState.West:
+                                    this.Recon.turn(3);
+                                    break;
+                                case PieceState.Goal:
+                                    condition = 1;
+                                    break;
+                            }
+                        }
+                    }
+
+                    //If Assault on direction tile.
+                    if (this.IsAssault)
+                    {
+                        if (this.GetGamePiece(i, j).PositionRect.Center == this.Assault.PositionRect.Center)
+                        {
+                            //Turn player based on tile direction.
+                            switch (this.GetGamePiece(i, j).PieceState)
+                            {
+                                case PieceState.Floor:
+                                    break;
+                                case PieceState.North:
+                                    this.Assault.turn(0);
+                                    break;
+                                case PieceState.East:
+                                    this.Assault.turn(1);
+                                    break;
+                                case PieceState.South:
+                                    this.Assault.turn(2);
+                                    break;
+                                case PieceState.West:
+                                    this.Assault.turn(3);
+                                    break;
+                                case PieceState.Goal:
+                                    condition = 1;
+                                    break;
+                            }
+                        }
+                    }
+
+                    //If game piece is a wall.
+                    if (this.GetGamePiece(i, j).PieceState == PieceState.Wall)
+                    {
+                        //Check if player collided with it.
+                        if (this.GetGamePiece(i, j).CheckCollision(this.Ninja))
+                        {
+                            condition = 2;
+                        }
+
+                        /*
+                        //Check if enemy collided with it.
+                        if (this.GetGamePiece(i, j).CheckCollision(guard))
+                        {
+                            guard.Patrol(0);
+                        }
+                        */
+                    }
+                }
+
+                //For all Game Pieces in level object list, check for collision.
+                foreach (Money gamePiece in this.Monies)
+                {
+                    if (gamePiece.CheckCollision(this.Ninja))
+                    {
+                        gamePiece.Active = false;
+                    }
+                }
+            }
+
+            return condition;
+        }
     }
 }
