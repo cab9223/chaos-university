@@ -422,7 +422,6 @@ namespace Chaos_University
         private void IncrementLevel()
         {
             indexLevel++;
-            Console.WriteLine(indexLevel);
             try
             {
                 level = levels[indexLevel];
@@ -436,7 +435,7 @@ namespace Chaos_University
             }
         }
 
-        //Centers the camera.
+        //Centers the camera. Is called by Fail and Increment Level.
         private void CenterCamera()
         {
             camX = camXCenter;  //Reset view.
@@ -534,9 +533,6 @@ namespace Chaos_University
             mouse = Mouse.GetState();
             keyboard = Keyboard.GetState();
 
-            Console.WriteLine(camX);
-            Console.WriteLine(camY);
-
             switch (current)
             {
                //Intro Animation
@@ -583,7 +579,34 @@ namespace Chaos_University
                     this.CheckGameKeyboard(gameTime.ElapsedGameTime.TotalSeconds);
 
                     //Move Player
-                    level.Ninja.Move((int)(100 * (float)gameTime.ElapsedGameTime.TotalSeconds));
+                    if (level.IsNinja)
+                    {
+                        level.Ninja.Move((int)(
+                            100 * 
+                            GlobalVar.TILESIZE *
+                            (float)gameTime.ElapsedGameTime.TotalSeconds / 
+                            50));
+                    }
+
+                    //Move Recon
+                    if (level.IsRecon)
+                    {
+                        level.Recon.Move((int)(
+                            100 *
+                            GlobalVar.TILESIZE *
+                            (float)gameTime.ElapsedGameTime.TotalSeconds /
+                            50));
+                    }
+
+                    //Move Assault
+                    if (level.IsAssault)
+                    {
+                        level.Assault.Move((int)(
+                            100 * 
+                            GlobalVar.TILESIZE *
+                            (float)gameTime.ElapsedGameTime.TotalSeconds / 
+                            50));
+                    }
 
                     //Move Guard
                     //guard.Move((int)(100 * (float)gameTime.ElapsedGameTime.TotalSeconds));

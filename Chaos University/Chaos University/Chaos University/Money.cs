@@ -33,10 +33,10 @@ namespace Chaos_University
             : base(x, y, textures)
         {
             PositionRect = new Rectangle(
-                PositionRect.X + (PositionRect.Width - textures[0].Width) / 2,
-                PositionRect.Y + (PositionRect.Height - textures[0].Height) / 2,
-                textures[0].Width,
-                textures[0].Height);
+                PositionRect.X + (PositionRect.Width - textures[0].Width * GlobalVar.TILESIZE / 50) / 2,
+                PositionRect.Y + (PositionRect.Height - textures[0].Height * GlobalVar.TILESIZE / 50) / 2,
+                textures[0].Width * GlobalVar.TILESIZE / 50,
+                textures[0].Height * GlobalVar.TILESIZE / 50);
             PieceState = PieceState.Collect;
             active = true;
         }
