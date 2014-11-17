@@ -187,7 +187,7 @@ namespace Chaos_University
                                 newLevel.Ninja = new Player(
                                     columnNumber * GlobalVar.TILESIZE,
                                     lineNumber * GlobalVar.TILESIZE,
-                                    charDirs.Dequeue(),
+                                    newLevel.RotNinja = charDirs.Dequeue(),
                                     playerTextures,
                                     Player.Major.Ninja);
                                 newLevel.StartNinja = newLevel.Ninja.PositionRect;
@@ -201,9 +201,9 @@ namespace Chaos_University
                                 newLevel.Recon = new Player(
                                     columnNumber * GlobalVar.TILESIZE,
                                     lineNumber * GlobalVar.TILESIZE,
-                                    charDirs.Dequeue(),
+                                    newLevel.RotRecon = charDirs.Dequeue(),
                                     playerTextures,
-                                    Player.Major.Ninja);
+                                    Player.Major.Recon);
                                 newLevel.StartRecon = newLevel.Recon.PositionRect;
                                 break;
                             //A = Assault
@@ -215,9 +215,9 @@ namespace Chaos_University
                                 newLevel.Assault = new Player(
                                     columnNumber * GlobalVar.TILESIZE,
                                     lineNumber * GlobalVar.TILESIZE,
-                                    charDirs.Dequeue(),
+                                    newLevel.RotAssault = charDirs.Dequeue(),
                                     playerTextures,
-                                    Player.Major.Ninja);
+                                    Player.Major.Assault);
                                 newLevel.StartAssault = newLevel.Assault.PositionRect;
                                 break;
                         }
@@ -252,32 +252,28 @@ namespace Chaos_University
         // Failure state.
         private void Fail()
         {
-            //Am leaving for now, but we'll need to redo this stuff.
+            //Ninja
             level.Ninja.PositionRect = level.StartNinja;    //Reset Player Location.
-            level.Ninja.turn(0);                            //Reset Player Direction.
-            GlobalVar.Tries--;                              //Reduce number of tries player has.
-            GlobalVar.ParCount = 0;                         //Reset par for player.
+            level.Ninja.turn(level.RotNinja);               //Reset Player Direction.
             level.Ninja.Moving = false;                     //Halt player.
-            level.ActivateMoney();                          //Reset monies.
-            indicator.Active = false;                       //Reset indicator.
-            clickPrevX = -1;                                //Reset clickPrev at a nonexistent index.
-            clickPrevY = -1;                                //Reset clickPrev at a nonexistent index.
-            camX = 0;                                       //Reset view.
-            camY = 0;                                       //Reset view.
 
-            //reconChar.PositionRect = ninjaStart;  //Reset Player Location.
-            //reconChar.turn(0);                     //Reset Player Direction.
-            //reconChar.Tries--;                     //Reduce number of tries player has.
-            //reconChar.ParCount = 0;                //Reset par for player.
-            //reconChar.Moving = false;              //Halt player.
-            //level.ActivateMoney();                  //Reset monies.
+            //Recon
+            level.Recon.PositionRect = level.StartRecon;    //Reset Player Location.
+            level.Recon.turn(level.RotRecon);               //Reset Player Direction.
+            level.Recon.Moving = false;                     //Halt player.
 
-            //assaultChar.PositionRect = ninjaStart;  //Reset Player Location.
-            //assaultChar.turn(0);                     //Reset Player Direction.
-            //assaultChar.Tries--;                     //Reduce number of tries player has.
-            //assaultChar.ParCount = 0;                //Reset par for player.
-            //assaultChar.Moving = false;              //Halt player.
-            //level.ActivateMoney();                  //Reset monies.
+            //Assault
+            level.Assault.PositionRect = level.StartAssault;    //Reset Player Location.
+            level.Assault.turn(level.RotAssault);               //Reset Player Direction.
+            level.Assault.Moving = false;                       //Halt player.
+
+            GlobalVar.ParCount = 0;                             //Reset par for player.
+            level.ActivateMoney();                              //Reset monies.
+            indicator.Active = false;                           //Reset indicator.
+            clickPrevX = -1;                                    //Reset clickPrev at a nonexistent index.
+            clickPrevY = -1;                                    //Reset clickPrev at a nonexistent index.
+            camX = 0;                                           //Reset view.
+            camY = 0;                                           //Reset view.
 
             //Reset all direction tiles.
             for (int b = 0; b < level.Height; ++b)
@@ -285,7 +281,7 @@ namespace Chaos_University
                 for (int a = 0; a < level.Width; ++a)
                 {
                     if (level.GetGamePiece(a, b).PieceState == PieceState.North ||
-                        level.GetGamePiece(a, b).PieceState == PieceState.East ||
+                        level.GetGamePiece(a, b).PieceState == PieceState.East  ||
                         level.GetGamePiece(a, b).PieceState == PieceState.South ||
                         level.GetGamePiece(a, b).PieceState == PieceState.West)
                     {
@@ -300,6 +296,16 @@ namespace Chaos_University
             {
                 //current = GameState.GameOver;
             }
+        }
+
+        //Succeed state.
+        private void Success()
+        {
+            indicator.Active = false;                           //Reset indicator.
+            clickPrevX = -1;                                    //Reset clickPrev at a nonexistent index.
+            clickPrevY = -1;                                    //Reset clickPrev at a nonexistent index.
+            camX = 0;                                           //Reset view.
+            camY = 0;                                           //Reset view.
         }
 
         //Checks the state of the mouse and performs appropriate actions.
@@ -380,11 +386,19 @@ namespace Chaos_University
             }
         }
 
+        //Increments the current level.
         private void IncrementLevel()
         {
             indexLevel++;
             Console.WriteLine(indexLevel);
-            level = levels[indexLevel];
+            try
+            {
+                level = levels[indexLevel];
+            }
+            catch(Exception)
+            {
+                current = GameState.Title;
+            }
         }
 
         /// <summary>
@@ -509,7 +523,7 @@ namespace Chaos_University
                     if (keyboard.IsKeyDown(Keys.Enter) && keyboardPrev.IsKeyUp(Keys.Enter)) //Press enter to play.
                     {
                         //Play sound. Do this only to type change.
-                        MediaPlayer.Play(music[0]);
+                        //MediaPlayer.Play(music[0]);
 
                         //First level.
                         this.IncrementLevel();
@@ -601,7 +615,9 @@ namespace Chaos_University
                     if (keyboard.IsKeyDown(Keys.Enter) && keyboardPrev.IsKeyUp(Keys.Enter))
                     {
                         //Increment level
+                        this.Success();
                         this.IncrementLevel();
+
 
                         current = GameState.Playing;
                     }

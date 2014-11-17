@@ -18,6 +18,29 @@ namespace Chaos_University
         private int gamePieceSize;          //Height of width of a game piece
         private List<Money> monies;         //List of non-grid objects on map. (currently exclusively monies).
 
+        //LEVEL PLAYERS
+        private Player ninja;
+        public Player Ninja
+        {
+            get { return ninja; }
+            set { ninja = value; }
+        }
+
+        private Player recon;
+        public Player Recon
+        {
+            get { return recon; }
+            set { recon = value; }
+        }
+
+        private Player assault;
+        public Player Assault
+        {
+            get { return assault; }
+            set { assault = value; }
+        }
+
+        //LEVEL PLAYERS START POSITION
         private Rectangle startNinja;             //Location at which ninja starts.
         public Rectangle StartNinja
         {
@@ -39,25 +62,48 @@ namespace Chaos_University
             set { startAssault = value; }
         }
 
-        private Player ninja;
-        public Player Ninja
+        //LEVEL PLAYERS START ROTATION
+        private int rotNinja;               //Initial direction the Ninja faces.
+        public int RotNinja
         {
-            get { return ninja; }
-            set { ninja = value; }
+            get { return rotNinja; }
+            set { rotNinja = value; }
         }
 
-        private Player recon;
-        public Player Recon
+        private int rotRecon;               //Initial direction the Recon faces.
+        public int RotRecon
         {
-            get { return recon; }
-            set { recon = value; }
+            get { return rotRecon; }
+            set { rotRecon = value; }
         }
 
-        private Player assault;
-        public Player Assault
+        private int rotAssault;               //Initial direction the Assault faces.
+        public int RotAssault
         {
-            get { return assault; }
-            set { assault = value; }
+            get { return rotAssault; }
+            set { rotAssault = value; }
+        }
+
+        //LEVEL PLAYERS EXISITENCE BOOLEAN.
+        private bool isNinja;
+        public bool IsNinja
+        {
+            get { return isNinja; }
+            set { isNinja = value; }
+        }
+
+        private bool isRecon;
+        public bool IsRecon
+        {
+            get { return isRecon; }
+            set { isRecon = value; }
+        }
+
+        private bool isAssault;
+        public bool IsAssault
+        {
+            get { return isAssault; }
+            set { isAssault = value; }
         }
 
         public List<Money> Monies
