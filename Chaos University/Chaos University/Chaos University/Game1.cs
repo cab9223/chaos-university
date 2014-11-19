@@ -245,35 +245,7 @@ namespace Chaos_University
                                     guardDirs.Dequeue(),
                                     guardTextures);
                                 guards.Add(guard);
-                                guardCount = 1;
-                                break;
-                            //Y = Guard 2, Must have guard 1 first
-                            case 'Y':
-                                newLevel.SetTile(columnNumber, lineNumber, new Tile(
-                                    columnNumber * GlobalVar.TILESIZE,
-                                    lineNumber * GlobalVar.TILESIZE,
-                                    tileTextures));
-                                guard = new Enemy(
-                                    columnNumber * GlobalVar.TILESIZE,
-                                    lineNumber * GlobalVar.TILESIZE,
-                                    guardDirs.Dequeue(),
-                                    guardTextures);
-                                guards.Add(guard);
-                                guardCount = 2;
-                                break;
-                            //Z = Guard 3, Must have guard 2 first
-                            case 'Z':
-                                newLevel.SetTile(columnNumber, lineNumber, new Tile(
-                                    columnNumber * GlobalVar.TILESIZE,
-                                    lineNumber * GlobalVar.TILESIZE,
-                                    tileTextures));
-                                guard = new Enemy(
-                                    columnNumber * GlobalVar.TILESIZE,
-                                    lineNumber * GlobalVar.TILESIZE,
-                                    guardDirs.Dequeue(),
-                                    guardTextures);
-                                guards.Add(guard);
-                                guardCount = 3;
+                                guardCount = guardCount + 1;
                                 break;
                         }
                         columnNumber++;
