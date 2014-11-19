@@ -566,6 +566,7 @@ namespace Chaos_University
 
             guardTextures = new List<Texture2D>();
             guardTextures.Add(this.Content.Load<Texture2D>("Default_Guard"));
+            guardTextures.Add(this.Content.Load<Texture2D>("!"));
 
             for (int i = 1; i <= GlobalVar.LevelCount; ++i)
             {
@@ -891,9 +892,9 @@ namespace Chaos_University
                     level.Ninja.Draw(spriteBatch, camX, camY);
                     indicator.Draw(spriteBatch, camX, camY);
 
-                    if (isGuard == true)
+                    if (isGuard == true) //Guard in level?
                     {
-                        switch (guardCount)
+                        switch (guardCount) //How many in level
                         {
                             case 1:
                                 guard.Draw(spriteBatch, camX, camY);

@@ -16,7 +16,14 @@ namespace Chaos_University
     {
         public int Difficulty { get; set; }
 
-        public bool IsActive { get; set; } //For guard death
+        private bool isAlive; //For guard death
+        public bool IsAlive//Read only
+        {
+            get
+            {
+                return isAlive;
+            }
+        }
 
         private Rectangle detectRect;
         public Rectangle DetectRect
@@ -32,15 +39,29 @@ namespace Chaos_University
             }
         }
 
+        private Rectangle emotionRect;
+        public Rectangle EmotionRect
+        {
+            get
+            {
+                return emotionRect;
+            }
+
+            set
+            {
+                emotionRect = value;
+            }
+        }
+
 
         public Enemy(int x, int y, int dir, List<Texture2D> textures) //Constructor
             : base(x, y, dir, textures)
         {
             Difficulty = 0;
 
-            //this.Turn(dir);
+            isAlive = true;
 
-            IsActive = false;
+            EmotionRect = new Rectangle(x + 10, y - 13, (GlobalVar.TILESIZE / 2), (GlobalVar.TILESIZE / 2));
 
             if (dir == 0 || dir == 2)
             {
@@ -136,8 +157,9 @@ namespace Chaos_University
 
         public override void Draw(SpriteBatch obj, int offX, int offY) //Draws Enemy
         {
-            //obj.Draw(this.listTextures[0], PositionRect, Color.White);
-            obj.Draw(listTextures[0],
+            if (this.IsAlive == true)
+            {
+                obj.Draw(listTextures[0],
                     new Rectangle((PositionRect.X + PositionRect.Width / 2) + offX, (PositionRect.Y + PositionRect.Height / 2) + offY, PositionRect.Width, PositionRect.Height),
                     null,
                     Color.White,
@@ -145,13 +167,25 @@ namespace Chaos_University
                     new Vector2(listTextures[0].Width / 2, listTextures[0].Height / 2),
                     SpriteEffects.None,
                     0.0f);
+            }
 
+            //For checking Detection
             //obj.Draw(listTextures[0],
             //        new Rectangle(DetectRect.X + DetectRect.Width / 2, DetectRect.Y + DetectRect.Height / 2, DetectRect.Width, DetectRect.Height),
             //        null,
             //        Color.White,
             //        (float)(Math.Atan2(Vector.Y, Vector.X) + Math.PI / 2),
             //        new Vector2(listTextures[0].Width / 2, listTextures[0].Height / 2),
+            //        SpriteEffects.None,
+            //        0.0f);
+
+            //For checking Emotion
+            //obj.Draw(listTextures[1],
+            //        new Rectangle((EmotionRect.X + EmotionRect.Width / 2) + offX, (EmotionRect.Y + EmotionRect.Height / 2) + offY, EmotionRect.Width, EmotionRect.Height),
+            //        null,
+            //        Color.White,
+            //        (float)(Math.Atan2(-1, 0) + Math.PI / 2),
+            //        new Vector2(listTextures[1].Width / 2, listTextures[1].Height / 2),
             //        SpriteEffects.None,
             //        0.0f);
         }
@@ -161,31 +195,37 @@ namespace Chaos_University
         {
             Rectangle temp = PositionRect;
             Rectangle temp2 = DetectRect;
+            Rectangle temp3 = EmotionRect;
 
             switch (Direction)
             {
                 case 0:
                     temp.Y += distance;
                     temp2.Y += distance;
+                    temp3.Y += distance;
                     break;
 
                 case 1:
                     temp.X -= distance;
                     temp2.X -= distance;
+                    temp3.X -= distance;
                     break;
 
                 case 2:
                     temp.Y -= distance;
                     temp2.Y -= distance;
+                    temp3.Y -= distance;
                     break;
 
                 case 3:
                     temp.X += distance;
                     temp2.X += distance;
+                    temp3.X += distance;
                     break;
             }
             PositionRect = temp;
             DetectRect = temp2;
+            EmotionRect = temp3;
         }
 
 
@@ -212,6 +252,11 @@ namespace Chaos_University
                     Direction = 3;
                     break;
             }
+        }
+
+        public void Dead() //removes guard
+        {
+            isAlive = false;
         }
     }
 }
