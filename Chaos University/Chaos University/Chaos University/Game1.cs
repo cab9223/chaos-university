@@ -36,8 +36,10 @@ namespace Chaos_University
 
         //Player stuff.
         Enemy guard;                //Guard
+        List<Enemy> guards;         //List of Guards
         bool isGuard;               //Active Guard
-        Rectangle guardStart;       //Guard starting position.
+        int guardIndex;
+        List<int> guardLevels;
         Indicator indicator;        //Indicator of currently selected tile.
 
         //Other things.
@@ -85,6 +87,8 @@ namespace Chaos_University
             this.IsMouseVisible = true;     // Make mouse visible on screen.
             videoPlayer = new VideoPlayer();
             levels = new List<Level>();
+            guards = new List<Enemy>();
+            guardLevels = new List<int>();
 
 
             indexLevel = -1;
@@ -95,6 +99,7 @@ namespace Chaos_University
             camXCenter = 0;
             camYCenter = 0;
             isGuard = false;
+            guardIndex = 0;
 
             base.Initialize();
         }
@@ -126,6 +131,13 @@ namespace Chaos_University
                 foreach(char dir in input.ReadLine())
                 {
                     charDirs.Enqueue(int.Parse(dir.ToString()));
+                }
+
+                //Read enemy directions.
+                Queue<int> guardDirs = new Queue<int>();
+                foreach (char dir in input.ReadLine())
+                {
+                    guardDirs.Enqueue(int.Parse(dir.ToString()));
                 }
 
                 //Counters for reading map blocks.
@@ -219,7 +231,7 @@ namespace Chaos_University
                                 break;
                             //X = Guard start and tile.
                             case 'X':
-                                int dirr = charDirs.Dequeue();
+                                int dirr = guardDirs.Dequeue();
                                 newLevel.SetTile(columnNumber, lineNumber, new Tile(
                                     columnNumber * GlobalVar.TILESIZE,
                                     lineNumber * GlobalVar.TILESIZE,
@@ -229,10 +241,9 @@ namespace Chaos_University
                                     lineNumber * GlobalVar.TILESIZE,
                                     dirr,
                                     guardTextures);
-                                guard.Turn(dirr);
-                                guard.Turn(dirr);
-                                guardStart = guard.PositionRect;
-                                isGuard = true;
+                                guardLevels.Add(levelNum);
+                                guards.Add(guard);
+                                //isGuard = true;
                                 break;
                         }
                         columnNumber++;
@@ -429,12 +440,23 @@ namespace Chaos_University
         private void IncrementLevel()
         {
             indexLevel++;
+            isGuard = false;
+
             try
             {
                 level = levels[indexLevel];
                 camXCenter = (GraphicsDevice.Viewport.Width - level.Width * GlobalVar.TILESIZE) / 2;
                 camYCenter = (GraphicsDevice.Viewport.Height - level.Height * GlobalVar.TILESIZE) / 2;
                 this.CenterCamera();
+
+                if ((indexLevel + 1) == guardLevels[guardIndex])
+                {
+                    guard = guards[guardIndex];
+                    guard.Turn(guard.Direction);
+                    guardIndex = guardIndex + 1;
+
+                    isGuard = true;
+                }
             }
             catch(Exception)
             {

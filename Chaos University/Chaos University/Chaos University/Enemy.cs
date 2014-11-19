@@ -38,6 +38,8 @@ namespace Chaos_University
         {
             Difficulty = 0;
 
+            //this.Turn(dir);
+
             IsActive = false;
 
             if (dir == 0 || dir == 2)
