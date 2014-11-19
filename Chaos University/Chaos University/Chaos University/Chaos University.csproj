@@ -86,6 +86,7 @@
     <Compile Include="CharacterCreator.Designer.cs">
       <DependentUpon>CharacterCreator.cs</DependentUpon>
     </Compile>
+    <Compile Include="Gear.cs" />
     <Compile Include="Indicator.cs" />
     <Compile Include="Money.cs" />
     <Compile Include="Enums.cs" />

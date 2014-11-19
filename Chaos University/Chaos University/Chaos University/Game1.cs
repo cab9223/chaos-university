@@ -63,6 +63,7 @@ namespace Chaos_University
         List<Texture2D> playerTextures;
         List<Texture2D> guardTextures;
         List<Texture2D> moneyTextures;
+        //List<Texture2D> abilityTextures;
 
         //Songs
         List<Song> music;
@@ -526,7 +527,7 @@ namespace Chaos_University
             levelCompPos = headerFont.MeasureString("LEVEL COMPLETE");
 
             music = new List<Song>();
-            music.Add(this.Content.Load<Song>("MainTheme"));
+            music.Add(this.Content.Load<Song>("ThemeV2"));
 
             
             introVideo = this.Content.Load<Video>("Intro");
@@ -630,7 +631,7 @@ namespace Chaos_University
                     if (keyboard.IsKeyDown(Keys.Enter) && keyboardPrev.IsKeyUp(Keys.Enter)) //Press enter to play.
                     {
                         //Play sound. Do this only to type change.
-                        MediaPlayer.Play(music[0]);
+                        //MediaPlayer.Play(music[0]);
 
                         //First level.
                         this.IncrementLevel();
@@ -653,6 +654,19 @@ namespace Chaos_University
                             (float)gameTime.ElapsedGameTime.TotalSeconds / 
                             50));
                     }
+
+                    //Use Ninja Ability
+                    /*if ((level.IsNinja && keyboard.IsKeyDown(Keys.NumPad1) && keyboardPrev.IsKeyUp(Keys.NumPad1)) || level.Ninja.AbilityActive)
+                    {
+                        level.Ninja.Ability();
+                    }*/
+
+                    //Rotate Ninja sword if the Ability is active
+                    /*if (level.Ninja.AbilityActive)
+                    {
+                        level.Ninja.ThisGear.Rotate((float)(gameTime.ElapsedGameTime.TotalSeconds / 50));
+                    }*/
+                     
 
                     //Move Recon
                     if (level.IsRecon)
@@ -890,6 +904,8 @@ namespace Chaos_University
                         Color.White);
                     level.Draw(spriteBatch, camX, camY);
                     level.Ninja.Draw(spriteBatch, camX, camY);
+                    /*if (level.Ninja.AbilityActive)
+                        level.Ninja.ThisGear.Draw(spriteBatch, camX, camY);*/
                     indicator.Draw(spriteBatch, camX, camY);
 
                     if (isGuard == true) //Guard in level?
