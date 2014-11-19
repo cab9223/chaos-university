@@ -16,6 +16,8 @@ namespace Chaos_University
     {
         public int Difficulty { get; set; }
 
+        public bool Detected { get; set; }
+
         private bool isAlive; //For guard death
         public bool IsAlive//Read only
         {
@@ -61,15 +63,18 @@ namespace Chaos_University
 
             isAlive = true;
 
-            EmotionRect = new Rectangle(x + 10, y - 13, (GlobalVar.TILESIZE / 2), (GlobalVar.TILESIZE / 2));
+            Detected = false;
 
             if (dir == 0 || dir == 2)
             {
                 DetectRect = new Rectangle(x + 20, y + 20, (GlobalVar.TILESIZE / 5), (GlobalVar.TILESIZE / 2));
+                EmotionRect = new Rectangle(x + 11, y - 11, (GlobalVar.TILESIZE / 2), (GlobalVar.TILESIZE / 2));
             }
             else if (dir == 1 || dir == 3)
             {
                 DetectRect = new Rectangle(x + 20, y + 20, (GlobalVar.TILESIZE / 2), (GlobalVar.TILESIZE / 5));
+                EmotionRect = new Rectangle(x + 11, y - 13, (GlobalVar.TILESIZE / 2), (GlobalVar.TILESIZE / 2));
+               // EmotionRect = new Rectangle(x + 31, y + 11, (GlobalVar.TILESIZE / 2), (GlobalVar.TILESIZE / 2));
             }
         }
 
@@ -79,6 +84,10 @@ namespace Chaos_University
             if (obj.PositionRect.Intersects(this.DetectRect) == true)
             {
                 //Maybe add an effect or sound to say the guard caught the player
+                Detected = true;
+                //Stop moving
+                //Delay
+                //Detected = false;
                 return true;
             }
             else
@@ -104,24 +113,28 @@ namespace Chaos_University
                         case 0:
                             Turn(2);
                             DetectRect = new Rectangle(DetectRect.X, DetectRect.Y - 18, (GlobalVar.TILESIZE / 5), (GlobalVar.TILESIZE / 2));
+                            //EmotionRect = new Rectangle(EmotionRect.X, EmotionRect.Y + 43, (GlobalVar.TILESIZE / 2), (GlobalVar.TILESIZE / 2));
                             //Direction = 2;
                             break;
 
                         case 1:
                             Turn(3);
                             DetectRect = new Rectangle(DetectRect.X + 18, DetectRect.Y, (GlobalVar.TILESIZE / 2), (GlobalVar.TILESIZE / 5));
+                            //EmotionRect = new Rectangle(EmotionRect.X - 43, EmotionRect.Y, (GlobalVar.TILESIZE / 2), (GlobalVar.TILESIZE / 2));
                             //Direction = 3;
                             break;
 
                         case 2:
                             Turn(0);
                             DetectRect = new Rectangle(DetectRect.X, DetectRect.Y + 18, (GlobalVar.TILESIZE / 5), (GlobalVar.TILESIZE / 2));
+                            //EmotionRect = new Rectangle(EmotionRect.X, EmotionRect.Y - 43, (GlobalVar.TILESIZE / 2), (GlobalVar.TILESIZE / 2));
                             //Direction = 0;
                             break;
 
                         case 3:
                             Turn(1);
                             DetectRect = new Rectangle(DetectRect.X - 18, DetectRect.Y, (GlobalVar.TILESIZE / 2), (GlobalVar.TILESIZE / 5));
+                            //EmotionRect = new Rectangle(EmotionRect.X + 43, EmotionRect.Y, (GlobalVar.TILESIZE / 2), (GlobalVar.TILESIZE / 2));
                             //Direction = 1;
                             break;
                     } 
@@ -179,15 +192,18 @@ namespace Chaos_University
             //        SpriteEffects.None,
             //        0.0f);
 
-            //For checking Emotion
-            //obj.Draw(listTextures[1],
-            //        new Rectangle((EmotionRect.X + EmotionRect.Width / 2) + offX, (EmotionRect.Y + EmotionRect.Height / 2) + offY, EmotionRect.Width, EmotionRect.Height),
-            //        null,
-            //        Color.White,
-            //        (float)(Math.Atan2(-1, 0) + Math.PI / 2),
-            //        new Vector2(listTextures[1].Width / 2, listTextures[1].Height / 2),
-            //        SpriteEffects.None,
-            //        0.0f);
+            if (this.Detected == true) //For Emotion
+            {
+                obj.Draw(listTextures[1],
+                    new Rectangle((EmotionRect.X + EmotionRect.Width / 2) + offX, (EmotionRect.Y + EmotionRect.Height / 2) + offY, EmotionRect.Width, EmotionRect.Height),
+                    null,
+                    Color.White,
+                    (float)(Math.Atan2(-1, 0) + Math.PI / 2),
+                    new Vector2(listTextures[1].Width / 2, listTextures[1].Height / 2),
+                    SpriteEffects.None,
+                    0.0f);
+            }
+
         }
 
 
