@@ -467,6 +467,12 @@ namespace Chaos_University
             {
                 camX += (int)(150 * (float)elapsedTime);
             }
+
+            //Next Level cheat, for our personal testing purposes only!
+            if (keyboard.IsKeyDown(Keys.N) && keyboardPrev.IsKeyUp(Keys.N))
+            {
+                current = GameState.LevelComp;
+            }
         }
 
         //Increments the current level.
