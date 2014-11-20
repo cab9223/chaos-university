@@ -417,20 +417,27 @@ namespace Chaos_University
                     int clickNowX = (mouse.X - camX) / GlobalVar.TILESIZE;
                     int clickNowY = (mouse.Y - camY) / GlobalVar.TILESIZE;
                     //Change tile at mouse location. True if Increment could have occured.
-                    if (level.GetGamePiece(clickNowX, clickNowY).IncrementType())
+                    //Check to see if tile is of special type, won't Increment if it is.
+                    if (level.GetGamePiece(clickNowX, clickNowY).PieceState != PieceState.SpecialNorth &&
+                        level.GetGamePiece(clickNowX, clickNowY).PieceState != PieceState.SpecialEast &&
+                        level.GetGamePiece(clickNowX, clickNowY).PieceState != PieceState.SpecialSouth &&
+                        level.GetGamePiece(clickNowX, clickNowY).PieceState != PieceState.SpecialWest)
                     {
-                        //Increment parCount if tile changed is a new tile.
-                        if (clickNowX != clickPrevX || clickNowY != clickPrevY)
+                        if (level.GetGamePiece(clickNowX, clickNowY).IncrementType())
                         {
-                            indicator.Active = true;                    //Activate indicator at changed tile.
-                            indicator.PositionRect = new Rectangle(     //Move indicator to changed tile.
-                                clickNowX * GlobalVar.TILESIZE,
-                                clickNowY * GlobalVar.TILESIZE,
-                                GlobalVar.TILESIZE,
-                                GlobalVar.TILESIZE);
-                            GlobalVar.ParCount++;
-                            clickPrevX = clickNowX;
-                            clickPrevY = clickNowY;
+                            //Increment parCount if tile changed is a new tile.
+                            if (clickNowX != clickPrevX || clickNowY != clickPrevY)
+                            {
+                                indicator.Active = true;                    //Activate indicator at changed tile.
+                                indicator.PositionRect = new Rectangle(     //Move indicator to changed tile.
+                                    clickNowX * GlobalVar.TILESIZE,
+                                    clickNowY * GlobalVar.TILESIZE,
+                                    GlobalVar.TILESIZE,
+                                    GlobalVar.TILESIZE);
+                                GlobalVar.ParCount++;
+                                clickPrevX = clickNowX;
+                                clickPrevY = clickNowY;
+                            }
                         }
                     }
                 }
