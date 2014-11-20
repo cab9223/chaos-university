@@ -27,29 +27,61 @@ namespace Chaos_University
             }
         }
 
+        private int ogDirection;
+        public int OGDirection
+        {
+            get
+            {
+                return ogDirection;
+            }
+
+            set
+            {
+                ogDirection = value;
+            }
+        }
+
+        private int Direction;
+        public int direction
+        {
+            get
+            {
+                return Direction;
+            }
+
+            set
+            {
+                Direction = value;
+            }
+        }
         //Constructor.
-        public SpecialTile(int x, int y, List<Texture2D> textures, int tileType, int direction) //Constructor
+        public SpecialTile(int x, int y, List<Texture2D> textures, int tileType, int dir) //Constructor
             : base(x, y, textures)
         {
+            direction = dir;
             if (direction == 0)
             {
                 PieceState = PieceState.SpecialNorth;
                 IndexTexture = direction;
+                OGDirection = direction;
             }
             if (direction == 1)
             {
                 PieceState = PieceState.SpecialEast;
                 IndexTexture = direction;
+                OGDirection = direction;
             }
             if (direction == 2)
             {
                 PieceState = PieceState.SpecialSouth;
                 IndexTexture = direction;
+                OGDirection = direction;
             }
             if (direction == 3)
             {
                 PieceState = PieceState.SpecialWest;
                 IndexTexture = direction;
+                OGDirection = direction;
             }
             TileType = tileType;
         }
@@ -81,6 +113,35 @@ namespace Chaos_University
                         }
                     return true;
                     }
+            return true;
+        }
+        
+        //sets special tiles back to ogrinal direction
+        public override bool ReturnStartingDirection()
+        {
+            direction = OGDirection;
+            IndexTexture = OGDirection;
+            
+            if (direction == 0)
+            {
+                PieceState = PieceState.SpecialNorth;
+                
+            }
+            if (direction == 1)
+            {
+                PieceState = PieceState.SpecialEast;
+                
+            }
+            if (direction == 2)
+            {
+                PieceState = PieceState.SpecialSouth;
+                
+            }
+            if (direction == 3)
+            {
+                PieceState = PieceState.SpecialWest;
+               
+            }
             return true;
         }
         

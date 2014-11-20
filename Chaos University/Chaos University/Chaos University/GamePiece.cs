@@ -103,6 +103,10 @@ namespace Chaos_University
             return false;
         }
 
+        public virtual bool ReturnStartingDirection()
+        {
+            return false;
+        }
         //Checks for object collision.
         public bool CheckCollision(GamePiece obj)
         {

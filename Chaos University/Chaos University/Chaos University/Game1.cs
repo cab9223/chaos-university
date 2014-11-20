@@ -357,6 +357,14 @@ namespace Chaos_University
                         level.GetGamePiece(a, b).PieceState = PieceState.Floor;
                         level.GetGamePiece(a, b).IndexTexture = 0;
                     }
+                    if (level.GetGamePiece(a, b).PieceState == PieceState.SpecialNorth||
+                        level.GetGamePiece(a, b).PieceState == PieceState.SpecialEast  ||
+                        level.GetGamePiece(a, b).PieceState == PieceState.SpecialSouth ||
+                        level.GetGamePiece(a, b).PieceState == PieceState.SpecialWest)
+                    {
+                        level.GetGamePiece(a, b).ReturnStartingDirection();
+                    }
+                        
                 }
             }
         }
