@@ -275,19 +275,19 @@ namespace Chaos_University
                                 case PieceState.Goal:
                                     condition = 1;
                                     break;
-                                case PieceState.SpecialNorth:
+                                case PieceState.SpecialNorth:                                   
                                     this.Ninja.turn(0);
                                     this.GetGamePiece(i, j).IncrementType();
-                                    break;
+                                    break;                                  
                                 case PieceState.SpecialEast:
                                     this.Ninja.turn(1);
                                     this.GetGamePiece(i, j).IncrementType();
                                     break;
                                 case PieceState.SpecialSouth:
                                     this.Ninja.turn(2);
-                                    this.GetGamePiece(i, j).IncrementType();
+                                    this.GetGamePiece(i, j).IncrementType();                                    
                                     break;
-                                case PieceState.SpecialWest:
+                                case PieceState.SpecialWest:                                    
                                     this.Ninja.turn(3);
                                     this.GetGamePiece(i, j).IncrementType();
                                     break;
@@ -326,15 +326,15 @@ namespace Chaos_University
                                     break;
                                 case PieceState.SpecialEast:
                                     this.Recon.turn(1);
-                                    this.GetGamePiece(i, j).IncrementType();
+                                    this.GetGamePiece(i, j).IncrementType();                                                                       
                                     break;
                                 case PieceState.SpecialSouth:
                                     this.Recon.turn(2);
                                     this.GetGamePiece(i, j).IncrementType();
                                     break;
-                                case PieceState.SpecialWest:
+                                case PieceState.SpecialWest:                                    
                                     this.Recon.turn(3);
-                                    this.GetGamePiece(i, j).IncrementType();
+                                    this.GetGamePiece(i, j).IncrementType();                                    
                                     break;
                             }
                         }

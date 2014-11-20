@@ -59,31 +59,63 @@ namespace Chaos_University
             : base(x, y, textures)
         {
             direction = dir;
-            if (direction == 0)
-            {
-                PieceState = PieceState.SpecialNorth;
-                IndexTexture = direction;
-                OGDirection = direction;
-            }
-            if (direction == 1)
-            {
-                PieceState = PieceState.SpecialEast;
-                IndexTexture = direction;
-                OGDirection = direction;
-            }
-            if (direction == 2)
-            {
-                PieceState = PieceState.SpecialSouth;
-                IndexTexture = direction;
-                OGDirection = direction;
-            }
-            if (direction == 3)
-            {
-                PieceState = PieceState.SpecialWest;
-                IndexTexture = direction;
-                OGDirection = direction;
-            }
             TileType = tileType;
+
+            if (TileType == 1)
+            {
+                if (direction == 0)
+                {
+                    PieceState = PieceState.SpecialNorth;
+                    IndexTexture = direction;
+                    OGDirection = direction;
+                }
+                if (direction == 1)
+                {
+                    PieceState = PieceState.SpecialEast;
+                    IndexTexture = direction;
+                    OGDirection = direction;
+                }
+                if (direction == 2)
+                {
+                    PieceState = PieceState.SpecialSouth;
+                    IndexTexture = direction;
+                    OGDirection = direction;
+                }
+                if (direction == 3)
+                {
+                    PieceState = PieceState.SpecialWest;
+                    IndexTexture = direction;
+                    OGDirection = direction;
+                }
+            }
+            if (TileType == 2)
+            {
+                if (direction == 0)
+                {
+                    PieceState = PieceState.SpecialNorth;
+                    IndexTexture = direction + 4;
+                    OGDirection = direction;
+                }
+                if (direction == 1)
+                {
+                    PieceState = PieceState.SpecialWest;
+                    IndexTexture = direction + 4;
+                    OGDirection = direction;
+                }
+                if (direction == 2)
+                {
+                    PieceState = PieceState.SpecialSouth;
+                    IndexTexture = direction + 4;
+                    OGDirection = direction;
+                }
+                if (direction == 3)
+                {
+                    PieceState = PieceState.SpecialEast;
+                    IndexTexture = direction + 4;
+                    OGDirection = direction;
+                }
+            }
+            
         }
 
         //Increment floor type to a different type.
@@ -113,9 +145,37 @@ namespace Chaos_University
                         }
                     return true;
                     }
-            return true;
+                    if (TileType == 2)
+                    {
+                        switch (PieceState)
+                        {
+                            case PieceState.SpecialNorth:
+                                PieceState = PieceState.SpecialWest;
+                                IndexTexture++;
+                                break;
+                            case PieceState.SpecialWest:
+                                PieceState = PieceState.SpecialSouth;
+                                IndexTexture++;
+                                break;
+                            case PieceState.SpecialSouth:
+                                PieceState = PieceState.SpecialEast;
+                                IndexTexture++;
+                                break;
+                            case PieceState.SpecialEast:
+                                PieceState = PieceState.SpecialNorth;
+                                IndexTexture = 4;
+                                break;
+                        }
+                        return true;
+                    }
+                    return true;
         }
-        
+
+
+        public override int GetTileType()
+        {
+            return TileType;
+        }
         //sets special tiles back to ogrinal direction
         public override bool ReturnStartingDirection()
         {
@@ -125,22 +185,40 @@ namespace Chaos_University
             if (direction == 0)
             {
                 PieceState = PieceState.SpecialNorth;
-                
+                if (TileType == 2 && direction == 0)
+                {
+                    IndexTexture = 4;
+                }
             }
+           
             if (direction == 1)
             {
                 PieceState = PieceState.SpecialEast;
-                
+               
+            }
+            if (TileType == 2 && direction == 1)
+            {
+                PieceState = PieceState.SpecialWest;
+                IndexTexture = 5;
             }
             if (direction == 2)
             {
                 PieceState = PieceState.SpecialSouth;
+                if (TileType == 2 && direction == 2)
+                {
+                    IndexTexture = 6;
+                }
                 
             }
             if (direction == 3)
             {
                 PieceState = PieceState.SpecialWest;
                
+            }
+            if (TileType == 2 && direction == 3)
+            {
+                PieceState = PieceState.SpecialEast;
+                IndexTexture = 7;
             }
             return true;
         }

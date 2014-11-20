@@ -256,26 +256,54 @@ namespace Chaos_University
                                     lineNumber * GlobalVar.TILESIZE,
                                     specialTileTextures, 1, 0));
                                 break;
-                            //^ = Rotate_Clockwise_East
+                            //> = Rotate_Clockwise_East
                             case '>':
                                 newLevel.SetTile(columnNumber, lineNumber, new SpecialTile(
                                     columnNumber * GlobalVar.TILESIZE,
                                     lineNumber * GlobalVar.TILESIZE,
                                     specialTileTextures, 1, 1));
                                 break;
-                            //^ = Rotate_Clockwise_South
+                            //v = Rotate_Clockwise_South
                             case 'v':
                                 newLevel.SetTile(columnNumber, lineNumber, new SpecialTile(
                                     columnNumber * GlobalVar.TILESIZE,
                                     lineNumber * GlobalVar.TILESIZE,
                                     specialTileTextures, 1, 2));
                                 break;
-                            //^ = Rotate_Clockwise_West
+                            //< = Rotate_Clockwise_West
                             case '<':
                                 newLevel.SetTile(columnNumber, lineNumber, new SpecialTile(
                                     columnNumber * GlobalVar.TILESIZE,
                                     lineNumber * GlobalVar.TILESIZE,
                                     specialTileTextures, 1, 3));
+                                break;
+                            //+ = Rotate_Counter_Clockwise_North
+                            case '+':
+                                newLevel.SetTile(columnNumber, lineNumber, new SpecialTile(
+                                    columnNumber * GlobalVar.TILESIZE,
+                                    lineNumber * GlobalVar.TILESIZE,
+                                    specialTileTextures, 2, 0));
+                                break;
+                            //} = Rotate_Counter_Clockwise_East
+                            case '}':
+                                newLevel.SetTile(columnNumber, lineNumber, new SpecialTile(
+                                    columnNumber * GlobalVar.TILESIZE,
+                                    lineNumber * GlobalVar.TILESIZE,
+                                    specialTileTextures, 2, 3));
+                                break;
+                            //^ = Rotate_Counter_Clockwise_South
+                            case '-':
+                                newLevel.SetTile(columnNumber, lineNumber, new SpecialTile(
+                                    columnNumber * GlobalVar.TILESIZE,
+                                    lineNumber * GlobalVar.TILESIZE,
+                                    specialTileTextures, 2, 2));
+                                break;
+                            //{ = Rotate_Counter_Clockwise_West
+                            case '{':
+                                newLevel.SetTile(columnNumber, lineNumber, new SpecialTile(
+                                    columnNumber * GlobalVar.TILESIZE,
+                                    lineNumber * GlobalVar.TILESIZE,
+                                    specialTileTextures, 2, 1));
                                 break;
                         }
                         columnNumber++;
@@ -589,9 +617,9 @@ namespace Chaos_University
             specialTileTextures.Add(this.Content.Load<Texture2D>("Rotate_Clockwise_Down"));
             specialTileTextures.Add(this.Content.Load<Texture2D>("Rotate_Clockwise_Left"));
             specialTileTextures.Add(this.Content.Load<Texture2D>("Rotate_Counter_Clockwise_Up"));
-            specialTileTextures.Add(this.Content.Load<Texture2D>("Rotate_Counter_Clockwise_Right"));
-            specialTileTextures.Add(this.Content.Load<Texture2D>("Rotate_Counter_Clockwise_Down"));
             specialTileTextures.Add(this.Content.Load<Texture2D>("Rotate_Counter_Clockwise_Left"));
+            specialTileTextures.Add(this.Content.Load<Texture2D>("Rotate_Counter_Clockwise_Down"));
+            specialTileTextures.Add(this.Content.Load<Texture2D>("Rotate_Counter_Clockwise_Right"));
 
             //Single Wall texture.
             wallTextures = new List<Texture2D>();

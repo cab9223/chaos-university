@@ -107,6 +107,11 @@ namespace Chaos_University
         {
             return false;
         }
+
+        public virtual int GetTileType()
+        {
+            return 0;
+        }
         //Checks for object collision.
         public bool CheckCollision(GamePiece obj)
         {
