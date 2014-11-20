@@ -63,6 +63,7 @@ namespace Chaos_University
         List<Texture2D> playerTextures;
         List<Texture2D> guardTextures;
         List<Texture2D> moneyTextures;
+        List<Texture2D> specialTileTextures;
         //List<Texture2D> abilityTextures;
 
         //Songs
@@ -247,6 +248,34 @@ namespace Chaos_University
                                     guardTextures);
                                 guards.Add(guard);
                                 guardCount = guardCount + 1;
+                                break;
+                            //^ = Rotate_Clockwise_North
+                            case '^':
+                                newLevel.SetTile(columnNumber, lineNumber, new SpecialTile(
+                                    columnNumber * GlobalVar.TILESIZE,
+                                    lineNumber * GlobalVar.TILESIZE,
+                                    specialTileTextures, 1, 0));
+                                break;
+                            //^ = Rotate_Clockwise_East
+                            case '>':
+                                newLevel.SetTile(columnNumber, lineNumber, new SpecialTile(
+                                    columnNumber * GlobalVar.TILESIZE,
+                                    lineNumber * GlobalVar.TILESIZE,
+                                    specialTileTextures, 1, 1));
+                                break;
+                            //^ = Rotate_Clockwise_South
+                            case 'v':
+                                newLevel.SetTile(columnNumber, lineNumber, new SpecialTile(
+                                    columnNumber * GlobalVar.TILESIZE,
+                                    lineNumber * GlobalVar.TILESIZE,
+                                    specialTileTextures, 1, 2));
+                                break;
+                            //^ = Rotate_Clockwise_West
+                            case '<':
+                                newLevel.SetTile(columnNumber, lineNumber, new SpecialTile(
+                                    columnNumber * GlobalVar.TILESIZE,
+                                    lineNumber * GlobalVar.TILESIZE,
+                                    specialTileTextures, 1, 3));
                                 break;
                         }
                         columnNumber++;
@@ -544,6 +573,17 @@ namespace Chaos_University
             tileTextures.Add(this.Content.Load<Texture2D>("Default_Right"));
             tileTextures.Add(this.Content.Load<Texture2D>("Default_Down"));
             tileTextures.Add(this.Content.Load<Texture2D>("Default_Left"));
+
+            //For rotate tiles
+            specialTileTextures = new List<Texture2D>();            
+            specialTileTextures.Add(this.Content.Load<Texture2D>("Rotate_Clockwise_Up"));
+            specialTileTextures.Add(this.Content.Load<Texture2D>("Rotate_Clockwise_Right"));
+            specialTileTextures.Add(this.Content.Load<Texture2D>("Rotate_Clockwise_Down"));
+            specialTileTextures.Add(this.Content.Load<Texture2D>("Rotate_Clockwise_Left"));
+            specialTileTextures.Add(this.Content.Load<Texture2D>("Rotate_Counter_Clockwise_Up"));
+            specialTileTextures.Add(this.Content.Load<Texture2D>("Rotate_Counter_Clockwise_Right"));
+            specialTileTextures.Add(this.Content.Load<Texture2D>("Rotate_Counter_Clockwise_Down"));
+            specialTileTextures.Add(this.Content.Load<Texture2D>("Rotate_Counter_Clockwise_Left"));
 
             //Single Wall texture.
             wallTextures = new List<Texture2D>();

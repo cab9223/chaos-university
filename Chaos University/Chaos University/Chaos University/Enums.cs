@@ -24,6 +24,10 @@ namespace Chaos_University
         West,
         Wall,
         Goal,
-        Collect
+        Collect,
+        SpecialNorth,
+        SpecialEast,
+        SpecialSouth,
+        SpecialWest
     }
 }
