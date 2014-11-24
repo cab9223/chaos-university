@@ -55,6 +55,7 @@ namespace Chaos_University
         int camY;                   //Y offset of view.
         int camXCenter;             //Current X center position of view.
         int camYCenter;             //Current Y center position of view.
+        string title;
 
         //Textures
         List<Texture2D> tileTextures;
@@ -94,6 +95,7 @@ namespace Chaos_University
             levels = new List<Level>();
             guards = new List<Enemy>();
             guardAmount = new Queue<int>();
+            title = "PLACE HOLDER";
 
 
             indexLevel = -1;
@@ -392,7 +394,6 @@ namespace Chaos_University
                     {
                         level.GetGamePiece(a, b).ReturnStartingDirection();
                     }
-                        
                 }
             }
         }
@@ -594,7 +595,7 @@ namespace Chaos_University
             menuFont = this.Content.Load<SpriteFont>("MenuFont");
             headerFont = this.Content.Load<SpriteFont>("MenuHeaderFont");
 
-            menuPos = headerFont.MeasureString("CHAOS UNIVERSITY");
+            menuPos = headerFont.MeasureString(title);
             gameOverPos = headerFont.MeasureString("GAME OVER");
             levelCompPos = headerFont.MeasureString("LEVEL COMPLETE");
 
@@ -878,7 +879,14 @@ namespace Chaos_University
                     switch(level.CheckCollisions())
                     {
                         case 1:
-                            current = GameState.LevelComp;
+                            if (level.GetMoneyCount() == 0 || GlobalVar.ParCount <= level.Par)
+                            {
+                                current = GameState.LevelComp;
+                            }
+                            else
+                            {
+                                current = GameState.LevelFail;
+                            }
                             break;
                         case 2:
                             this.Fail();
@@ -893,6 +901,17 @@ namespace Chaos_University
                         //Increment level
                         this.Success();
                         this.IncrementLevel();
+
+                        current = GameState.Playing;
+                    }
+                    break;
+
+                //LEVEL INCOMPLETE
+                case GameState.LevelFail:
+                    if (keyboard.IsKeyDown(Keys.Enter) && keyboardPrev.IsKeyUp(Keys.Enter))
+                    {
+                        //Increment level
+                        this.Success();
 
                         current = GameState.Playing;
                     }
@@ -934,7 +953,7 @@ namespace Chaos_University
                 case GameState.Title:
                     //Draw Title
                     spriteBatch.DrawString(headerFont,
-                        "CHAOS UNIVERSITY",
+                        title,
                         new Vector2(GraphicsDevice.Viewport.Width / 2, 0),
                         Color.White,
                         0.0f,
@@ -1036,6 +1055,35 @@ namespace Chaos_University
                     //Draw Press Enter Prompt
                     spriteBatch.DrawString(menuFont,
                         "Press enter to continue.",
+                        new Vector2(25, GraphicsDevice.Viewport.Height - 26),
+                        Color.White);
+                    break;
+
+                //Level Complete feedback screen.
+                case GameState.LevelFail:
+                    //Draw LEVEL COMPLETE
+                    spriteBatch.DrawString(headerFont,
+                        "LEVEL INCOMPLETE",
+                        new Vector2(GraphicsDevice.Viewport.Width / 2, 0),
+                        Color.White,
+                        0.0f,
+                        new Vector2(levelCompPos.X / 2, 0),
+                        new Vector2(1.2f, 1.0f),
+                        SpriteEffects.None,
+                        0);
+                    //Draw Items collected.
+                    spriteBatch.DrawString(menuFont,
+                        String.Format("Items Collected: {0} of {1}", level.Monies.Count - level.GetMoneyCount(), level.Monies.Count),
+                        new Vector2(25, 100),
+                        Color.White);
+                    //Draw Par
+                    spriteBatch.DrawString(menuFont,
+                        String.Format("Par: {0} of {1}", GlobalVar.ParCount, level.Par),
+                        new Vector2(25, 125),
+                        Color.White);
+                    //Draw Press Enter Prompt
+                    spriteBatch.DrawString(menuFont,
+                        "Press enter to replay level.",
                         new Vector2(25, GraphicsDevice.Viewport.Height - 26),
                         Color.White);
                     break;
