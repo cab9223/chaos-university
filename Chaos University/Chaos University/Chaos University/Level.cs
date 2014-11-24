@@ -240,12 +240,12 @@ namespace Chaos_University
             }
         }
 
-        public int CheckCollisions()
+        public CollisionState CheckCollisions()
         {
             //Condition:    0 = do nothing.
             //              1 = Succeed.
             //              2 = Fail.
-            int condition = 0;
+            CollisionState condition = CollisionState.Proceed;
             for (int j = 0; j < this.Height; ++j)
             {
                 for (int i = 0; i < this.Width; ++i)
@@ -273,7 +273,7 @@ namespace Chaos_University
                                     this.Ninja.turn(3);
                                     break;
                                 case PieceState.Goal:
-                                    condition = 1;
+                                    condition = CollisionState.Goal;
                                     break;
                                 case PieceState.SpecialNorth:                                   
                                     this.Ninja.turn(0);
@@ -318,7 +318,7 @@ namespace Chaos_University
                                     this.Recon.turn(3);
                                     break;
                                 case PieceState.Goal:
-                                    condition = 1;
+                                    condition = CollisionState.Goal;
                                     break;
                                 case PieceState.SpecialNorth:
                                     this.Recon.turn(0);
@@ -363,7 +363,7 @@ namespace Chaos_University
                                     this.Assault.turn(3);
                                     break;
                                 case PieceState.Goal:
-                                    condition = 1;
+                                    condition = CollisionState.Goal;
                                     break;
                                 case PieceState.SpecialNorth:
                                     this.Assault.turn(0);
@@ -389,9 +389,26 @@ namespace Chaos_University
                     if (this.GetGamePiece(i, j).PieceState == PieceState.Wall)
                     {
                         //Check if player collided with it.
-                        if (this.GetGamePiece(i, j).CheckCollision(this.Ninja))
+                        if (this.isNinja)
                         {
-                            condition = 2;
+                            if (this.GetGamePiece(i, j).CheckCollision(this.Ninja))
+                            {
+                                condition = CollisionState.Fail;
+                            }
+                        }
+                        if (this.isRecon)
+                        {
+                            if (this.GetGamePiece(i, j).CheckCollision(this.Recon))
+                            {
+                                condition = CollisionState.Fail;
+                            }
+                        }
+                        if (this.isAssault)
+                        {
+                            if (this.GetGamePiece(i, j).CheckCollision(this.Assault))
+                            {
+                                condition = CollisionState.Fail;
+                            }
                         }
                     }
                 }

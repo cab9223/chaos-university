@@ -581,6 +581,110 @@ namespace Chaos_University
             camY = camYCenter;  //Reset view.
         }
 
+        //Updates all guards.
+        private void UpdateGuards(double gameTime)
+        {
+            //Important Guard Updates
+            if (isGuard == true)
+            {
+                switch (guardCount) //Move Guards
+                {
+                    case 1:
+                        guard.Move((int)(100 * GlobalVar.TILESIZE * (float)gameTime / 50));
+                        break;
+                    case 2:
+                        guard.Move((int)(100 * GlobalVar.TILESIZE * (float)gameTime / 50));
+                        guard2.Move((int)(100 * GlobalVar.TILESIZE * (float)gameTime / 50));
+                        break;
+                    case 3:
+                        guard.Move((int)(100 * GlobalVar.TILESIZE * (float)gameTime / 50));
+                        guard2.Move((int)(100 * GlobalVar.TILESIZE * (float)gameTime / 50));
+                        guard3.Move((int)(100 * GlobalVar.TILESIZE * (float)gameTime / 50));
+                        break;
+                }
+
+                switch (guardCount) //Guards attack player
+                {
+                    case 1:
+                        if (guard.Attack(level.Ninja) == true)
+                        {
+                            this.Fail();
+                        }
+                        break;
+                    case 2:
+                        if (guard.Attack(level.Ninja) == true)
+                        {
+                            this.Fail();
+                        }
+                        else if (guard2.Attack(level.Ninja) == true)
+                        {
+                            this.Fail();
+                        }
+                        break;
+                    case 3:
+                        if (guard.Attack(level.Ninja) == true)
+                        {
+                            this.Fail();
+                        }
+                        else if (guard2.Attack(level.Ninja) == true)
+                        {
+                            this.Fail();
+                        }
+                        else if (guard3.Attack(level.Ninja) == true)
+                        {
+                            this.Fail();
+                        }
+                        break;
+                }
+
+
+                //Guards Wall detection
+                for (int j = 0; j < level.Height; ++j)
+                {
+                    for (int i = 0; i < level.Width; ++i)
+                    {
+                        if (level.GetGamePiece(i, j).PieceState == PieceState.Wall)
+                        {
+                            //Check if enemy collided with it.
+                            switch (guardCount)
+                            {
+                                case 1:
+                                    if (level.GetGamePiece(i, j).CheckCollision(guard))
+                                    {
+                                        guard.Patrol(0);
+                                    }
+                                    break;
+                                case 2:
+                                    if (level.GetGamePiece(i, j).CheckCollision(guard))
+                                    {
+                                        guard.Patrol(0);
+                                    }
+                                    else if (level.GetGamePiece(i, j).CheckCollision(guard2))
+                                    {
+                                        guard2.Patrol(0);
+                                    }
+                                    break;
+                                case 3:
+                                    if (level.GetGamePiece(i, j).CheckCollision(guard))
+                                    {
+                                        guard.Patrol(0);
+                                    }
+                                    else if (level.GetGamePiece(i, j).CheckCollision(guard2))
+                                    {
+                                        guard2.Patrol(0);
+                                    }
+                                    else if (level.GetGamePiece(i, j).CheckCollision(guard3))
+                                    {
+                                        guard3.Patrol(0);
+                                    }
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// LoadContent will be called once per game and is the place to load
         /// all of your content.
@@ -772,113 +876,13 @@ namespace Chaos_University
                             50));
                     }
 
-
-                    //Important Guard Updates
-                    if (isGuard == true)
-                    {
-                        switch (guardCount) //Move Guards
-                        {
-                            case 1:
-                                guard.Move((int)(100 * GlobalVar.TILESIZE * (float)gameTime.ElapsedGameTime.TotalSeconds / 50));
-                                break;
-                            case 2:
-                                guard.Move((int)(100 * GlobalVar.TILESIZE * (float)gameTime.ElapsedGameTime.TotalSeconds / 50));
-                                guard2.Move((int)(100 * GlobalVar.TILESIZE * (float)gameTime.ElapsedGameTime.TotalSeconds / 50));
-                                break;
-                            case 3:
-                                guard.Move((int)(100 * GlobalVar.TILESIZE * (float)gameTime.ElapsedGameTime.TotalSeconds / 50));
-                                guard2.Move((int)(100 * GlobalVar.TILESIZE * (float)gameTime.ElapsedGameTime.TotalSeconds / 50));
-                                guard3.Move((int)(100 * GlobalVar.TILESIZE * (float)gameTime.ElapsedGameTime.TotalSeconds / 50));
-                                break;
-                        }
-
-                        switch (guardCount) //Guards attack player
-                        {
-                            case 1:
-                                if (guard.Attack(level.Ninja) == true)
-                                {
-                                    this.Fail();
-                                }
-                                break;
-                            case 2:
-                                if (guard.Attack(level.Ninja) == true)
-                                {
-                                    this.Fail();
-                                }
-                                else if (guard2.Attack(level.Ninja) == true)
-                                {
-                                    this.Fail();
-                                }
-                                break;
-                            case 3:
-                                if (guard.Attack(level.Ninja) == true)
-                                {
-                                    this.Fail();
-                                }
-                                else if (guard2.Attack(level.Ninja) == true)
-                                {
-                                    this.Fail();
-                                }
-                                else if (guard3.Attack(level.Ninja) == true)
-                                {
-                                    this.Fail();
-                                }
-                                break;
-                        }
-                        
-
-                        //Guards Wall detection
-                        for (int j = 0; j < level.Height; ++j)
-                        {
-                            for (int i = 0; i < level.Width; ++i)
-                            {
-                                if (level.GetGamePiece(i, j).PieceState == PieceState.Wall)
-                                {
-                                    //Check if enemy collided with it.
-                                    switch (guardCount)
-                                    {
-                                        case 1:
-                                            if (level.GetGamePiece(i, j).CheckCollision(guard))
-                                            {
-                                                guard.Patrol(0);
-                                            }
-                                            break;
-                                        case 2:
-                                            if (level.GetGamePiece(i, j).CheckCollision(guard))
-                                            {
-                                                guard.Patrol(0);
-                                            }
-                                            else if (level.GetGamePiece(i, j).CheckCollision(guard2))
-                                            {
-                                                guard2.Patrol(0);
-                                            }
-                                            break;
-                                        case 3:
-                                            if (level.GetGamePiece(i, j).CheckCollision(guard))
-                                            {
-                                                guard.Patrol(0);
-                                            }
-                                            else if (level.GetGamePiece(i, j).CheckCollision(guard2))
-                                            {
-                                                guard2.Patrol(0);
-                                            }
-                                            else if (level.GetGamePiece(i, j).CheckCollision(guard3))
-                                            {
-                                                guard3.Patrol(0);
-                                            }
-                                            break;
-                                    }
-                                }
-                            }
-                        }
-                    }
-
+                    this.UpdateGuards(gameTime.ElapsedGameTime.TotalSeconds);
                     
                     //Gonna have to redo this for multiple classes                    
                     //For all gamepieces in level grid, check for direcion changes or collisions.
                     switch(level.CheckCollisions())
                     {
-                        case 1:
+                        case CollisionState.Goal:
                             if (level.GetMoneyCount() == 0 || GlobalVar.ParCount <= level.Par)
                             {
                                 current = GameState.LevelComp;
@@ -888,7 +892,7 @@ namespace Chaos_University
                                 current = GameState.LevelFail;
                             }
                             break;
-                        case 2:
+                        case CollisionState.Fail:
                             this.Fail();
                             break;
                     }

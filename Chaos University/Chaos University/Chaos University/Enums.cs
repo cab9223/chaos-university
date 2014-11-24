@@ -31,4 +31,11 @@ namespace Chaos_University
         SpecialSouth,
         SpecialWest
     }
+
+    public enum CollisionState
+    {
+        Proceed,
+        Fail,
+        Goal
+    }
 }
