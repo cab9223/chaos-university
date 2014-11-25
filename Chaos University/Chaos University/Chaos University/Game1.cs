@@ -481,7 +481,12 @@ namespace Chaos_University
             //Pressing enter makes the player start move.
             if (keyboard.IsKeyDown(Keys.Enter) && keyboardPrev.IsKeyUp(Keys.Enter) && !level.Ninja.Moving)
             {
-                level.Ninja.Moving = true;
+                if(level.IsNinja)
+                    level.Ninja.Moving = true;
+                if(level.IsRecon)
+                    level.Recon.Moving = true;
+                if(level.IsAssault)
+                    level.Assault.Moving = true;
             }
 
             //Reset
@@ -869,6 +874,7 @@ namespace Chaos_University
                     //Move Assault
                     if (level.IsAssault)
                     {
+                        Console.WriteLine("LOL!");
                         level.Assault.Move((int)(
                             100 * 
                             GlobalVar.TILESIZE *
@@ -1009,7 +1015,12 @@ namespace Chaos_University
                         new Vector2(420, GraphicsDevice.Viewport.Height - 50),
                         Color.White);
                     level.Draw(spriteBatch, camX, camY);
-                    level.Ninja.Draw(spriteBatch, camX, camY);
+                    if(level.IsNinja)
+                        level.Ninja.Draw(spriteBatch, camX, camY);
+                    if (level.IsRecon)
+                        level.Recon.Draw(spriteBatch, camX, camY);
+                    if(level.IsAssault)
+                        level.Assault.Draw(spriteBatch, camX, camY);
                     /*if (level.Ninja.AbilityActive)
                         level.Ninja.ThisGear.Draw(spriteBatch, camX, camY);*/
                     indicator.Draw(spriteBatch, camX, camY);
