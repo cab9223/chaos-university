@@ -43,6 +43,7 @@ namespace Chaos_University
         int guardIndex;             //Tells which guard to make
         int guardCount;             //Tells amount of guards
         Queue<int> guardAmount;     //Also tells amount of guards
+        bool attacked;              //Guard attacked player
         Indicator indicator;        //Indicator of currently selected tile.
 
         //Other things.
@@ -108,6 +109,7 @@ namespace Chaos_University
             isGuard = false;
             guardIndex = 0;
             guardCount = 0;
+            attacked = false;
 
             base.Initialize();
         }
@@ -586,6 +588,22 @@ namespace Chaos_University
             camY = camYCenter;  //Reset view.
         }
 
+
+        public void GuardFail(double gameTime) //When the player failed due to a guard
+        {
+            float timer = 0;
+
+            timer += (float)gameTime;
+
+            if (timer >= 2.0f)
+            {
+                guard.Reset();
+                guard2.Reset();
+                guard3.Reset();
+            }
+        }
+
+
         //Updates all guards.
         private void UpdateGuards(double gameTime)
         {
@@ -883,6 +901,11 @@ namespace Chaos_University
                     }
 
                     this.UpdateGuards(gameTime.ElapsedGameTime.TotalSeconds);
+
+                    if (attacked == true) //Attacked by a guard
+                    {
+                        this.GuardFail(gameTime.ElapsedGameTime.TotalSeconds);
+                    }
                     
                     //Gonna have to redo this for multiple classes                    
                     //For all gamepieces in level grid, check for direcion changes or collisions.

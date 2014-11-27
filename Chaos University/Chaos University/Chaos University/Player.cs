@@ -24,19 +24,6 @@ namespace Chaos_University
 
         public Major ThisMajor { get; set; }
 
-        private bool moving;
-        public bool Moving
-        {
-            get
-            {
-                return moving;
-            }
-            set
-            {
-                moving = value;
-            }
-        }
-
         public bool AbilityActive { get; set; }
 
         public Gear ThisGear { get; set; }
@@ -46,7 +33,7 @@ namespace Chaos_University
             : base(x, y, direction, textures)
         {
             //PlrName = name;  //sets player name
-            moving = false;
+            Moving = false;
             ThisMajor = myMajor;
             
             AbilityActive = false;

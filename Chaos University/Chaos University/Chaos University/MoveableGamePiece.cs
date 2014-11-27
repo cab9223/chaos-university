@@ -36,6 +36,21 @@ namespace Chaos_University
             }
         }
 
+
+        private bool moving;
+        public bool Moving
+        {
+            get
+            {
+                return moving;
+            }
+            set
+            {
+                moving = value;
+            }
+        }
+
+
         //Vector drection To Draw Textures at.
         private Vector2 vector;
         public Vector2 Vector

@@ -60,6 +60,35 @@ namespace Chaos_University
             }
         }
 
+        //Initial value for X
+        private int initialX;
+        public int InitialX
+        {
+            get
+            {
+                return initialX;
+            }
+            set
+            {
+                initialX = value;
+            }
+        }
+        
+        //Initial value for Y
+        private int initialY;
+        public int InitialY
+        {
+            get
+            {
+                return initialY;
+            }
+            set
+            {
+                initialY = value;
+            }
+        }
+
+
         // Constructor that establishes textures.
         public GamePiece(int x, int y, List<Texture2D> textures)
         {
@@ -67,6 +96,10 @@ namespace Chaos_University
 
             listTextures = textures;
             indexTexture = 0;
+
+            InitialX = x;
+
+            InitialY = y;
         }
 
         // Constructor that does not establish textures.
@@ -76,6 +109,10 @@ namespace Chaos_University
 
             listTextures = new List<Texture2D>();
             indexTexture = 0;
+
+            InitialX = x;
+
+            InitialY = y;
         }
 
         //Draws any gameobject to screen

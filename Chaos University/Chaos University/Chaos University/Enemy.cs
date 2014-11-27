@@ -56,12 +56,15 @@ namespace Chaos_University
         }
 
 
+
         public Enemy(int x, int y, int dir, List<Texture2D> textures) //Constructor
             : base(x, y, dir, textures)
         {
             Difficulty = 0;
 
             isAlive = true;
+
+            Moving = true;
 
             Detected = false;
 
@@ -74,7 +77,6 @@ namespace Chaos_University
             {
                 DetectRect = new Rectangle(x + 20, y + 20, (GlobalVar.TILESIZE / 2), (GlobalVar.TILESIZE / 5));
                 EmotionRect = new Rectangle(x + 11, y - 13, (GlobalVar.TILESIZE / 2), (GlobalVar.TILESIZE / 2));
-               // EmotionRect = new Rectangle(x + 31, y + 11, (GlobalVar.TILESIZE / 2), (GlobalVar.TILESIZE / 2));
             }
         }
 
@@ -85,7 +87,7 @@ namespace Chaos_University
             {
                 //Maybe add an effect or sound to say the guard caught the player
                 Detected = true;
-                //Stop moving
+                Moving = false;
                 //Delay
                 //Detected = false;
                 return true;
@@ -93,6 +95,29 @@ namespace Chaos_University
             else
             {
                 return false;
+            }
+        }
+
+
+        public void Reset()
+        {
+            isAlive = true;
+
+            Moving = true;
+
+            Detected = false;
+
+            PositionRect = new Rectangle(InitialX, InitialY, GlobalVar.TILESIZE, GlobalVar.TILESIZE);
+
+            if (Direction == 0 || Direction == 2)
+            {
+                DetectRect = new Rectangle(InitialX + 20, InitialY + 20, (GlobalVar.TILESIZE / 5), (GlobalVar.TILESIZE / 2));
+                EmotionRect = new Rectangle(InitialX + 11, InitialY - 11, (GlobalVar.TILESIZE / 2), (GlobalVar.TILESIZE / 2));
+            }
+            else if (Direction == 1 || Direction == 3)
+            {
+                DetectRect = new Rectangle(InitialX + 20, InitialY + 20, (GlobalVar.TILESIZE / 2), (GlobalVar.TILESIZE / 5));
+                EmotionRect = new Rectangle(InitialX + 11, InitialY - 13, (GlobalVar.TILESIZE / 2), (GlobalVar.TILESIZE / 2));
             }
         }
 
