@@ -71,7 +71,7 @@ namespace Chaos_University
             if (dir == 0 || dir == 2)
             {
                 DetectRect = new Rectangle(x + 20, y + 20, (GlobalVar.TILESIZE / 5), (GlobalVar.TILESIZE / 2));
-                EmotionRect = new Rectangle(x + 11, y - 11, (GlobalVar.TILESIZE / 2), (GlobalVar.TILESIZE / 2));
+                EmotionRect = new Rectangle(x + 13, y - 11, (GlobalVar.TILESIZE / 2), (GlobalVar.TILESIZE / 2));
             }
             else if (dir == 1 || dir == 3)
             {
@@ -112,7 +112,7 @@ namespace Chaos_University
             if (Direction == 0 || Direction == 2)
             {
                 DetectRect = new Rectangle(InitialX + 20, InitialY + 20, (GlobalVar.TILESIZE / 5), (GlobalVar.TILESIZE / 2));
-                EmotionRect = new Rectangle(InitialX + 11, InitialY - 11, (GlobalVar.TILESIZE / 2), (GlobalVar.TILESIZE / 2));
+                EmotionRect = new Rectangle(InitialX + 13, InitialY - 11, (GlobalVar.TILESIZE / 2), (GlobalVar.TILESIZE / 2));
             }
             else if (Direction == 1 || Direction == 3)
             {
@@ -234,39 +234,42 @@ namespace Chaos_University
 
         public override void Move(int distance)
         {
-            Rectangle temp = PositionRect;
-            Rectangle temp2 = DetectRect;
-            Rectangle temp3 = EmotionRect;
-
-            switch (Direction)
+            if (Moving == true)
             {
-                case 0:
-                    temp.Y += distance;
-                    temp2.Y += distance;
-                    temp3.Y += distance;
-                    break;
+                Rectangle temp = PositionRect;
+                Rectangle temp2 = DetectRect;
+                Rectangle temp3 = EmotionRect;
 
-                case 1:
-                    temp.X -= distance;
-                    temp2.X -= distance;
-                    temp3.X -= distance;
-                    break;
+                switch (Direction)
+                {
+                    case 0:
+                        temp.Y += distance;
+                        temp2.Y += distance;
+                        temp3.Y += distance;
+                        break;
 
-                case 2:
-                    temp.Y -= distance;
-                    temp2.Y -= distance;
-                    temp3.Y -= distance;
-                    break;
+                    case 1:
+                        temp.X -= distance;
+                        temp2.X -= distance;
+                        temp3.X -= distance;
+                        break;
 
-                case 3:
-                    temp.X += distance;
-                    temp2.X += distance;
-                    temp3.X += distance;
-                    break;
+                    case 2:
+                        temp.Y -= distance;
+                        temp2.Y -= distance;
+                        temp3.Y -= distance;
+                        break;
+
+                    case 3:
+                        temp.X += distance;
+                        temp2.X += distance;
+                        temp3.X += distance;
+                        break;
+                }
+                PositionRect = temp;
+                DetectRect = temp2;
+                EmotionRect = temp3;
             }
-            PositionRect = temp;
-            DetectRect = temp2;
-            EmotionRect = temp3;
         }
 
 

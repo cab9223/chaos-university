@@ -45,6 +45,8 @@ namespace Chaos_University
         Queue<int> guardAmount;     //Also tells amount of guards
         bool attacked;              //Guard attacked player
         Indicator indicator;        //Indicator of currently selected tile.
+        float timer;                //Short pause
+        bool alerted;               //Alert went off
 
         //Other things.
         Vector2 menuPos;            //Position of the menu header
@@ -70,6 +72,7 @@ namespace Chaos_University
 
         //Songs
         List<Song> music;
+        List<Song> effects;
 
         //Videos
         Video introVideo;
@@ -110,6 +113,8 @@ namespace Chaos_University
             guardIndex = 0;
             guardCount = 0;
             attacked = false;
+            timer = 0;
+            alerted = false;
 
             base.Initialize();
         }
@@ -239,7 +244,7 @@ namespace Chaos_University
                                 newLevel.StartAssault = newLevel.Assault.PositionRect;
                                 newLevel.IsAssault = true;
                                 break;
-                            //X = Guard 1
+                            //X = Guard
                             case 'X':
                                 newLevel.SetTile(columnNumber, lineNumber, new Tile(
                                     columnNumber * GlobalVar.TILESIZE,
@@ -589,17 +594,25 @@ namespace Chaos_University
         }
 
 
-        public void GuardFail(double gameTime) //When the player failed due to a guard
+        public void GuardFail() //When the player failed due to a guard
         {
-            float timer = 0;
+            if (alerted == false)
+            {
+                MediaPlayer.Play(effects[0]);
+                alerted = true;
+            }
 
-            timer += (float)gameTime;
+            level.Ninja.Moving = false;
 
             if (timer >= 2.0f)
             {
                 guard.Reset();
                 guard2.Reset();
                 guard3.Reset();
+                this.Fail();
+                attacked = false;
+                alerted = false;
+                timer = 0;
             }
         }
 
@@ -631,31 +644,37 @@ namespace Chaos_University
                     case 1:
                         if (guard.Attack(level.Ninja) == true)
                         {
-                            this.Fail();
+                            attacked = true;
+                            //this.Fail();
                         }
                         break;
                     case 2:
                         if (guard.Attack(level.Ninja) == true)
                         {
-                            this.Fail();
+                            attacked = true;
+                            //this.Fail();
                         }
                         else if (guard2.Attack(level.Ninja) == true)
                         {
-                            this.Fail();
+                            attacked = true;
+                            //this.Fail();
                         }
                         break;
                     case 3:
                         if (guard.Attack(level.Ninja) == true)
                         {
-                            this.Fail();
+                            attacked = true;
+                            //this.Fail();
                         }
                         else if (guard2.Attack(level.Ninja) == true)
                         {
-                            this.Fail();
+                            attacked = true;
+                            //this.Fail();
                         }
                         else if (guard3.Attack(level.Ninja) == true)
                         {
-                            this.Fail();
+                            attacked = true;
+                            //this.Fail();
                         }
                         break;
                 }
@@ -729,7 +748,9 @@ namespace Chaos_University
             music = new List<Song>();
             music.Add(this.Content.Load<Song>("ThemeV2"));
 
-            
+            effects = new List<Song>();
+            effects.Add(this.Content.Load<Song>("Alert"));
+
             introVideo = this.Content.Load<Video>("Intro");
 
             //Single indicator.
@@ -904,7 +925,8 @@ namespace Chaos_University
 
                     if (attacked == true) //Attacked by a guard
                     {
-                        this.GuardFail(gameTime.ElapsedGameTime.TotalSeconds);
+                        timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                        this.GuardFail();
                     }
                     
                     //Gonna have to redo this for multiple classes                    

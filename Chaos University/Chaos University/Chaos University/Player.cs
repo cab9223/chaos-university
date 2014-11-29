@@ -129,7 +129,7 @@ namespace Chaos_University
         //Move Player
         public override void Move(int distance)
         {
-            if (moving)
+            if (Moving)
             {
                 switch (Direction)
                 {
