@@ -35,10 +35,9 @@ namespace Chaos_University
         int clickPrevY;             //Y index of previous tile changed.
 
         //Player stuff.
-        Enemy guard;                //Guard
-        Enemy guard2;               //Second Guard
-        Enemy guard3;               //Third Guard
+        Enemy guard;                //Guard temp
         List<Enemy> guards;         //List of Guards
+        List<Enemy> activeGuards;   //List of Active Guards
         bool isGuard;               //Active Guards
         int guardIndex;             //Tells which guard to make
         int guardCount;             //Tells amount of guards
@@ -98,6 +97,7 @@ namespace Chaos_University
             videoPlayer = new VideoPlayer();
             levels = new List<Level>();
             guards = new List<Enemy>();
+            activeGuards = new List<Enemy>();
             guardAmount = new Queue<int>();
             title = "PLACE HOLDER";
 
@@ -538,6 +538,7 @@ namespace Chaos_University
         {
             indexLevel++;
             isGuard = false;
+            activeGuards.Clear();
             guardCount = guardAmount.Dequeue();
 
             try
@@ -549,35 +550,14 @@ namespace Chaos_University
 
                 if (guardCount > 0)  //Checks for guards in this level
                 {
-                    switch (guardCount)
-                    {
-                        case 1:
-                            guard = guards[guardIndex];
-                            guard.Turn(guard.Direction);
-                            guardIndex = guardIndex + 1;
-                            break;
-                        case 2:
-                            guard = guards[guardIndex];
-                            guard.Turn(guard.Direction);
-                            guardIndex = guardIndex + 1;
-                            guard2 = guards[guardIndex];
-                            guard2.Turn(guard2.Direction);
-                            guardIndex = guardIndex + 1;
-                            break;
-                        case 3:
-                            guard = guards[guardIndex];
-                            guard.Turn(guard.Direction);
-                            guardIndex = guardIndex + 1;
-                            guard2 = guards[guardIndex];
-                            guard2.Turn(guard2.Direction);
-                            guardIndex = guardIndex + 1;
-                            guard3 = guards[guardIndex];
-                            guard3.Turn(guard3.Direction);
-                            guardIndex = guardIndex + 1;
-                            break;
-                    }
-
                     isGuard = true;  //Sets the guards to active
+
+                    for (int i = 0; i < guardCount; i++)
+                    {
+                        activeGuards.Add(guards[guardIndex]);
+                        activeGuards[i].Turn(activeGuards[i].Direction);
+                        guardIndex = guardIndex + 1;
+                    }
                 }
             }
             catch(Exception)
@@ -606,9 +586,10 @@ namespace Chaos_University
 
             if (timer >= 2.0f)
             {
-                guard.Reset();
-                guard2.Reset();
-                guard3.Reset();
+                for (int i = 0; i < guardCount; i++)
+                {
+                    activeGuards[i].Reset();
+                }
                 this.Fail();
                 attacked = false;
                 alerted = false;
@@ -623,60 +604,18 @@ namespace Chaos_University
             //Important Guard Updates
             if (isGuard == true)
             {
-                switch (guardCount) //Move Guards
+                for (int i = 0; i < guardCount; i++)
                 {
-                    case 1:
-                        guard.Move((int)(100 * GlobalVar.TILESIZE * (float)gameTime / 50));
-                        break;
-                    case 2:
-                        guard.Move((int)(100 * GlobalVar.TILESIZE * (float)gameTime / 50));
-                        guard2.Move((int)(100 * GlobalVar.TILESIZE * (float)gameTime / 50));
-                        break;
-                    case 3:
-                        guard.Move((int)(100 * GlobalVar.TILESIZE * (float)gameTime / 50));
-                        guard2.Move((int)(100 * GlobalVar.TILESIZE * (float)gameTime / 50));
-                        guard3.Move((int)(100 * GlobalVar.TILESIZE * (float)gameTime / 50));
-                        break;
+                    activeGuards[i].Move((int)(100 * GlobalVar.TILESIZE * (float)gameTime / 50));
                 }
 
-                switch (guardCount) //Guards attack player
+
+                for (int i = 0; i < guardCount; i++)
                 {
-                    case 1:
-                        if (guard.Attack(level.Ninja) == true)
-                        {
-                            attacked = true;
-                            //this.Fail();
-                        }
-                        break;
-                    case 2:
-                        if (guard.Attack(level.Ninja) == true)
-                        {
-                            attacked = true;
-                            //this.Fail();
-                        }
-                        else if (guard2.Attack(level.Ninja) == true)
-                        {
-                            attacked = true;
-                            //this.Fail();
-                        }
-                        break;
-                    case 3:
-                        if (guard.Attack(level.Ninja) == true)
-                        {
-                            attacked = true;
-                            //this.Fail();
-                        }
-                        else if (guard2.Attack(level.Ninja) == true)
-                        {
-                            attacked = true;
-                            //this.Fail();
-                        }
-                        else if (guard3.Attack(level.Ninja) == true)
-                        {
-                            attacked = true;
-                            //this.Fail();
-                        }
-                        break;
+                    if (activeGuards[i].Attack(level.Ninja) == true)
+                    {
+                        attacked = true;
+                    }
                 }
 
 
@@ -688,39 +627,14 @@ namespace Chaos_University
                         if (level.GetGamePiece(i, j).PieceState == PieceState.Wall)
                         {
                             //Check if enemy collided with it.
-                            switch (guardCount)
+                            for (int x = 0; x < guardCount; x++)
                             {
-                                case 1:
-                                    if (level.GetGamePiece(i, j).CheckCollision(guard))
+                                if (level.GetGamePiece(i, j).CheckCollision(activeGuards[x]))
                                     {
-                                        guard.Patrol(0);
+                                        activeGuards[x].Patrol(0);
                                     }
-                                    break;
-                                case 2:
-                                    if (level.GetGamePiece(i, j).CheckCollision(guard))
-                                    {
-                                        guard.Patrol(0);
-                                    }
-                                    else if (level.GetGamePiece(i, j).CheckCollision(guard2))
-                                    {
-                                        guard2.Patrol(0);
-                                    }
-                                    break;
-                                case 3:
-                                    if (level.GetGamePiece(i, j).CheckCollision(guard))
-                                    {
-                                        guard.Patrol(0);
-                                    }
-                                    else if (level.GetGamePiece(i, j).CheckCollision(guard2))
-                                    {
-                                        guard2.Patrol(0);
-                                    }
-                                    else if (level.GetGamePiece(i, j).CheckCollision(guard3))
-                                    {
-                                        guard3.Patrol(0);
-                                    }
-                                    break;
                             }
+
                         }
                     }
                 }
@@ -1072,20 +986,9 @@ namespace Chaos_University
 
                     if (isGuard == true) //Guard in level?
                     {
-                        switch (guardCount) //How many in level
+                        for (int i = 0; i < guardCount; i++)
                         {
-                            case 1:
-                                guard.Draw(spriteBatch, camX, camY);
-                                break;
-                            case 2:
-                                guard.Draw(spriteBatch, camX, camY);
-                                guard2.Draw(spriteBatch, camX, camY);
-                                break;
-                            case 3:
-                                guard.Draw(spriteBatch, camX, camY);
-                                guard2.Draw(spriteBatch, camX, camY);
-                                guard3.Draw(spriteBatch, camX, camY);
-                                break;
+                            activeGuards[i].Draw(spriteBatch, camX, camY);
                         }
                     }
                     break;
