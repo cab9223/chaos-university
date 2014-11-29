@@ -68,6 +68,7 @@ namespace Chaos_University
 
             Detected = false;
 
+
             if (dir == 0 || dir == 2)
             {
                 DetectRect = new Rectangle(x + 20, y + 20, (GlobalVar.TILESIZE / 5), (GlobalVar.TILESIZE / 2));
@@ -106,6 +107,10 @@ namespace Chaos_University
             Moving = true;
 
             Detected = false;
+
+            Direction = InitialDirection;
+
+            Turn(Direction);
 
             PositionRect = new Rectangle(InitialX, InitialY, GlobalVar.TILESIZE, GlobalVar.TILESIZE);
 

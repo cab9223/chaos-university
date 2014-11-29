@@ -37,6 +37,28 @@ namespace Chaos_University
         }
 
 
+        private int initialDirection;
+        public int InitialDirection
+        {
+            get
+            {
+                return initialDirection;
+            }
+
+            set
+            {
+                if ((value > -1) && (value < 4)) //Test to make sure its direction is from only 0 to 3
+                {
+                    initialDirection = value;
+                }
+                else
+                {
+                    initialDirection = 0;
+                }
+            }
+        }
+
+
         private bool moving;
         public bool Moving
         {
@@ -70,6 +92,7 @@ namespace Chaos_University
             : base(x, y, textures)
         {
             direction = dir;
+            InitialDirection = dir;
             vector = new Vector2(0, -1);
         }
 
