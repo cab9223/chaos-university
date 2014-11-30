@@ -58,6 +58,7 @@ namespace Chaos_University
         int camXCenter;             //Current X center position of view.
         int camYCenter;             //Current Y center position of view.
         string title;
+        bool fastActive;
 
         //Textures
         List<Texture2D> tileTextures;
@@ -115,6 +116,7 @@ namespace Chaos_University
             attacked = false;
             timer = 0;
             alerted = false;
+            fastActive = false;
 
             base.Initialize();
         }
@@ -392,6 +394,8 @@ namespace Chaos_University
             clickPrevX = -1;                                    //Reset clickPrev at a nonexistent index.
             clickPrevY = -1;                                    //Reset clickPrev at a nonexistent index.
             this.CenterCamera();
+            GlobalVar.SpeedLevel = 50;
+            fastActive = false;
 
             //Reset all direction tiles.
             for (int b = 0; b < level.Height; ++b)
@@ -425,6 +429,22 @@ namespace Chaos_University
             clickPrevX = -1;                                    //Reset clickPrev at a nonexistent index.
             clickPrevY = -1;                                    //Reset clickPrev at a nonexistent index.
         }
+
+
+        private void FastFoward() //Speeds up gameplay or returns to normal
+        {
+            if (fastActive == false)
+            {
+                GlobalVar.SpeedLevel = 40;
+                fastActive = true;
+            }
+            else if (fastActive == true)
+            {
+                GlobalVar.SpeedLevel = 50;
+                fastActive = false;
+            }
+        }
+
 
         //Checks the state of the mouse and performs appropriate actions.
         private void CheckGameMouse()
@@ -538,6 +558,12 @@ namespace Chaos_University
                 camX += (int)(150 * (float)elapsedTime);
             }
 
+            //Fast Forward with Space bar
+            if (keyboard.IsKeyDown(Keys.Space) && keyboardPrev.IsKeyUp(Keys.Space))
+            {
+                FastFoward();
+            }
+
             //Next Level cheat, for our personal testing purposes only!
             if (keyboard.IsKeyDown(Keys.N) && keyboardPrev.IsKeyUp(Keys.N))
             {
@@ -633,7 +659,7 @@ namespace Chaos_University
             {
                 for (int i = 0; i < guardCount; i++)
                 {
-                    activeGuards[i].Move((int)(100 * GlobalVar.TILESIZE * (float)gameTime / 50));
+                    activeGuards[i].Move((int)(100 * GlobalVar.TILESIZE * (float)gameTime / GlobalVar.SpeedLevel));
                 }
 
 
@@ -844,7 +870,7 @@ namespace Chaos_University
                             100 * 
                             GlobalVar.TILESIZE *
                             (float)gameTime.ElapsedGameTime.TotalSeconds / 
-                            50));
+                            GlobalVar.SpeedLevel));
                     }
 
                     //Use Ninja Ability
@@ -867,18 +893,18 @@ namespace Chaos_University
                             100 *
                             GlobalVar.TILESIZE *
                             (float)gameTime.ElapsedGameTime.TotalSeconds /
-                            50));
+                            GlobalVar.SpeedLevel));
                     }
 
                     //Move Assault
                     if (level.IsAssault)
                     {
-                        Console.WriteLine("LOL!");
+                        //Console.WriteLine("LOL!");
                         level.Assault.Move((int)(
                             100 * 
                             GlobalVar.TILESIZE *
-                            (float)gameTime.ElapsedGameTime.TotalSeconds / 
-                            50));
+                            (float)gameTime.ElapsedGameTime.TotalSeconds /
+                            GlobalVar.SpeedLevel));
                     }
 
                     this.UpdateGuards(gameTime.ElapsedGameTime.TotalSeconds);  //Updates and checks guards

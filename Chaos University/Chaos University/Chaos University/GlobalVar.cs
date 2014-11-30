@@ -18,7 +18,7 @@ namespace Chaos_University
         // All the variables that we'll need
 
         //Number of levels.
-        public static int LevelCount = 2;
+        public static int LevelCount = 5;
 
         // Allows us to edit the size of a single tile- also useful for a bunch of other things that have been startedo n.
         public static int TILESIZE = 50;
@@ -27,5 +27,7 @@ namespace Chaos_University
         public static Int16[] ColorsSplit = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
         public static int ParCount = 0;
+
+        public static int SpeedLevel = 50; //50 is normal, 40 is max
     }
 }
