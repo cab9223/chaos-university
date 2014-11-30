@@ -424,7 +424,7 @@ namespace Chaos_University
         }
 
 
-        private void FastFoward() //Speeds up gameplay or returns to normal
+        private void FastForward() //Speeds up gameplay or returns to normal
         {
             if (fastActive == false)
             {
@@ -554,7 +554,7 @@ namespace Chaos_University
             //Fast Forward with Space bar
             if (keyboard.IsKeyDown(Keys.Space) && keyboardPrev.IsKeyUp(Keys.Space))
             {
-                FastFoward();
+                FastForward();
             }
 
             //Next Level cheat, for our personal testing purposes only!
