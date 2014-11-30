@@ -231,8 +231,8 @@ namespace Chaos_University
                                 newLevel.StartRecon = newLevel.Recon.PositionRect;
                                 newLevel.IsRecon = true;
                                 break;
-                            //A = Assault
-                            case 'A':
+                            //T = assaulT
+                            case 'T':
                                 newLevel.SetTile(columnNumber, lineNumber, new Tile(
                                     columnNumber * GlobalVar.TILESIZE,
                                     lineNumber * GlobalVar.TILESIZE,
@@ -260,57 +260,57 @@ namespace Chaos_University
                                 guards.Add(guard);
                                 guardCount = guardCount + 1;
                                 break;
-                            //^ = Rotate_Clockwise_North
-                            case '^':
+                            //W = Rotate_Clockwise_North
+                            case 'W':
                                 newLevel.SetTile(columnNumber, lineNumber, new SpecialTile(
                                     columnNumber * GlobalVar.TILESIZE,
                                     lineNumber * GlobalVar.TILESIZE,
                                     specialTileTextures, 1, 0));
                                 break;
-                            //> = Rotate_Clockwise_East
-                            case '>':
+                            //D = Rotate_Clockwise_East
+                            case 'D':
                                 newLevel.SetTile(columnNumber, lineNumber, new SpecialTile(
                                     columnNumber * GlobalVar.TILESIZE,
                                     lineNumber * GlobalVar.TILESIZE,
                                     specialTileTextures, 1, 1));
                                 break;
-                            //v = Rotate_Clockwise_South
-                            case 'v':
+                            //S = Rotate_Clockwise_South
+                            case 'S':
                                 newLevel.SetTile(columnNumber, lineNumber, new SpecialTile(
                                     columnNumber * GlobalVar.TILESIZE,
                                     lineNumber * GlobalVar.TILESIZE,
                                     specialTileTextures, 1, 2));
                                 break;
-                            //< = Rotate_Clockwise_West
-                            case '<':
+                            //A = Rotate_Clockwise_West
+                            case 'A':
                                 newLevel.SetTile(columnNumber, lineNumber, new SpecialTile(
                                     columnNumber * GlobalVar.TILESIZE,
                                     lineNumber * GlobalVar.TILESIZE,
                                     specialTileTextures, 1, 3));
                                 break;
-                            //+ = Rotate_Counter_Clockwise_North
-                            case '+':
+                            //I = Rotate_Counter_Clockwise_North
+                            case 'I':
                                 newLevel.SetTile(columnNumber, lineNumber, new SpecialTile(
                                     columnNumber * GlobalVar.TILESIZE,
                                     lineNumber * GlobalVar.TILESIZE,
                                     specialTileTextures, 2, 0));
                                 break;
-                            //} = Rotate_Counter_Clockwise_East
-                            case '}':
+                            //L = Rotate_Counter_Clockwise_East
+                            case 'L':
                                 newLevel.SetTile(columnNumber, lineNumber, new SpecialTile(
                                     columnNumber * GlobalVar.TILESIZE,
                                     lineNumber * GlobalVar.TILESIZE,
                                     specialTileTextures, 2, 3));
                                 break;
-                            //^ = Rotate_Counter_Clockwise_South
-                            case '-':
+                            //K = Rotate_Counter_Clockwise_South
+                            case 'K':
                                 newLevel.SetTile(columnNumber, lineNumber, new SpecialTile(
                                     columnNumber * GlobalVar.TILESIZE,
                                     lineNumber * GlobalVar.TILESIZE,
                                     specialTileTextures, 2, 2));
                                 break;
-                            //{ = Rotate_Counter_Clockwise_West
-                            case '{':
+                            //J = Rotate_Counter_Clockwise_West
+                            case 'J':
                                 newLevel.SetTile(columnNumber, lineNumber, new SpecialTile(
                                     columnNumber * GlobalVar.TILESIZE,
                                     lineNumber * GlobalVar.TILESIZE,
@@ -882,7 +882,7 @@ namespace Chaos_University
                     //Rotate Ninja sword if the Ability is active
                     /*if (level.Ninja.AbilityActive)
                     {
-                        level.Ninja.ThisGear.Rotate((float)(gameTime.ElapsedGameTime.TotalSeconds / 50));
+                        level.Ninja.ThisGear.Rotate((float)(gameTime.ElapsedGameTime.TotalSeconds / GlobalVar.SpeedLevel));
                     }*/
                      
 
