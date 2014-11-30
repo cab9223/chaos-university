@@ -34,7 +34,7 @@ namespace Chaos_University
         int clickPrevX;             //X index of previous tile changed.
         int clickPrevY;             //Y index of previous tile changed.
 
-        //Player stuff.
+        //Guards stuff.
         Enemy guard;                //Guard temp
         List<Enemy> guards;         //List of Guards
         List<Enemy> activeGuards;   //List of Active Guards
@@ -498,7 +498,7 @@ namespace Chaos_University
         {
             //Keyboard buttons.
             //Pressing enter makes the player start move.
-            if (keyboard.IsKeyDown(Keys.Enter) && keyboardPrev.IsKeyUp(Keys.Enter) && !level.Ninja.Moving)
+            if (keyboard.IsKeyDown(Keys.Enter) && keyboardPrev.IsKeyUp(Keys.Enter)) //&& !level.Ninja.Moving)
             {
                 if(level.IsNinja)
                     level.Ninja.Moving = true;
@@ -588,17 +588,32 @@ namespace Chaos_University
 
         public void GuardFail() //When the player failed due to a guard
         {
-            if (alerted == false)
+            if (alerted == false)  //For alert sound effect
             {
                 MediaPlayer.Play(effects[0]);
                 alerted = true;
             }
 
-            level.Ninja.Moving = false;
 
-            if (timer >= 2.0f)
+            if (level.IsNinja)  //if active Ninja
             {
-                for (int i = 0; i < guardCount; i++)
+                level.Ninja.Moving = false;
+            }
+
+            if (level.IsAssault) //if active Assault
+            {
+                level.Assault.Moving = false;
+            }
+
+            if (level.IsRecon) //if active Recon
+            {
+                level.Recon.Moving = false;
+            }
+
+
+            if (timer >= 2.0f) //2 second pause
+            {
+                for (int i = 0; i < guardCount; i++) //Resets all guards
                 {
                     activeGuards[i].Reset();
                 }
@@ -624,9 +639,28 @@ namespace Chaos_University
 
                 for (int i = 0; i < guardCount; i++)
                 {
-                    if (activeGuards[i].Attack(level.Ninja) == true)
+                    if (level.IsNinja) //if active Ninja is attacked
                     {
-                        attacked = true;
+                        if (activeGuards[i].Attack(level.Ninja) == true)
+                        {
+                            attacked = true;
+                        }
+                    }
+
+                    if (level.IsAssault) //if active Assault is attacked
+                    {
+                        if (activeGuards[i].Attack(level.Assault) == true)
+                        {
+                            attacked = true;
+                        }
+                    }
+
+                    if (level.IsRecon) //if active Recon is attacked
+                    {
+                        if (activeGuards[i].Attack(level.Recon) == true)
+                        {
+                            attacked = true;
+                        }
                     }
                 }
 
@@ -847,7 +881,7 @@ namespace Chaos_University
                             50));
                     }
 
-                    this.UpdateGuards(gameTime.ElapsedGameTime.TotalSeconds);
+                    this.UpdateGuards(gameTime.ElapsedGameTime.TotalSeconds);  //Updates and checks guards
 
                     if (attacked == true) //Attacked by a guard
                     {
@@ -1002,7 +1036,7 @@ namespace Chaos_University
 
                     if (isGuard == true) //Guard in level?
                     {
-                        for (int i = 0; i < guardCount; i++)
+                        for (int i = 0; i < guardCount; i++)  //Draw all guards
                         {
                             activeGuards[i].Draw(spriteBatch, camX, camY);
                         }
