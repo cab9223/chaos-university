@@ -341,13 +341,6 @@ namespace Chaos_University
             return newLevel;
         }
 
-        // will create a new instance of the character creator and display it.
-        public void LoadCharacterCreator()
-        {
-            CharacterCreator characterCreator = new CharacterCreator();
-            characterCreator.Show();
-        }
-
         // Failure state.
         private void Fail()
         {
@@ -791,7 +784,6 @@ namespace Chaos_University
             {
                 levels.Add(this.LoadLevel(i));
             }
-            this.LoadCharacterCreator();
         }
 
         /// <summary>
@@ -850,6 +842,23 @@ namespace Chaos_University
                     {
                         //Play sound. Do this only to type change.
                         //MediaPlayer.Play(music[0]);
+
+                        string path = Directory.GetCurrentDirectory() + "/../../../../../../Colors.txt";
+
+                        //read the file
+                        StreamReader reader = new StreamReader(path);
+
+                        string[] stringColors = reader.ReadLine().Split(',');
+
+                        GlobalVar.ColorsSplit = new Int16[stringColors.Length];
+
+                        //match the values
+                        for (int i = 0; i < stringColors.Length; i++)
+                        {
+                            GlobalVar.ColorsSplit[i] = Int16.Parse(stringColors[i]);
+                        }
+
+                        reader.Close();
 
                         //First level.
                         this.IncrementLevel();
