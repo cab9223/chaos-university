@@ -101,7 +101,7 @@ namespace Chaos_University
             guards = new List<Enemy>();
             activeGuards = new List<Enemy>();
             guardAmount = new Queue<int>();
-            title = "PLACE HOLDER";
+            title = "Team Tyro";
 
             indexLevel = -1;
             clickPrevX = -1;                //Start clickPrev at a nonexistent index.
@@ -965,7 +965,7 @@ namespace Chaos_University
             effects = new List<Song>();
             effects.Add(this.Content.Load<Song>("Alert"));
 
-            introVideo = this.Content.Load<Video>("Intro");
+            introVideo = this.Content.Load<Video>("Intro_V2");
 
             //Single indicator.
             List<Texture2D> indicatorTextureTemp = new List<Texture2D>();
