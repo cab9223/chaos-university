@@ -16,12 +16,36 @@ namespace Chaos_University
     class Tile : GamePiece
     {
         //Constructor.
-        public Tile(int x, int y, List<Texture2D> textures) //Constructor
+        public Tile(int x, int y, List<Texture2D> textures)
             : base(x, y, textures)
         {
             PieceState = PieceState.Floor;
         }
-        
+
+        //Constructor with prestablished direction.
+        public Tile(int x, int y, List<Texture2D> textures, PieceState _pieceState)
+            : base(x, y, textures)
+        {
+            PieceState = _pieceState;
+            switch (PieceState)
+            {
+                case PieceState.Floor:
+                    IndexTexture = 0;
+                    break;
+                case PieceState.North:
+                    IndexTexture = 1;
+                    break;
+                case PieceState.East:
+                    IndexTexture = 2;
+                    break;
+                case PieceState.South:
+                    IndexTexture = 3;
+                    break;
+                case PieceState.West:
+                    IndexTexture = 4;
+                    break;
+            }
+        }
 
         //Increment floor type to a different type.
         public override bool IncrementType()

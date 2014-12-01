@@ -25,6 +25,7 @@ namespace Chaos_University
         int indexLevel;             //Current level index.
         Level level;                //Current level of the game.
         List<Level> levels;         //List of levels.
+        Tutorial tutorial;          //Tutorial Messages.
         
         //Input stuff.
         MouseState mouse;           //Current mouse state
@@ -181,6 +182,38 @@ namespace Chaos_University
                                     columnNumber * GlobalVar.TILESIZE,
                                     lineNumber * GlobalVar.TILESIZE,
                                     wallTextures));
+                                break;
+                            //2 = Floor North.
+                            case '2':
+                                newLevel.SetTile(columnNumber, lineNumber, new Tile(
+                                    columnNumber * GlobalVar.TILESIZE,
+                                    lineNumber * GlobalVar.TILESIZE,
+                                    tileTextures,
+                                    PieceState.North));
+                                break;
+                            //2 = Floor East.
+                            case '3':
+                                newLevel.SetTile(columnNumber, lineNumber, new Tile(
+                                    columnNumber * GlobalVar.TILESIZE,
+                                    lineNumber * GlobalVar.TILESIZE,
+                                    tileTextures,
+                                    PieceState.East));
+                                break;
+                            //2 = Floor South.
+                            case '4':
+                                newLevel.SetTile(columnNumber, lineNumber, new Tile(
+                                    columnNumber * GlobalVar.TILESIZE,
+                                    lineNumber * GlobalVar.TILESIZE,
+                                    tileTextures,
+                                    PieceState.South));
+                                break;
+                            //2 = Floor West.
+                            case '5':
+                                newLevel.SetTile(columnNumber, lineNumber, new Tile(
+                                    columnNumber * GlobalVar.TILESIZE,
+                                    lineNumber * GlobalVar.TILESIZE,
+                                    tileTextures,
+                                    PieceState.West));
                                 break;
                             //M = Moneh
                             case 'M':
@@ -452,8 +485,8 @@ namespace Chaos_University
             clickPrevY = -1;                                    //Reset clickPrev at a nonexistent index.
         }
 
-
-        private void FastForward() //Speeds up gameplay or returns to normal
+        //Speeds up gameplay or returns to normal
+        private void FastForward()
         {
             if (fastActive == false)
             {
@@ -466,7 +499,6 @@ namespace Chaos_University
                 fastActive = false;
             }
         }
-
 
         //Checks the state of the mouse and performs appropriate actions.
         private void CheckGameMouse()
@@ -979,10 +1011,15 @@ namespace Chaos_University
             playerTextures.Add(this.Content.Load<Texture2D>("Default_Head"));
             playerTextures.Add(this.Content.Load<Texture2D>("Default_Bandana"));
 
+            //Guard Textures.
             guardTextures = new List<Texture2D>();
             guardTextures.Add(this.Content.Load<Texture2D>("Default_Guard"));
             guardTextures.Add(this.Content.Load<Texture2D>("!"));
 
+            //Tutorial messages
+            tutorial = new Tutorial(GraphicsDevice.Viewport.Height, GraphicsDevice.Viewport.Width, menuFont);
+
+            //Load each level.
             for (int i = 1; i <= GlobalVar.LevelCount; ++i)
             {
                 levels.Add(this.LoadLevel(i));
@@ -1235,6 +1272,37 @@ namespace Chaos_University
 
                 //PLAYING
                 case GameState.Playing:
+                    //DRAW LEVEL
+                    level.Draw(spriteBatch, camX, camY);
+
+                    //DRAW PLAYERS
+                    if(level.IsNinja)
+                        level.Ninja.Draw(spriteBatch, camX, camY);
+                    if (level.IsRecon)
+                        level.Recon.Draw(spriteBatch, camX, camY);
+                    if(level.IsAssault)
+                        level.Assault.Draw(spriteBatch, camX, camY);
+
+                    //DRAW GUARDS
+                    if (isGuard == true) //Guard in level?
+                    {
+                        for (int i = 0; i < guardCount; i++)  //Draw all guards
+                        {
+                            activeGuards[i].Draw(spriteBatch, camX, camY);
+                        }
+                    }
+
+                    //DRAW PLAYER ABILITIES
+                    /*if (level.Ninja.AbilityActive)
+                        level.Ninja.ThisGear.Draw(spriteBatch, camX, camY);*/
+
+                    //DRAW INDICATOR
+                    indicator.Draw(spriteBatch, camX, camY);
+
+                    //Draw Tutorial Messages
+                    tutorial.Draw(spriteBatch, camX, camY);
+
+                    //DRAW UI
                     //Draw Par UI Element.
                     if (GlobalVar.ParCount < level.Par || GlobalVar.ParCount < 1)
                     {
@@ -1261,24 +1329,6 @@ namespace Chaos_University
                         "Press R to reset.",
                         new Vector2(420, GraphicsDevice.Viewport.Height - 50),
                         Color.White);
-                    level.Draw(spriteBatch, camX, camY);
-                    if(level.IsNinja)
-                        level.Ninja.Draw(spriteBatch, camX, camY);
-                    if (level.IsRecon)
-                        level.Recon.Draw(spriteBatch, camX, camY);
-                    if(level.IsAssault)
-                        level.Assault.Draw(spriteBatch, camX, camY);
-                    /*if (level.Ninja.AbilityActive)
-                        level.Ninja.ThisGear.Draw(spriteBatch, camX, camY);*/
-                    indicator.Draw(spriteBatch, camX, camY);
-
-                    if (isGuard == true) //Guard in level?
-                    {
-                        for (int i = 0; i < guardCount; i++)  //Draw all guards
-                        {
-                            activeGuards[i].Draw(spriteBatch, camX, camY);
-                        }
-                    }
                     break;
 
                 //Level Complete feedback screen.

@@ -35,13 +35,16 @@ namespace Chaos_University
 
             index = 0;
 
+            tutorials = new List<string[]>();
+            locations = new List<int[]>();
+
             tutorials.Add(new string[1] { "Press Enter to start moving." });
-            tutorials.Add(new string[1] { "PLACE HOLDER TUT 2" });
+            tutorials.Add(new string[1] { "Press Enter to start moving." });
             tutorials.Add(new string[1] { "PLACE HOLDER TUT 3" });
             tutorials.Add(new string[1] { "PLACE HOLDER TUT 4" });
             tutorials.Add(new string[1] { "PLACE HOLDER TUT 5" });
 
-            locations.Add(new int[2] { 20, 20 });
+            locations.Add(new int[2] { 20, 180 });
             locations.Add(new int[2] { 20, 20 });
             locations.Add(new int[2] { 20, 20 });
             locations.Add(new int[2] { 20, 20 });
@@ -60,8 +63,8 @@ namespace Chaos_University
             if (index < tutorials.Count)
             {
                 spriteBatch.DrawString(font,
-                    tutorials[index][1],
-                    new Vector2(locations[index][1] + offX, locations[index][2] + offY),
+                    tutorials[index][0],
+                    new Vector2(locations[index][0] + offX, locations[index][1] + offY),
                     Color.White);
             }
         }

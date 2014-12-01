@@ -103,6 +103,9 @@
     <Content Include="GameThumbnail.png">
       <XnaPlatformSpecific>true</XnaPlatformSpecific>
     </Content>
+    <None Include="LevelMapY2.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="LevelMap2.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
