@@ -109,7 +109,6 @@ namespace Chaos_University
             if (dir == 0 || dir == 2)
             {
                 DetectRect = new Rectangle(x + 20, y + 20, (GlobalVar.TILESIZE / 5), (GlobalVar.TILESIZE / 2));
-                //DetectRect = new Rectangle(x + 20, y + 13, (GlobalVar.TILESIZE / 5), (GlobalVar.TILESIZE / 2));
                 EmotionRect = new Rectangle(x + 13, y - 11, (GlobalVar.TILESIZE / 2), (GlobalVar.TILESIZE / 2));
             }
             else if (dir == 1 || dir == 3)
@@ -256,14 +255,14 @@ namespace Chaos_University
             }
 
             //For checking Detection
-            obj.Draw(listTextures[0],
-                    new Rectangle((DetectRect.X + DetectRect.Width / 2) + offX, (DetectRect.Y + DetectRect.Height / 2) + offY, DetectRect.Width, DetectRect.Height),
-                    null,
-                    Color.White,
-                    (float)(Math.Atan2(Vector.Y, Vector.X) + Math.PI / 2),
-                    new Vector2(listTextures[0].Width / 2, listTextures[0].Height / 2),
-                    SpriteEffects.None,
-                    0.0f);
+            //obj.Draw(listTextures[0],
+            //        new Rectangle((DetectRect.X + DetectRect.Width / 2) + offX, (DetectRect.Y + DetectRect.Height / 2) + offY, DetectRect.Width, DetectRect.Height),
+            //        null,
+            //        Color.White,
+            //        (float)(Math.Atan2(Vector.Y, Vector.X) + Math.PI / 2),
+            //        new Vector2(listTextures[0].Width / 2, listTextures[0].Height / 2),
+            //        SpriteEffects.None,
+            //        0.0f);
 
             if (this.Detected == true) //For Emotion
             {
