@@ -1179,7 +1179,7 @@ namespace Chaos_University
                     switch(level.CheckCollisions())
                     {
                         case CollisionState.Goal:
-                            if (level.GetMoneyCount() == 0 && GlobalVar.ParCount <= level.Par)
+                            if (level.GetMoneyCount() == 0 && (GlobalVar.ParCount <= level.Par || level.Par == 0))
                             {
                                 current = GameState.LevelComp;
                             }
@@ -1314,7 +1314,7 @@ namespace Chaos_University
 
                     //DRAW UI
                     //Draw Par UI Element.
-                    if (GlobalVar.ParCount < level.Par || GlobalVar.ParCount < 1)
+                    if (GlobalVar.ParCount < level.Par || GlobalVar.ParCount < 1 && level.Par != 0)
                     {
                         spriteBatch.DrawString(menuFont,
                             String.Format("Par: {0} of {1}", GlobalVar.ParCount, level.Par),
@@ -1322,18 +1322,13 @@ namespace Chaos_University
                             Color.White);
                     }
                     //Draw maxed out Par UI Element. Ternary expression stops display from going above par.
-                    else
+                    else if (level.Par != 0)
                     {
                         spriteBatch.DrawString(menuFont,
                             String.Format("Par: {0} of {1} (PAR REACHED)", GlobalVar.ParCount, level.Par),
                             new Vector2(25, GraphicsDevice.Viewport.Height - 26),
                             Color.White);
                     }
-                    //Draw Enter Directions.
-                    spriteBatch.DrawString(menuFont,
-                        "Press Enter to start movement.",
-                        new Vector2(420, GraphicsDevice.Viewport.Height - 26),
-                        Color.White);
                     //Draw Reset Directions.
                     spriteBatch.DrawString(menuFont,
                         "Press R to reset.",
