@@ -246,7 +246,7 @@ namespace Chaos_University
                                 newLevel.StartAssault = newLevel.Assault.PositionRect;
                                 newLevel.IsAssault = true;
                                 break;
-                            //X = Guard
+                            //X = Guard Difficulty 0
                             case 'X':
                                 newLevel.SetTile(columnNumber, lineNumber, new Tile(
                                     columnNumber * GlobalVar.TILESIZE,
@@ -257,6 +257,36 @@ namespace Chaos_University
                                     lineNumber * GlobalVar.TILESIZE,
                                     guardDirs.Dequeue(),
                                     guardTextures);
+                                guards.Add(guard);
+                                guardCount = guardCount + 1;
+                                break;
+                            //Y = Guard Difficulty 1
+                            case 'Y':
+                                newLevel.SetTile(columnNumber, lineNumber, new Tile(
+                                    columnNumber * GlobalVar.TILESIZE,
+                                    lineNumber * GlobalVar.TILESIZE,
+                                    tileTextures));
+                                guard = new Enemy(
+                                    columnNumber * GlobalVar.TILESIZE,
+                                    lineNumber * GlobalVar.TILESIZE,
+                                    guardDirs.Dequeue(),
+                                    guardTextures);
+                                guard.Difficulty = 1;
+                                guards.Add(guard);
+                                guardCount = guardCount + 1;
+                                break;
+                            //Z = Guard Difficulty 2 -- Not ready yet
+                            case 'Z':
+                                newLevel.SetTile(columnNumber, lineNumber, new Tile(
+                                    columnNumber * GlobalVar.TILESIZE,
+                                    lineNumber * GlobalVar.TILESIZE,
+                                    tileTextures));
+                                guard = new Enemy(
+                                    columnNumber * GlobalVar.TILESIZE,
+                                    lineNumber * GlobalVar.TILESIZE,
+                                    guardDirs.Dequeue(),
+                                    guardTextures);
+                                guard.Difficulty = 2;
                                 guards.Add(guard);
                                 guardCount = guardCount + 1;
                                 break;
@@ -694,17 +724,15 @@ namespace Chaos_University
                         {
                             if (level.GetGamePiece(i, j).CheckCollision(activeGuards[x]))
                             {
-                                //activeGuards[x].Patrol();
-
                                 switch (level.GetGamePiece(i, j).PieceState)
                                 {
                                     case PieceState.Floor:
                                         break;
                                     case PieceState.Wall:
-                                        activeGuards[x].Patrol();
+                                        activeGuards[x].Patrol(0);
                                         break;
                                     case PieceState.Goal:
-                                        activeGuards[x].Patrol();
+                                        activeGuards[x].Patrol(0);
                                         break;
                                 }
                                 if (level.GetGamePiece(i, j).PositionRect.Center == activeGuards[x].PositionRect.Center
@@ -713,31 +741,99 @@ namespace Chaos_University
                                     switch (level.GetGamePiece(i, j).PieceState)
                                     {
                                         case PieceState.North:
-                                            activeGuards[x].Rotate(2);
+                                            if (activeGuards[x].Direction != 2)
+                                            {
+                                                activeGuards[x] = new Enemy(
+                                                                    activeGuards[x].PositionRect.X,
+                                                                    activeGuards[x].PositionRect.Y,
+                                                                    0, guardTextures,
+                                                                    activeGuards[x].InitialDirection,
+                                                                    activeGuards[x].InitialX,
+                                                                    activeGuards[x].InitialY);
+                                                activeGuards[x].Patrol(1);  
+                                            }
                                             break;
                                         case PieceState.East:
-                                            activeGuards[x].Rotate(3);
+                                            if (activeGuards[x].Direction != 3)
+                                            {
+                                                activeGuards[x] = new Enemy(
+                                                                    activeGuards[x].PositionRect.X,
+                                                                    activeGuards[x].PositionRect.Y,
+                                                                    1, guardTextures,
+                                                                    activeGuards[x].InitialDirection,
+                                                                    activeGuards[x].InitialX,
+                                                                    activeGuards[x].InitialY);
+                                                activeGuards[x].Patrol(1);
+                                            }
                                             break;
                                         case PieceState.South:
-                                            activeGuards[x].Rotate(0);
+                                            if (activeGuards[x].Direction != 0)
+                                            {
+                                                activeGuards[x] = new Enemy(
+                                                                    activeGuards[x].PositionRect.X,
+                                                                    activeGuards[x].PositionRect.Y,
+                                                                    2, guardTextures,
+                                                                    activeGuards[x].InitialDirection,
+                                                                    activeGuards[x].InitialX,
+                                                                    activeGuards[x].InitialY);
+                                                activeGuards[x].Patrol(1);
+                                            }
                                             break;
                                         case PieceState.West:
-                                            activeGuards[x].Rotate(1);
+                                            if (activeGuards[x].Direction != 1)
+                                            {
+                                                activeGuards[x] = new Enemy(
+                                                                    activeGuards[x].PositionRect.X,
+                                                                    activeGuards[x].PositionRect.Y,
+                                                                    3, guardTextures,
+                                                                    activeGuards[x].InitialDirection,
+                                                                    activeGuards[x].InitialX,
+                                                                    activeGuards[x].InitialY);
+                                                activeGuards[x].Patrol(1);
+                                            }
                                             break;
                                         case PieceState.SpecialNorth:
-                                            activeGuards[x].Turn(2);
+                                            activeGuards[x] = new Enemy(
+                                                                    activeGuards[x].PositionRect.X,
+                                                                    activeGuards[x].PositionRect.Y,
+                                                                    0, guardTextures,
+                                                                    activeGuards[x].InitialDirection,
+                                                                    activeGuards[x].InitialX,
+                                                                    activeGuards[x].InitialY);
+                                            activeGuards[x].Patrol(1);
                                             level.GetGamePiece(i, j).IncrementType();
                                             break;
                                         case PieceState.SpecialEast:
-                                            activeGuards[x].Turn(3);
+                                            activeGuards[x] = new Enemy(
+                                                                    activeGuards[x].PositionRect.X,
+                                                                    activeGuards[x].PositionRect.Y,
+                                                                    1, guardTextures,
+                                                                    activeGuards[x].InitialDirection,
+                                                                    activeGuards[x].InitialX,
+                                                                    activeGuards[x].InitialY);
+                                            activeGuards[x].Patrol(1);
                                             level.GetGamePiece(i, j).IncrementType();
                                             break;
                                         case PieceState.SpecialSouth:
-                                            activeGuards[x].Turn(0);
+                                            activeGuards[x] = new Enemy(
+                                                                    activeGuards[x].PositionRect.X,
+                                                                    activeGuards[x].PositionRect.Y,
+                                                                    2, guardTextures, 
+                                                                    activeGuards[x].InitialDirection,
+                                                                    activeGuards[x].InitialX,
+                                                                    activeGuards[x].InitialY);
+                                            activeGuards[x].Patrol(1);
                                             level.GetGamePiece(i, j).IncrementType();
                                             break;
                                         case PieceState.SpecialWest:
-                                            activeGuards[x].Turn(1);
+                                            activeGuards[x] = new Enemy(
+                                                                    activeGuards[x].PositionRect.X,
+                                                                    activeGuards[x].PositionRect.Y,
+                                                                    3, guardTextures,
+                                                                    activeGuards[x].InitialDirection,
+                                                                    activeGuards[x].InitialX,
+                                                                    activeGuards[x].InitialY);
+                                            activeGuards[x].Patrol(1);
                                             level.GetGamePiece(i, j).IncrementType();
                                             break;
                                     }

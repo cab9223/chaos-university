@@ -68,6 +68,11 @@ namespace Chaos_University
 
             Detected = false;
 
+            InitialX = x;
+
+            InitialY = y;
+
+            InitialDirection = dir;
 
             if (dir == 0 || dir == 2)
             {
@@ -77,6 +82,40 @@ namespace Chaos_University
             else if (dir == 1 || dir == 3)
             {
                 DetectRect = new Rectangle(x + 4, y + 20, (GlobalVar.TILESIZE / 2), (GlobalVar.TILESIZE / 5));
+                EmotionRect = new Rectangle(x + 11, y - 13, (GlobalVar.TILESIZE / 2), (GlobalVar.TILESIZE / 2));
+            }
+
+            Turn(Direction);
+        }
+
+
+        public Enemy(int x, int y, int dir, List<Texture2D> textures, int initDir, int initX, int initY) //Constructor 2
+            : base(x, y, dir, textures)
+        {
+            Difficulty = 1;
+
+            isAlive = true;
+
+            Moving = true;
+
+            Detected = false;
+
+            InitialX = initX;
+
+            InitialY = initY;
+
+            InitialDirection = initDir;
+
+            if (dir == 0 || dir == 2)
+            {
+                DetectRect = new Rectangle(x + 20, y + 20, (GlobalVar.TILESIZE / 5), (GlobalVar.TILESIZE / 2));
+                //DetectRect = new Rectangle(x + 20, y + 13, (GlobalVar.TILESIZE / 5), (GlobalVar.TILESIZE / 2));
+                EmotionRect = new Rectangle(x + 13, y - 11, (GlobalVar.TILESIZE / 2), (GlobalVar.TILESIZE / 2));
+            }
+            else if (dir == 1 || dir == 3)
+            {
+                DetectRect = new Rectangle(x + 4, y + 20, (GlobalVar.TILESIZE / 2), (GlobalVar.TILESIZE / 5));
+                //DetectRect = new Rectangle(x + 12, y + 20, (GlobalVar.TILESIZE / 2), (GlobalVar.TILESIZE / 5));
                 EmotionRect = new Rectangle(x + 11, y - 13, (GlobalVar.TILESIZE / 2), (GlobalVar.TILESIZE / 2));
             }
 
@@ -127,14 +166,14 @@ namespace Chaos_University
         }
 
 
-        public void Patrol() //Method to move enemy around map
+        public void Patrol(int type) //Method to move enemy around map
         {
             //if (challenge < 3 && challenge > -1)
             //{
             //    Difficulty = challenge;
             //}
 
-            switch (Difficulty)
+            switch (type)
             {
                 case 0:  //Simple back and forth partol, stops at cirtain distance or wall
 
@@ -166,27 +205,31 @@ namespace Chaos_University
                     } 
                     break;
                 case 1:
-                    //Moves in any direction based on an algorithm, stops at walls, can hit traps
+                    //Moves back and forth, at walls, can hit traps
 
                     switch (Direction)
                     {
                         case 0:
                             Turn(2);
+                            DetectRect = new Rectangle(DetectRect.X, DetectRect.Y - 18, (GlobalVar.TILESIZE / 5), (GlobalVar.TILESIZE / 2));
                             //Direction = 2;
                             break;
 
                         case 1:
                             Turn(3);
+                            DetectRect = new Rectangle(DetectRect.X + 18, DetectRect.Y, (GlobalVar.TILESIZE / 2), (GlobalVar.TILESIZE / 5));
                             //Direction = 3;
                             break;
 
                         case 2:
                             Turn(0);
+                            DetectRect = new Rectangle(DetectRect.X, DetectRect.Y, (GlobalVar.TILESIZE / 5), (GlobalVar.TILESIZE / 2));
                             //Direction = 0;
                             break;
 
                         case 3:
                             Turn(1);
+                            DetectRect = new Rectangle(DetectRect.X, DetectRect.Y, (GlobalVar.TILESIZE / 2), (GlobalVar.TILESIZE / 5));
                             //Direction = 1;
                             break;
                     }
@@ -213,14 +256,14 @@ namespace Chaos_University
             }
 
             //For checking Detection
-            //obj.Draw(listTextures[0],
-            //        new Rectangle((DetectRect.X + DetectRect.Width / 2) + offX, (DetectRect.Y + DetectRect.Height / 2) + offY, DetectRect.Width, DetectRect.Height),
-            //        null,
-            //        Color.White,
-            //        (float)(Math.Atan2(Vector.Y, Vector.X) + Math.PI / 2),
-            //        new Vector2(listTextures[0].Width / 2, listTextures[0].Height / 2),
-            //        SpriteEffects.None,
-            //        0.0f);
+            obj.Draw(listTextures[0],
+                    new Rectangle((DetectRect.X + DetectRect.Width / 2) + offX, (DetectRect.Y + DetectRect.Height / 2) + offY, DetectRect.Width, DetectRect.Height),
+                    null,
+                    Color.White,
+                    (float)(Math.Atan2(Vector.Y, Vector.X) + Math.PI / 2),
+                    new Vector2(listTextures[0].Width / 2, listTextures[0].Height / 2),
+                    SpriteEffects.None,
+                    0.0f);
 
             if (this.Detected == true) //For Emotion
             {
@@ -303,95 +346,9 @@ namespace Chaos_University
         }
 
 
-        public void Rotate(int newDirection)
-        {
-            switch (Direction)
-            {
-                case 0:
-                    switch (newDirection)
-                    {
-                        case 0:
-                            break;
-                        case 1:
-                            Turn(1);
-                            DetectRect = new Rectangle(DetectRect.X - 16, DetectRect.Y, (GlobalVar.TILESIZE / 2), (GlobalVar.TILESIZE / 5));
-                            break;
-                        case 2:
-                            Turn(2);
-                            DetectRect = new Rectangle(DetectRect.X, DetectRect.Y - 18, (GlobalVar.TILESIZE / 5), (GlobalVar.TILESIZE / 2));
-                            break;
-                        case 3:
-                            Turn(3);
-                            DetectRect = new Rectangle(DetectRect.X + 2, DetectRect.Y, (GlobalVar.TILESIZE / 2), (GlobalVar.TILESIZE / 5));//
-                            break;
-                    }
-                    break;
-                case 1:
-                    switch (newDirection)
-                    {
-                        case 0:
-                            Turn(0);
-                            DetectRect = new Rectangle(DetectRect.X + 16, DetectRect.Y, (GlobalVar.TILESIZE / 5), (GlobalVar.TILESIZE / 2));//
-                            break;
-                        case 1:
-                            break;
-                        case 2:
-                            Turn(2);
-                            DetectRect = new Rectangle(DetectRect.X + 16, DetectRect.Y - 15, (GlobalVar.TILESIZE / 5), (GlobalVar.TILESIZE / 2));
-                            break;
-                        case 3:
-                            Turn(3);
-                            DetectRect = new Rectangle(DetectRect.X + 18, DetectRect.Y, (GlobalVar.TILESIZE / 2), (GlobalVar.TILESIZE / 5));
-                            break;
-                    }
-                    break;
-                case 2:
-                    switch (newDirection)
-                    {
-                        case 0:
-                            Turn(0);
-                            DetectRect = new Rectangle(DetectRect.X, DetectRect.Y + 18, (GlobalVar.TILESIZE / 5), (GlobalVar.TILESIZE / 2));
-                            break;
-                        case 1:
-                            Turn(1);
-                            DetectRect = new Rectangle(DetectRect.X - 16, DetectRect.Y + 16, (GlobalVar.TILESIZE / 2), (GlobalVar.TILESIZE / 5));//
-                            break;
-                        case 2:
-                            break;
-                        case 3:
-                            Turn(3);
-                            DetectRect = new Rectangle(DetectRect.X + 2, DetectRect.Y + 17, (GlobalVar.TILESIZE / 2), (GlobalVar.TILESIZE / 5));
-                            break;
-                    }
-                    break;
-                case 3:
-                    switch (newDirection)
-                    {
-                        case 0:
-                            Turn(0);
-                            DetectRect = new Rectangle(DetectRect.X - 2, DetectRect.Y, (GlobalVar.TILESIZE / 5), (GlobalVar.TILESIZE / 2));
-                            break;
-                        case 1:
-                            Turn(1);
-                            DetectRect = new Rectangle(DetectRect.X - 18, DetectRect.Y, (GlobalVar.TILESIZE / 2), (GlobalVar.TILESIZE / 5));
-                            break;
-                        case 2:
-                            Turn(2);
-                            DetectRect = new Rectangle(DetectRect.X - 2, DetectRect.Y - 16, (GlobalVar.TILESIZE / 5), (GlobalVar.TILESIZE / 2));//
-                            break;
-                        case 3:
-                            break;
-                    }
-                    break;
-            }
-        }
-
-
-
-
-
         public void Dead() //removes guard
         {
+            Moving = false;
             isAlive = false;
         }
     }

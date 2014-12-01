@@ -92,7 +92,6 @@ namespace Chaos_University
             : base(x, y, textures)
         {
             direction = dir;
-            InitialDirection = dir;
             vector = new Vector2(0, -1);
         }
 

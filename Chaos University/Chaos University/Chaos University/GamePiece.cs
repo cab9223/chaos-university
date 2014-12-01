@@ -97,9 +97,6 @@ namespace Chaos_University
             listTextures = textures;
             indexTexture = 0;
 
-            InitialX = x;
-
-            InitialY = y;
         }
 
         // Constructor that does not establish textures.
