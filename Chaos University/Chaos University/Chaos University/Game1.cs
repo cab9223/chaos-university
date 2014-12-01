@@ -747,14 +747,14 @@ namespace Chaos_University
 
             //For rotate tiles
             specialTileTextures = new List<Texture2D>();            
-            specialTileTextures.Add(this.Content.Load<Texture2D>("Rotate_Clockwise_Up"));
-            specialTileTextures.Add(this.Content.Load<Texture2D>("Rotate_Clockwise_Right"));
-            specialTileTextures.Add(this.Content.Load<Texture2D>("Rotate_Clockwise_Down"));
-            specialTileTextures.Add(this.Content.Load<Texture2D>("Rotate_Clockwise_Left"));
-            specialTileTextures.Add(this.Content.Load<Texture2D>("Rotate_Counter_Clockwise_Up"));
-            specialTileTextures.Add(this.Content.Load<Texture2D>("Rotate_Counter_Clockwise_Left"));
-            specialTileTextures.Add(this.Content.Load<Texture2D>("Rotate_Counter_Clockwise_Down"));
-            specialTileTextures.Add(this.Content.Load<Texture2D>("Rotate_Counter_Clockwise_Right"));
+            specialTileTextures.Add(this.Content.Load<Texture2D>("Rotate_Clockwise_Up_1"));
+            specialTileTextures.Add(this.Content.Load<Texture2D>("Rotate_Clockwise_Right_1"));
+            specialTileTextures.Add(this.Content.Load<Texture2D>("Rotate_Clockwise_Down_1"));
+            specialTileTextures.Add(this.Content.Load<Texture2D>("Rotate_Clockwise_Left_1"));
+            specialTileTextures.Add(this.Content.Load<Texture2D>("Rotate_Counter_Clockwise_Up_1"));
+            specialTileTextures.Add(this.Content.Load<Texture2D>("Rotate_Counter_Clockwise_Left_1"));
+            specialTileTextures.Add(this.Content.Load<Texture2D>("Rotate_Counter_Clockwise_Down_1"));
+            specialTileTextures.Add(this.Content.Load<Texture2D>("Rotate_Counter_Clockwise_Right_1"));
 
             //Single Wall texture.
             wallTextures = new List<Texture2D>();
