@@ -960,7 +960,7 @@ namespace Chaos_University
             levelCompPos = headerFont.MeasureString("LEVEL COMPLETE");
 
             music = new List<Song>();
-            music.Add(this.Content.Load<Song>("ThemeV2"));
+            music.Add(this.Content.Load<Song>("TheoreticalTheme"));
 
             effects = new List<Song>();
             effects.Add(this.Content.Load<Song>("Alert"));
@@ -1081,7 +1081,8 @@ namespace Chaos_University
                     if (keyboard.IsKeyDown(Keys.Enter) && keyboardPrev.IsKeyUp(Keys.Enter)) //Press enter to play.
                     {
                         //Play sound. Do this only to type change.
-                        //MediaPlayer.Play(music[0]);
+                        MediaPlayer.Play(music[0]);
+                        MediaPlayer.IsRepeating = true;
 
                         string path = Directory.GetCurrentDirectory() + "/../../../../../../Colors.txt";
 
