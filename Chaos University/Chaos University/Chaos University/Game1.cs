@@ -739,7 +739,7 @@ namespace Chaos_University
 
             // Order tile textures in order that they appear when clicked.
             tileTextures = new List<Texture2D>();
-            tileTextures.Add(this.Content.Load<Texture2D>("Default_Tile"));
+            tileTextures.Add(this.Content.Load<Texture2D>("Default_Tile_1"));
             tileTextures.Add(this.Content.Load<Texture2D>("Default_Up"));
             tileTextures.Add(this.Content.Load<Texture2D>("Default_Right"));
             tileTextures.Add(this.Content.Load<Texture2D>("Default_Down"));
@@ -758,11 +758,11 @@ namespace Chaos_University
 
             //Single Wall texture.
             wallTextures = new List<Texture2D>();
-            wallTextures.Add(this.Content.Load<Texture2D>("Default_Wall"));
+            wallTextures.Add(this.Content.Load<Texture2D>("Default_Wall_1"));
 
             //Single goal texture.
             goalTextures = new List<Texture2D>();
-            goalTextures.Add(this.Content.Load<Texture2D>("Default_Goal"));
+            goalTextures.Add(this.Content.Load<Texture2D>("Default_Open_Ladder"));
 
             //Single Money texture.
             moneyTextures = new List<Texture2D>();
