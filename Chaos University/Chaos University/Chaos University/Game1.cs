@@ -689,17 +689,60 @@ namespace Chaos_University
                 {
                     for (int i = 0; i < level.Width; ++i)
                     {
-                        if (level.GetGamePiece(i, j).PieceState == PieceState.Wall)
+                        //Check if enemy collided with it.
+                        for (int x = 0; x < guardCount; x++)
                         {
-                            //Check if enemy collided with it.
-                            for (int x = 0; x < guardCount; x++)
+                            if (level.GetGamePiece(i, j).CheckCollision(activeGuards[x]))
                             {
-                                if (level.GetGamePiece(i, j).CheckCollision(activeGuards[x]))
-                                    {
-                                        activeGuards[x].Patrol(0);
-                                    }
-                            }
+                                //activeGuards[x].Patrol();
 
+                                switch (level.GetGamePiece(i, j).PieceState)
+                                {
+                                    case PieceState.Floor:
+                                        break;
+                                    case PieceState.Wall:
+                                        activeGuards[x].Patrol();
+                                        break;
+                                    case PieceState.Goal:
+                                        activeGuards[x].Patrol();
+                                        break;
+                                }
+                                if (level.GetGamePiece(i, j).PositionRect.Center == activeGuards[x].PositionRect.Center
+                                    && activeGuards[x].Difficulty == 1)
+                                {
+                                    switch (level.GetGamePiece(i, j).PieceState)
+                                    {
+                                        case PieceState.North:
+                                            activeGuards[x].Rotate(2);
+                                            break;
+                                        case PieceState.East:
+                                            activeGuards[x].Rotate(3);
+                                            break;
+                                        case PieceState.South:
+                                            activeGuards[x].Rotate(0);
+                                            break;
+                                        case PieceState.West:
+                                            activeGuards[x].Rotate(1);
+                                            break;
+                                        case PieceState.SpecialNorth:
+                                            activeGuards[x].Turn(2);
+                                            level.GetGamePiece(i, j).IncrementType();
+                                            break;
+                                        case PieceState.SpecialEast:
+                                            activeGuards[x].Turn(3);
+                                            level.GetGamePiece(i, j).IncrementType();
+                                            break;
+                                        case PieceState.SpecialSouth:
+                                            activeGuards[x].Turn(0);
+                                            level.GetGamePiece(i, j).IncrementType();
+                                            break;
+                                        case PieceState.SpecialWest:
+                                            activeGuards[x].Turn(1);
+                                            level.GetGamePiece(i, j).IncrementType();
+                                            break;
+                                    }
+                                }
+                            }
                         }
                     }
                 }
