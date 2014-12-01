@@ -14,13 +14,13 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using System.Windows.Forms;
 
-namespace Chaos_University
+namespace TheCreator
 {
     public partial class CharacterCreator : Form
     {
         public CharacterCreator()
         {
-            path = Directory.GetCurrentDirectory() + "/Colors.txt";
+            path = Directory.GetCurrentDirectory() + "/../../../../../../Colors.txt";
             StreamReader ogColorFile = new StreamReader(path);
             ogColors = ogColorFile.ReadLine();
             ogColorFile.Close();
@@ -35,7 +35,7 @@ namespace Chaos_University
         //orginal colors from globalvar before edit
         string path;
         string ogColors;
-        
+
         // holds ints for each RGB value for each piece.
         int headR;
         int headG;
@@ -312,38 +312,12 @@ namespace Chaos_University
 
             writer.Close();
 
-            //read the file
-            StreamReader reader = new StreamReader(path);
-
-            string[] stringColors = reader.ReadLine().Split(',');
-
-            GlobalVar.ColorsSplit = new Int16[stringColors.Length];
-
-            //match the values
-            for (int i = 0; i < stringColors.Length; i++)
-            {
-                GlobalVar.ColorsSplit[i] = Int16.Parse(stringColors[i]);
-            }
-
-            reader.Close();
-
+            
             this.Hide();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            // use old values
-            string[] stringColors = ogColors.Split(',');
-
-            // parse all this stuff again.
-            GlobalVar.ColorsSplit = new Int16[stringColors.Length];
-
-            for (int i = 0; i < stringColors.Length; i++)
-            {
-                GlobalVar.ColorsSplit[i] = Int16.Parse(stringColors[i]);
-            }
-            
-
             this.Hide();
         }
 

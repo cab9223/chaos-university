@@ -18,7 +18,7 @@ namespace Chaos_University
         {
             User = owner;
             AnimTime = 0;
-            direction = 3.14159f;
+            direction = 0.0f;
         }
 
         public int AnimTime { get; set; }
@@ -31,7 +31,7 @@ namespace Chaos_University
         {
             if (User.ThisMajor == Player.Major.Ninja)
             {
-                if ( AnimTime <= 50)
+                if ( direction <= 2 * Math.PI)
                 {
                     obj.Draw(listTextures[1],
                             new Rectangle(User.PositionRect.X,
@@ -49,7 +49,7 @@ namespace Chaos_University
 
                 }
 
-                if (AnimTime >= 50)
+                if (direction > 2 * Math.PI)
                 {
                     User.AbilityActive = false;
                 }
@@ -58,7 +58,7 @@ namespace Chaos_University
 
         public void Rotate(float increment)
         {
-            direction += AnimTime * increment;
+            direction += 4 * (float)Math.PI * increment;
         }
     }
 }

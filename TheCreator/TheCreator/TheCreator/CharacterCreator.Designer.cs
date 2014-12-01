@@ -1,4 +1,4 @@
-﻿namespace Chaos_University
+﻿namespace TheCreator
 {
     partial class CharacterCreator
     {

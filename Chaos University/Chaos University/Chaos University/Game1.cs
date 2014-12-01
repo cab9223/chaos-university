@@ -231,8 +231,8 @@ namespace Chaos_University
                                 newLevel.StartRecon = newLevel.Recon.PositionRect;
                                 newLevel.IsRecon = true;
                                 break;
-                            //A = Assault
-                            case 'A':
+                            //T = assaulT
+                            case 'T':
                                 newLevel.SetTile(columnNumber, lineNumber, new Tile(
                                     columnNumber * GlobalVar.TILESIZE,
                                     lineNumber * GlobalVar.TILESIZE,
@@ -260,57 +260,57 @@ namespace Chaos_University
                                 guards.Add(guard);
                                 guardCount = guardCount + 1;
                                 break;
-                            //^ = Rotate_Clockwise_North
-                            case '^':
+                            //W = Rotate_Clockwise_North
+                            case 'W':
                                 newLevel.SetTile(columnNumber, lineNumber, new SpecialTile(
                                     columnNumber * GlobalVar.TILESIZE,
                                     lineNumber * GlobalVar.TILESIZE,
                                     specialTileTextures, 1, 0));
                                 break;
-                            //> = Rotate_Clockwise_East
-                            case '>':
+                            //D = Rotate_Clockwise_East
+                            case 'D':
                                 newLevel.SetTile(columnNumber, lineNumber, new SpecialTile(
                                     columnNumber * GlobalVar.TILESIZE,
                                     lineNumber * GlobalVar.TILESIZE,
                                     specialTileTextures, 1, 1));
                                 break;
-                            //v = Rotate_Clockwise_South
-                            case 'v':
+                            //S = Rotate_Clockwise_South
+                            case 'S':
                                 newLevel.SetTile(columnNumber, lineNumber, new SpecialTile(
                                     columnNumber * GlobalVar.TILESIZE,
                                     lineNumber * GlobalVar.TILESIZE,
                                     specialTileTextures, 1, 2));
                                 break;
-                            //< = Rotate_Clockwise_West
-                            case '<':
+                            //A = Rotate_Clockwise_West
+                            case 'A':
                                 newLevel.SetTile(columnNumber, lineNumber, new SpecialTile(
                                     columnNumber * GlobalVar.TILESIZE,
                                     lineNumber * GlobalVar.TILESIZE,
                                     specialTileTextures, 1, 3));
                                 break;
-                            //+ = Rotate_Counter_Clockwise_North
-                            case '+':
+                            //I = Rotate_Counter_Clockwise_North
+                            case 'I':
                                 newLevel.SetTile(columnNumber, lineNumber, new SpecialTile(
                                     columnNumber * GlobalVar.TILESIZE,
                                     lineNumber * GlobalVar.TILESIZE,
                                     specialTileTextures, 2, 0));
                                 break;
-                            //} = Rotate_Counter_Clockwise_East
-                            case '}':
+                            //L = Rotate_Counter_Clockwise_East
+                            case 'L':
                                 newLevel.SetTile(columnNumber, lineNumber, new SpecialTile(
                                     columnNumber * GlobalVar.TILESIZE,
                                     lineNumber * GlobalVar.TILESIZE,
                                     specialTileTextures, 2, 3));
                                 break;
-                            //^ = Rotate_Counter_Clockwise_South
-                            case '-':
+                            //K = Rotate_Counter_Clockwise_South
+                            case 'K':
                                 newLevel.SetTile(columnNumber, lineNumber, new SpecialTile(
                                     columnNumber * GlobalVar.TILESIZE,
                                     lineNumber * GlobalVar.TILESIZE,
                                     specialTileTextures, 2, 2));
                                 break;
-                            //{ = Rotate_Counter_Clockwise_West
-                            case '{':
+                            //J = Rotate_Counter_Clockwise_West
+                            case 'J':
                                 newLevel.SetTile(columnNumber, lineNumber, new SpecialTile(
                                     columnNumber * GlobalVar.TILESIZE,
                                     lineNumber * GlobalVar.TILESIZE,
@@ -339,13 +339,6 @@ namespace Chaos_University
             }
 
             return newLevel;
-        }
-
-        // will create a new instance of the character creator and display it.
-        public void LoadCharacterCreator()
-        {
-            CharacterCreator characterCreator = new CharacterCreator();
-            characterCreator.Show();
         }
 
         // Failure state.
@@ -431,7 +424,7 @@ namespace Chaos_University
         }
 
 
-        private void FastFoward() //Speeds up gameplay or returns to normal
+        private void FastForward() //Speeds up gameplay or returns to normal
         {
             if (fastActive == false)
             {
@@ -561,7 +554,7 @@ namespace Chaos_University
             //Fast Forward with Space bar
             if (keyboard.IsKeyDown(Keys.Space) && keyboardPrev.IsKeyUp(Keys.Space))
             {
-                FastFoward();
+                FastForward();
             }
 
             //Next Level cheat, for our personal testing purposes only!
@@ -746,7 +739,7 @@ namespace Chaos_University
 
             // Order tile textures in order that they appear when clicked.
             tileTextures = new List<Texture2D>();
-            tileTextures.Add(this.Content.Load<Texture2D>("Default_Tile"));
+            tileTextures.Add(this.Content.Load<Texture2D>("Default_Tile_1"));
             tileTextures.Add(this.Content.Load<Texture2D>("Default_Up"));
             tileTextures.Add(this.Content.Load<Texture2D>("Default_Right"));
             tileTextures.Add(this.Content.Load<Texture2D>("Default_Down"));
@@ -754,22 +747,22 @@ namespace Chaos_University
 
             //For rotate tiles
             specialTileTextures = new List<Texture2D>();            
-            specialTileTextures.Add(this.Content.Load<Texture2D>("Rotate_Clockwise_Up"));
-            specialTileTextures.Add(this.Content.Load<Texture2D>("Rotate_Clockwise_Right"));
-            specialTileTextures.Add(this.Content.Load<Texture2D>("Rotate_Clockwise_Down"));
-            specialTileTextures.Add(this.Content.Load<Texture2D>("Rotate_Clockwise_Left"));
-            specialTileTextures.Add(this.Content.Load<Texture2D>("Rotate_Counter_Clockwise_Up"));
-            specialTileTextures.Add(this.Content.Load<Texture2D>("Rotate_Counter_Clockwise_Left"));
-            specialTileTextures.Add(this.Content.Load<Texture2D>("Rotate_Counter_Clockwise_Down"));
-            specialTileTextures.Add(this.Content.Load<Texture2D>("Rotate_Counter_Clockwise_Right"));
+            specialTileTextures.Add(this.Content.Load<Texture2D>("Rotate_Clockwise_Up_1"));
+            specialTileTextures.Add(this.Content.Load<Texture2D>("Rotate_Clockwise_Right_1"));
+            specialTileTextures.Add(this.Content.Load<Texture2D>("Rotate_Clockwise_Down_1"));
+            specialTileTextures.Add(this.Content.Load<Texture2D>("Rotate_Clockwise_Left_1"));
+            specialTileTextures.Add(this.Content.Load<Texture2D>("Rotate_Counter_Clockwise_Up_1"));
+            specialTileTextures.Add(this.Content.Load<Texture2D>("Rotate_Counter_Clockwise_Left_1"));
+            specialTileTextures.Add(this.Content.Load<Texture2D>("Rotate_Counter_Clockwise_Down_1"));
+            specialTileTextures.Add(this.Content.Load<Texture2D>("Rotate_Counter_Clockwise_Right_1"));
 
             //Single Wall texture.
             wallTextures = new List<Texture2D>();
-            wallTextures.Add(this.Content.Load<Texture2D>("Default_Wall"));
+            wallTextures.Add(this.Content.Load<Texture2D>("Default_Wall_1"));
 
             //Single goal texture.
             goalTextures = new List<Texture2D>();
-            goalTextures.Add(this.Content.Load<Texture2D>("Default_Goal"));
+            goalTextures.Add(this.Content.Load<Texture2D>("Default_Open_Ladder"));
 
             //Single Money texture.
             moneyTextures = new List<Texture2D>();
@@ -791,7 +784,6 @@ namespace Chaos_University
             {
                 levels.Add(this.LoadLevel(i));
             }
-            this.LoadCharacterCreator();
         }
 
         /// <summary>
@@ -851,6 +843,23 @@ namespace Chaos_University
                         //Play sound. Do this only to type change.
                         //MediaPlayer.Play(music[0]);
 
+                        string path = Directory.GetCurrentDirectory() + "/../../../../../../Colors.txt";
+
+                        //read the file
+                        StreamReader reader = new StreamReader(path);
+
+                        string[] stringColors = reader.ReadLine().Split(',');
+
+                        GlobalVar.ColorsSplit = new Int16[stringColors.Length];
+
+                        //match the values
+                        for (int i = 0; i < stringColors.Length; i++)
+                        {
+                            GlobalVar.ColorsSplit[i] = Int16.Parse(stringColors[i]);
+                        }
+
+                        reader.Close();
+
                         //First level.
                         this.IncrementLevel();
 
@@ -882,7 +891,7 @@ namespace Chaos_University
                     //Rotate Ninja sword if the Ability is active
                     /*if (level.Ninja.AbilityActive)
                     {
-                        level.Ninja.ThisGear.Rotate((float)(gameTime.ElapsedGameTime.TotalSeconds / 50));
+                        level.Ninja.ThisGear.Rotate((float)(gameTime.ElapsedGameTime.TotalSeconds / GlobalVar.SpeedLevel));
                     }*/
                      
 
