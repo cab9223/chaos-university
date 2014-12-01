@@ -250,6 +250,7 @@ namespace Chaos_University
             {
                 for (int i = 0; i < this.Width; ++i)
                 {
+                    bool specialIncrement = false;
                     //If Ninja on direction tile.
                     if (this.IsNinja)
                     {
@@ -277,19 +278,19 @@ namespace Chaos_University
                                     break;
                                 case PieceState.SpecialNorth:                                   
                                     this.Ninja.turn(0);
-                                    this.GetGamePiece(i, j).IncrementType();
+                                    specialIncrement = true;
                                     break;                                  
                                 case PieceState.SpecialEast:
                                     this.Ninja.turn(1);
-                                    this.GetGamePiece(i, j).IncrementType();
+                                    specialIncrement = true;
                                     break;
                                 case PieceState.SpecialSouth:
                                     this.Ninja.turn(2);
-                                    this.GetGamePiece(i, j).IncrementType();                                    
+                                    specialIncrement = true;                                    
                                     break;
                                 case PieceState.SpecialWest:                                    
                                     this.Ninja.turn(3);
-                                    this.GetGamePiece(i, j).IncrementType();
+                                    specialIncrement = true;
                                     break;
                             }
                         }
@@ -302,7 +303,8 @@ namespace Chaos_University
                         {
                             //Turn player based on tile direction.
                             switch (this.GetGamePiece(i, j).PieceState)
-                            {
+                            {                                    
+
                                 case PieceState.Floor:
                                     break;
                                 case PieceState.North:
@@ -322,19 +324,19 @@ namespace Chaos_University
                                     break;
                                 case PieceState.SpecialNorth:
                                     this.Recon.turn(0);
-                                    this.GetGamePiece(i, j).IncrementType();
+                                    specialIncrement = true;
                                     break;
                                 case PieceState.SpecialEast:
                                     this.Recon.turn(1);
-                                    this.GetGamePiece(i, j).IncrementType();                                                                       
+                                    specialIncrement = true;                                                                       
                                     break;
                                 case PieceState.SpecialSouth:
                                     this.Recon.turn(2);
-                                    this.GetGamePiece(i, j).IncrementType();
+                                    specialIncrement = true;
                                     break;
                                 case PieceState.SpecialWest:                                    
                                     this.Recon.turn(3);
-                                    this.GetGamePiece(i, j).IncrementType();                                    
+                                    specialIncrement = true;                                    
                                     break;
                             }
                         }
@@ -367,19 +369,19 @@ namespace Chaos_University
                                     break;
                                 case PieceState.SpecialNorth:
                                     this.Assault.turn(0);
-                                    this.GetGamePiece(i, j).IncrementType();
+                                    specialIncrement = true;
                                     break;
                                 case PieceState.SpecialEast:
                                     this.Assault.turn(1);
-                                    this.GetGamePiece(i, j).IncrementType();
+                                    specialIncrement = true;
                                     break;
                                 case PieceState.SpecialSouth:
                                     this.Assault.turn(2);
-                                    this.GetGamePiece(i, j).IncrementType();
+                                    specialIncrement = true;
                                     break;
                                 case PieceState.SpecialWest:
                                     this.Assault.turn(3);
-                                    this.GetGamePiece(i, j).IncrementType();
+                                    specialIncrement = true;
                                     break;
                             }
                         }
@@ -410,6 +412,13 @@ namespace Chaos_University
                                 condition = CollisionState.Fail;
                             }
                         }
+                    }
+                    
+                    //Now will change tile direction after all the player's changed directions are taken care of.
+                    if (specialIncrement == true)
+                    {
+                        this.GetGamePiece(i, j).IncrementType();
+                        specialIncrement = false;
                     }
                 }
 
