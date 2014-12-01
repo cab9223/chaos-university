@@ -425,9 +425,28 @@ namespace Chaos_University
                 //For all Game Pieces in level object list, check for collision.
                 foreach (Money gamePiece in this.Monies)
                 {
-                    if (gamePiece.CheckCollision(this.Ninja))
+                    if (this.IsNinja)
                     {
-                        gamePiece.Active = false;
+                        if (gamePiece.CheckCollision(this.Ninja))
+                        {
+                            gamePiece.Active = false;
+                        }
+                    }
+
+                    if (this.IsAssault)
+                    {
+                        if (gamePiece.CheckCollision(this.Assault))
+                        {
+                            gamePiece.Active = false;
+                        }
+                    }
+
+                    if (this.IsRecon)
+                    {
+                        if (gamePiece.CheckCollision(this.Recon))
+                        {
+                            gamePiece.Active = false;
+                        }
                     }
                 }
             }
