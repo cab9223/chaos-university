@@ -102,7 +102,6 @@ namespace Chaos_University
             guardAmount = new Queue<int>();
             title = "PLACE HOLDER";
 
-
             indexLevel = -1;
             clickPrevX = -1;                //Start clickPrev at a nonexistent index.
             clickPrevY = -1;

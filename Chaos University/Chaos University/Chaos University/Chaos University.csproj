@@ -95,6 +95,7 @@
     <Compile Include="Game1.cs" />
     <Compile Include="SpecialTile.cs" />
     <Compile Include="Tile.cs" />
+    <Compile Include="Tutorial.cs" />
     <Compile Include="Wall.cs" />
   </ItemGroup>
   <ItemGroup>
