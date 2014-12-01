@@ -33,22 +33,20 @@ namespace Chaos_University
             screenWidth = _screenWidth;
             font = _font;
 
-            index = 0;
+            index = -1;
 
             tutorials = new List<string[]>();
             locations = new List<int[]>();
 
             tutorials.Add(new string[1] { "Press Enter to start moving." });
             tutorials.Add(new string[1] { "Press Enter to start moving." });
-            tutorials.Add(new string[1] { "PLACE HOLDER TUT 3" });
-            tutorials.Add(new string[1] { "PLACE HOLDER TUT 4" });
-            tutorials.Add(new string[1] { "PLACE HOLDER TUT 5" });
+            tutorials.Add(new string[1] { "Click the floor to place a tile." });
+            tutorials.Add(new string[2] { "Use WASD or the arrow keys to move the camera.", "Try to not go over par." });
 
-            locations.Add(new int[2] { 20, 180 });
-            locations.Add(new int[2] { 20, 20 });
-            locations.Add(new int[2] { 20, 20 });
-            locations.Add(new int[2] { 20, 20 });
-            locations.Add(new int[2] { 20, 20 });
+            locations.Add(new int[2] { 24, 180 });
+            locations.Add(new int[2] { 24, -60 });
+            locations.Add(new int[2] { 24, -60 });
+            locations.Add(new int[4] { 20, -40, 250, 550 });
         }
 
         //Increment level.
@@ -66,6 +64,16 @@ namespace Chaos_University
                     tutorials[index][0],
                     new Vector2(locations[index][0] + offX, locations[index][1] + offY),
                     Color.White);
+
+                //Display second message.
+                //More messy code. Should also be fixed.
+                if(tutorials[index].Length > 1)
+                {
+                    spriteBatch.DrawString(font,
+                        tutorials[index][1],
+                        new Vector2(locations[index][2] + offX, locations[index][3] + offY),
+                        Color.White);
+                }
             }
         }
     }

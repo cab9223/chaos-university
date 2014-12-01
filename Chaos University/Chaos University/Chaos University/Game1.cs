@@ -191,7 +191,7 @@ namespace Chaos_University
                                     tileTextures,
                                     PieceState.North));
                                 break;
-                            //2 = Floor East.
+                            //3 = Floor East.
                             case '3':
                                 newLevel.SetTile(columnNumber, lineNumber, new Tile(
                                     columnNumber * GlobalVar.TILESIZE,
@@ -199,7 +199,7 @@ namespace Chaos_University
                                     tileTextures,
                                     PieceState.East));
                                 break;
-                            //2 = Floor South.
+                            //4 = Floor South.
                             case '4':
                                 newLevel.SetTile(columnNumber, lineNumber, new Tile(
                                     columnNumber * GlobalVar.TILESIZE,
@@ -207,7 +207,7 @@ namespace Chaos_University
                                     tileTextures,
                                     PieceState.South));
                                 break;
-                            //2 = Floor West.
+                            //5 = Floor West.
                             case '5':
                                 newLevel.SetTile(columnNumber, lineNumber, new Tile(
                                     columnNumber * GlobalVar.TILESIZE,
@@ -635,6 +635,7 @@ namespace Chaos_University
         private void IncrementLevel()
         {
             indexLevel++;
+            tutorial.Increment();
             isGuard = false;
             activeGuards.Clear();
             guardCount = guardAmount.Dequeue();
@@ -644,6 +645,14 @@ namespace Chaos_University
                 level = levels[indexLevel];
                 camXCenter = (GraphicsDevice.Viewport.Width - level.Width * GlobalVar.TILESIZE) / 2;
                 camYCenter = (GraphicsDevice.Viewport.Height - level.Height * GlobalVar.TILESIZE) / 2;
+                
+                //Temporary camera fix for level 4.
+                if(indexLevel == 3)
+                {
+                    camYCenter = GraphicsDevice.Viewport.Height / 2 - level.Ninja.PositionRect.Center.Y;
+                    Console.WriteLine(camYCenter);
+                }
+
                 this.CenterCamera();
 
                 if (guardCount > 0)  //Checks for guards in this level
@@ -1169,7 +1178,7 @@ namespace Chaos_University
                     switch(level.CheckCollisions())
                     {
                         case CollisionState.Goal:
-                            if (level.GetMoneyCount() == 0 || GlobalVar.ParCount <= level.Par)
+                            if (level.GetMoneyCount() == 0 && GlobalVar.ParCount <= level.Par)
                             {
                                 current = GameState.LevelComp;
                             }
