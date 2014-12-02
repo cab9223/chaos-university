@@ -89,10 +89,10 @@ namespace Chaos_University
         }
 
 
-        public Enemy(int x, int y, int dir, List<Texture2D> textures, int initDir, int initX, int initY) //Constructor 2
+        public Enemy(int x, int y, int dir, List<Texture2D> textures, int diff, int initDir, int initX, int initY) //Constructor 2
             : base(x, y, dir, textures)
         {
-            Difficulty = 1;
+            Difficulty = diff;
 
             isAlive = true;
 

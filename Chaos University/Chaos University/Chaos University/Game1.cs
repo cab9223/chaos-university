@@ -649,7 +649,10 @@ namespace Chaos_University
             tutorial.Increment();
             isGuard = false;
             activeGuards.Clear();
-            guardCount = guardAmount.Dequeue();
+            if (indexLevel < GlobalVar.LevelCount)
+            {
+                guardCount = guardAmount.Dequeue();
+            }
 
             try
             {
@@ -692,60 +695,65 @@ namespace Chaos_University
         }
 
 
-        public void AssaultTaunt() //Assault special move, Taunt
+        public void AssaultTaunt() //Assault special move, Taunt -- Testing new concept that seems to be working!
         {
             if (level.IsAssault) //if active Assault
             {
                 for (int x = 0; x < guardCount; x++)
                 {
                     if ((activeGuards[x].PositionRect.X < level.Assault.PositionRect.X) //Guards to the left of Assault
-                        && (level.Assault.Direction == 0 || level.Assault.Direction == 2)) //Facing up or down
+                        && ((activeGuards[x].PositionRect.Y < level.Assault.PositionRect.Y + (GlobalVar.TILESIZE))
+                        && (activeGuards[x].PositionRect.Y > level.Assault.PositionRect.Y - (GlobalVar.TILESIZE))))
                     {
                         activeGuards[x] = new Enemy(
                                                      activeGuards[x].PositionRect.X,
                                                      activeGuards[x].PositionRect.Y,
-                                                     1, guardTextures,
+                                                     1, guardTextures, 
+                                                     activeGuards[x].Difficulty,
                                                      activeGuards[x].InitialDirection,
                                                      activeGuards[x].InitialX,
                                                      activeGuards[x].InitialY);
                         activeGuards[x].Patrol(1);
                     }
-                    else if ((activeGuards[x].PositionRect.X > level.Assault.PositionRect.X) //Guards to the right of Assault
-                        && (level.Assault.Direction == 0 || level.Assault.Direction == 2)) //Facing up or down
-                    {
-                        activeGuards[x] = new Enemy(
-                                                     activeGuards[x].PositionRect.X,
-                                                     activeGuards[x].PositionRect.Y,
-                                                     3, guardTextures,
-                                                     activeGuards[x].InitialDirection,
-                                                     activeGuards[x].InitialX,
-                                                     activeGuards[x].InitialY);
-                        activeGuards[x].Patrol(1);
-                    }
-                    else if ((activeGuards[x].PositionRect.Y > level.Assault.PositionRect.Y) //Guards below Assault
-                        && (level.Assault.Direction == 1 || level.Assault.Direction == 3)) //Facing left or right
-                    {
-                        activeGuards[x] = new Enemy(
-                                                     activeGuards[x].PositionRect.X,
-                                                     activeGuards[x].PositionRect.Y,
-                                                     0, guardTextures,
-                                                     activeGuards[x].InitialDirection,
-                                                     activeGuards[x].InitialX,
-                                                     activeGuards[x].InitialY);
-                        activeGuards[x].Patrol(1);
-                    }
-                    else if ((activeGuards[x].PositionRect.Y < level.Assault.PositionRect.Y) //Guards above Assault
-                        && (level.Assault.Direction == 1 || level.Assault.Direction == 3)) //Facing left or right
-                    {
-                        activeGuards[x] = new Enemy(
-                                                     activeGuards[x].PositionRect.X,
-                                                     activeGuards[x].PositionRect.Y,
-                                                     2, guardTextures,
-                                                     activeGuards[x].InitialDirection,
-                                                     activeGuards[x].InitialX,
-                                                     activeGuards[x].InitialY);
-                        activeGuards[x].Patrol(1);
-                    }
+                    //else if ((activeGuards[x].PositionRect.X > level.Assault.PositionRect.X) //Guards to the right of Assault
+                    //    && (level.Assault.Direction == 0 || level.Assault.Direction == 2)) //Facing up or down
+                    //{
+                    //    activeGuards[x] = new Enemy(
+                    //                                 activeGuards[x].PositionRect.X,
+                    //                                 activeGuards[x].PositionRect.Y,
+                    //                                 3, guardTextures,
+                    //                                 activeGuards[x].Difficulty,
+                    //                                 activeGuards[x].InitialDirection,
+                    //                                 activeGuards[x].InitialX,
+                    //                                 activeGuards[x].InitialY);
+                    //    activeGuards[x].Patrol(1);
+                    //}
+                    //else if ((activeGuards[x].PositionRect.Y > level.Assault.PositionRect.Y) //Guards below Assault
+                    //    && (level.Assault.Direction == 1 || level.Assault.Direction == 3)) //Facing left or right
+                    //{
+                    //    activeGuards[x] = new Enemy(
+                    //                                 activeGuards[x].PositionRect.X,
+                    //                                 activeGuards[x].PositionRect.Y,
+                    //                                 0, guardTextures,
+                    //                                 activeGuards[x].Difficulty,
+                    //                                 activeGuards[x].InitialDirection,
+                    //                                 activeGuards[x].InitialX,
+                    //                                 activeGuards[x].InitialY);
+                    //    activeGuards[x].Patrol(1);
+                    //}
+                    //else if ((activeGuards[x].PositionRect.Y < level.Assault.PositionRect.Y) //Guards above Assault
+                    //    && (level.Assault.Direction == 1 || level.Assault.Direction == 3)) //Facing left or right
+                    //{
+                    //    activeGuards[x] = new Enemy(
+                    //                                 activeGuards[x].PositionRect.X,
+                    //                                 activeGuards[x].PositionRect.Y,
+                    //                                 2, guardTextures,
+                    //                                 activeGuards[x].Difficulty,
+                    //                                 activeGuards[x].InitialDirection,
+                    //                                 activeGuards[x].InitialX,
+                    //                                 activeGuards[x].InitialY);
+                    //    activeGuards[x].Patrol(1);
+                    //}
                 }
             }
         }
@@ -867,6 +875,7 @@ namespace Chaos_University
                                                                     activeGuards[x].PositionRect.X,
                                                                     activeGuards[x].PositionRect.Y,
                                                                     0, guardTextures,
+                                                                    activeGuards[x].Difficulty,
                                                                     activeGuards[x].InitialDirection,
                                                                     activeGuards[x].InitialX,
                                                                     activeGuards[x].InitialY);
@@ -884,6 +893,7 @@ namespace Chaos_University
                                                                     activeGuards[x].PositionRect.X,
                                                                     activeGuards[x].PositionRect.Y,
                                                                     1, guardTextures,
+                                                                    activeGuards[x].Difficulty,
                                                                     activeGuards[x].InitialDirection,
                                                                     activeGuards[x].InitialX,
                                                                     activeGuards[x].InitialY);
@@ -901,6 +911,7 @@ namespace Chaos_University
                                                                     activeGuards[x].PositionRect.X,
                                                                     activeGuards[x].PositionRect.Y,
                                                                     2, guardTextures,
+                                                                    activeGuards[x].Difficulty,
                                                                     activeGuards[x].InitialDirection,
                                                                     activeGuards[x].InitialX,
                                                                     activeGuards[x].InitialY);
@@ -918,6 +929,7 @@ namespace Chaos_University
                                                                     activeGuards[x].PositionRect.X,
                                                                     activeGuards[x].PositionRect.Y,
                                                                     3, guardTextures,
+                                                                    activeGuards[x].Difficulty,
                                                                     activeGuards[x].InitialDirection,
                                                                     activeGuards[x].InitialX,
                                                                     activeGuards[x].InitialY);
@@ -933,6 +945,7 @@ namespace Chaos_University
                                                                     activeGuards[x].PositionRect.X,
                                                                     activeGuards[x].PositionRect.Y,
                                                                     0, guardTextures,
+                                                                    activeGuards[x].Difficulty,
                                                                     activeGuards[x].InitialDirection,
                                                                     activeGuards[x].InitialX,
                                                                     activeGuards[x].InitialY);
@@ -944,6 +957,7 @@ namespace Chaos_University
                                                                     activeGuards[x].PositionRect.X,
                                                                     activeGuards[x].PositionRect.Y,
                                                                     1, guardTextures,
+                                                                    activeGuards[x].Difficulty,
                                                                     activeGuards[x].InitialDirection,
                                                                     activeGuards[x].InitialX,
                                                                     activeGuards[x].InitialY);
@@ -954,7 +968,8 @@ namespace Chaos_University
                                             activeGuards[x] = new Enemy(
                                                                     activeGuards[x].PositionRect.X,
                                                                     activeGuards[x].PositionRect.Y,
-                                                                    2, guardTextures, 
+                                                                    2, guardTextures,
+                                                                    activeGuards[x].Difficulty,
                                                                     activeGuards[x].InitialDirection,
                                                                     activeGuards[x].InitialX,
                                                                     activeGuards[x].InitialY);
@@ -966,6 +981,7 @@ namespace Chaos_University
                                                                     activeGuards[x].PositionRect.X,
                                                                     activeGuards[x].PositionRect.Y,
                                                                     3, guardTextures,
+                                                                    activeGuards[x].Difficulty,
                                                                     activeGuards[x].InitialDirection,
                                                                     activeGuards[x].InitialX,
                                                                     activeGuards[x].InitialY);
