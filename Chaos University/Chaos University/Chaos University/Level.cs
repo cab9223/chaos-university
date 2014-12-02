@@ -240,6 +240,25 @@ namespace Chaos_University
             }
         }
 
+
+        public void OpenGate()
+        {
+            if (this.Monies.Count == (this.Monies.Count - GetMoneyCount()))
+            {
+                for (int j = 0; j < this.Height; ++j)
+                {
+                    for (int i = 0; i < this.Width; ++i)
+                    {
+                        if (this.GetGamePiece(i, j).PieceState == PieceState.Goal)
+                        {
+                            grid[i, j].IndexTexture = 1;
+                        }
+                    }
+                }
+            }
+        }
+
+
         public CollisionState CheckCollisions()
         {
             //Condition:    0 = do nothing.

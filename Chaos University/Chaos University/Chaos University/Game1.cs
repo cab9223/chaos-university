@@ -1006,6 +1006,7 @@ namespace Chaos_University
 
             //Single goal texture.
             goalTextures = new List<Texture2D>();
+            goalTextures.Add(this.Content.Load<Texture2D>("Default_Close_Ladder"));
             goalTextures.Add(this.Content.Load<Texture2D>("Default_Open_Ladder"));
 
             //Single Money texture.
@@ -1168,6 +1169,8 @@ namespace Chaos_University
                     }
 
                     this.UpdateGuards(gameTime.ElapsedGameTime.TotalSeconds);  //Updates and checks guards
+
+                    level.OpenGate(); //Checks to see if all intel is collected
 
                     if (attacked == true) //Attacked by a guard
                     {
