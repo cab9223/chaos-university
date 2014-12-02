@@ -244,14 +244,31 @@ namespace Chaos_University
         {
             if (this.IsAlive == true)
             {
-                obj.Draw(listTextures[0],
-                    new Rectangle((PositionRect.X + PositionRect.Width / 2) + offX, (PositionRect.Y + PositionRect.Height / 2) + offY, PositionRect.Width, PositionRect.Height),
-                    null,
-                    Color.White,
-                    (float)(Math.Atan2(Vector.Y, Vector.X) + Math.PI / 2),
-                    new Vector2(listTextures[0].Width / 2, listTextures[0].Height / 2),
-                    SpriteEffects.None,
-                    0.0f);
+                switch (Difficulty)
+                {
+                    case 0:
+                        obj.Draw(listTextures[0],
+                            new Rectangle((PositionRect.X + PositionRect.Width / 2) + offX, (PositionRect.Y + PositionRect.Height / 2) + offY, PositionRect.Width, PositionRect.Height),
+                            null,
+                            Color.White,
+                            (float)(Math.Atan2(Vector.Y, Vector.X) + Math.PI / 2),
+                            new Vector2(listTextures[0].Width / 2, listTextures[0].Height / 2),
+                            SpriteEffects.None,
+                            0.0f);
+                        break;
+
+                    case 1:
+                        obj.Draw(listTextures[1],
+                            new Rectangle((PositionRect.X + PositionRect.Width / 2) + offX, (PositionRect.Y + PositionRect.Height / 2) + offY, PositionRect.Width, PositionRect.Height),
+                            null,
+                            Color.White,
+                            (float)(Math.Atan2(Vector.Y, Vector.X) + Math.PI / 2),
+                            new Vector2(listTextures[0].Width / 2, listTextures[0].Height / 2),
+                            SpriteEffects.None,
+                            0.0f);
+                        break;
+                }
+
             }
 
             //For checking Detection
@@ -266,12 +283,12 @@ namespace Chaos_University
 
             if (this.Detected == true) //For Emotion
             {
-                obj.Draw(listTextures[1],
+                obj.Draw(listTextures[2],
                     new Rectangle((EmotionRect.X + EmotionRect.Width / 2) + offX, (EmotionRect.Y + EmotionRect.Height / 2) + offY, EmotionRect.Width, EmotionRect.Height),
                     null,
                     Color.White,
                     (float)(Math.Atan2(-1, 0) + Math.PI / 2),
-                    new Vector2(listTextures[1].Width / 2, listTextures[1].Height / 2),
+                    new Vector2(listTextures[2].Width / 2, listTextures[2].Height / 2),
                     SpriteEffects.None,
                     0.0f);
             }

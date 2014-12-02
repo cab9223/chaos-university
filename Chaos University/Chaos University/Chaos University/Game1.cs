@@ -73,7 +73,7 @@ namespace Chaos_University
 
         //Songs
         List<Song> music;
-        List<Song> effects;
+        List<SoundEffect> effects;
 
         //Videos
         Video introVideo;
@@ -744,7 +744,7 @@ namespace Chaos_University
         {
             if (alerted == false)  //For alert sound effect
             {
-                MediaPlayer.Play(effects[0]);
+                effects[0].Play();
                 alerted = true;
             }
 
@@ -971,8 +971,8 @@ namespace Chaos_University
             music = new List<Song>();
             music.Add(this.Content.Load<Song>("TheoreticalTheme"));
 
-            effects = new List<Song>();
-            effects.Add(this.Content.Load<Song>("Alert"));
+            effects = new List<SoundEffect>();
+            effects.Add(this.Content.Load<SoundEffect>("AlertWav"));
 
             introVideo = this.Content.Load<Video>("Intro_V2");
 
@@ -1023,6 +1023,7 @@ namespace Chaos_University
             //Guard Textures.
             guardTextures = new List<Texture2D>();
             guardTextures.Add(this.Content.Load<Texture2D>("Default_Guard"));
+            guardTextures.Add(this.Content.Load<Texture2D>("Default_Guard_2"));
             guardTextures.Add(this.Content.Load<Texture2D>("!"));
 
             //Tutorial messages
