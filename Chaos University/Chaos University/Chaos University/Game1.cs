@@ -48,6 +48,12 @@ namespace Chaos_University
         float timer;                //Short pause
         bool alerted;               //Alert went off
 
+        //Variables for preventing stuck
+        bool north;
+        bool east;
+        bool west;
+        bool south;
+
         //Other things.
         Vector2 menuPos;            //Position of the menu header
         Vector2 gameOverPos;        //Position of the game over screen.
@@ -117,6 +123,11 @@ namespace Chaos_University
             timer = 0;
             alerted = false;
             fastActive = false;
+
+            north = false;
+            east = false;
+            west = false;
+            south = false;
 
             base.Initialize();
         }
@@ -831,8 +842,6 @@ namespace Chaos_University
                             {
                                 switch (level.GetGamePiece(i, j).PieceState)
                                 {
-                                    case PieceState.Floor:
-                                        break;
                                     case PieceState.Wall:
                                         activeGuards[x].Patrol(0);
                                         break;
@@ -845,8 +854,14 @@ namespace Chaos_University
                                 {
                                     switch (level.GetGamePiece(i, j).PieceState)
                                     {
+                                        case PieceState.Floor:
+                                            north = false;
+                                            east = false;
+                                            west = false;
+                                            south = false;
+                                            break;
                                         case PieceState.North:
-                                            if (activeGuards[x].Direction != 2)
+                                            if (activeGuards[x].Direction != 2 && north == false)
                                             {
                                                 activeGuards[x] = new Enemy(
                                                                     activeGuards[x].PositionRect.X,
@@ -855,11 +870,15 @@ namespace Chaos_University
                                                                     activeGuards[x].InitialDirection,
                                                                     activeGuards[x].InitialX,
                                                                     activeGuards[x].InitialY);
-                                                activeGuards[x].Patrol(1);  
+                                                activeGuards[x].Patrol(1);
+                                                north = true;
+                                                east = false;
+                                                west = false;
+                                                south = false;
                                             }
                                             break;
                                         case PieceState.East:
-                                            if (activeGuards[x].Direction != 3)
+                                            if (activeGuards[x].Direction != 3 && east == false)
                                             {
                                                 activeGuards[x] = new Enemy(
                                                                     activeGuards[x].PositionRect.X,
@@ -869,10 +888,14 @@ namespace Chaos_University
                                                                     activeGuards[x].InitialX,
                                                                     activeGuards[x].InitialY);
                                                 activeGuards[x].Patrol(1);
+                                                north = false;
+                                                east = true;
+                                                west = false;
+                                                south = false;
                                             }
                                             break;
                                         case PieceState.South:
-                                            if (activeGuards[x].Direction != 0)
+                                            if (activeGuards[x].Direction != 0 && south == false)
                                             {
                                                 activeGuards[x] = new Enemy(
                                                                     activeGuards[x].PositionRect.X,
@@ -882,10 +905,14 @@ namespace Chaos_University
                                                                     activeGuards[x].InitialX,
                                                                     activeGuards[x].InitialY);
                                                 activeGuards[x].Patrol(1);
+                                                north = false;
+                                                east = false;
+                                                west = false;
+                                                south = true;
                                             }
                                             break;
                                         case PieceState.West:
-                                            if (activeGuards[x].Direction != 1)
+                                            if (activeGuards[x].Direction != 1 && west == false)
                                             {
                                                 activeGuards[x] = new Enemy(
                                                                     activeGuards[x].PositionRect.X,
@@ -895,6 +922,10 @@ namespace Chaos_University
                                                                     activeGuards[x].InitialX,
                                                                     activeGuards[x].InitialY);
                                                 activeGuards[x].Patrol(1);
+                                                north = false;
+                                                east = false;
+                                                west = true;
+                                                south = false;
                                             }
                                             break;
                                         case PieceState.SpecialNorth:
