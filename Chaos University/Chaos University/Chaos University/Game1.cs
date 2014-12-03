@@ -477,7 +477,7 @@ namespace Chaos_University
             this.CenterCamera();
             GlobalVar.SpeedLevel = 50;
             fastActive = false;
-            
+            level.ResetGate();                                  //Reset ladder sprite to close
 
             //Reset all direction tiles.
             for (int b = 0; b < level.Height; ++b)
