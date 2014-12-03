@@ -333,7 +333,7 @@ namespace Chaos_University
                                 guards.Add(guard);
                                 guardCount = guardCount + 1;
                                 break;
-                            //Z = Guard Difficulty 2 -- Not ready yet
+                            //Z = Guard 
                             case 'Z':
                                 newLevel.SetTile(columnNumber, lineNumber, new Tile(
                                     columnNumber * GlobalVar.TILESIZE,

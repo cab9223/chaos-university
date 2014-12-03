@@ -78,12 +78,12 @@ namespace Chaos_University
 
             InitialDirection = dir;
 
-            if (dir == 0 || dir == 2)
+            if (Direction == 0 || Direction == 2 || Direction == 4 || Direction == 6)
             {
                 DetectRect = new Rectangle(x + 20, y + 20, (GlobalVar.TILESIZE / 5), (GlobalVar.TILESIZE / 2));
                 EmotionRect = new Rectangle(x + 13, y - 11, (GlobalVar.TILESIZE / 2), (GlobalVar.TILESIZE / 2));
             }
-            else if (dir == 1 || dir == 3)
+            else if (Direction == 1 || Direction == 3 || Direction == 5 || Direction == 7)
             {
                 DetectRect = new Rectangle(x + 4, y + 20, (GlobalVar.TILESIZE / 2), (GlobalVar.TILESIZE / 5));
                 EmotionRect = new Rectangle(x + 11, y - 13, (GlobalVar.TILESIZE / 2), (GlobalVar.TILESIZE / 2));
@@ -110,12 +110,12 @@ namespace Chaos_University
 
             InitialDirection = initDir;
 
-            if (dir == 0 || dir == 2)
+            if (Direction == 0 || Direction == 2 || Direction == 4 || Direction == 6)
             {
                 DetectRect = new Rectangle(x + 20, y + 20, (GlobalVar.TILESIZE / 5), (GlobalVar.TILESIZE / 2));
                 EmotionRect = new Rectangle(x + 13, y - 11, (GlobalVar.TILESIZE / 2), (GlobalVar.TILESIZE / 2));
             }
-            else if (dir == 1 || dir == 3)
+            else if (Direction == 1 || Direction == 3 || Direction == 5 || Direction == 7)
             {
                 DetectRect = new Rectangle(x + 4, y + 20, (GlobalVar.TILESIZE / 2), (GlobalVar.TILESIZE / 5));
                 //DetectRect = new Rectangle(x + 12, y + 20, (GlobalVar.TILESIZE / 2), (GlobalVar.TILESIZE / 5));
@@ -163,12 +163,12 @@ namespace Chaos_University
 
             PositionRect = new Rectangle(InitialX, InitialY, GlobalVar.TILESIZE, GlobalVar.TILESIZE);
 
-            if (Direction == 0 || Direction == 2)
+            if (Direction == 0 || Direction == 2 || Direction == 4 || Direction == 6)
             {
                 DetectRect = new Rectangle(InitialX + 20, InitialY + 20, (GlobalVar.TILESIZE / 5), (GlobalVar.TILESIZE / 2));
                 EmotionRect = new Rectangle(InitialX + 13, InitialY - 11, (GlobalVar.TILESIZE / 2), (GlobalVar.TILESIZE / 2));
             }
-            else if (Direction == 1 || Direction == 3)
+            else if (Direction == 1 || Direction == 3 || Direction == 5 || Direction == 7)
             {
                 DetectRect = new Rectangle(InitialX + 4, InitialY + 20, (GlobalVar.TILESIZE / 2), (GlobalVar.TILESIZE / 5));
                 EmotionRect = new Rectangle(InitialX + 11, InitialY - 13, (GlobalVar.TILESIZE / 2), (GlobalVar.TILESIZE / 2));
@@ -342,6 +342,22 @@ namespace Chaos_University
                         temp2.X += distance;
                         temp3.X += distance;
                         break;
+                    case 4: //Stopped equivilent to Direction 0.
+                        Stop();
+                        Turn(0);
+                        break;
+                    case 5: //Stopped equivilent to Direction 1.
+                        Stop();
+                        Turn(1);
+                        break;
+                    case 6: //Stopped equivilent to Direction 2.
+                        Stop();
+                        Turn(2);
+                        break;
+                    case 7: //Stopped equivilent to Direction 3.
+                        Stop();
+                        Turn(3);
+                        break;
                 }
                 PositionRect = temp;
                 DetectRect = temp2;
@@ -372,6 +388,33 @@ namespace Chaos_University
                     Direction = 3;
                     break;
             }
+        }
+
+
+        public void Stop() //Stop the enemy
+        {
+            Moving = false;
+        }
+
+
+        public void StartMove() //Start enemy movement after a stop
+        {
+            switch (Direction)
+            {
+                case 4:
+                    Direction = 0;
+                    break;
+                case 5:
+                    Direction = 1;
+                    break;
+                case 6:
+                    Direction = 2;
+                    break;
+                case 7:
+                    Direction = 3;
+                    break;
+            }   
+            Moving = true;
         }
 
 
