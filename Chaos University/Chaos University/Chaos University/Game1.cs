@@ -71,6 +71,10 @@ namespace Chaos_University
         int camYCenter;             //Current Y center position of view.
         string title;
         bool fastActive;
+        PieceState temp;
+        PieceState temp2;
+        int tauntDir;
+
 
         //Textures
         List<Texture2D> tileTextures;
@@ -128,6 +132,7 @@ namespace Chaos_University
             timer = 0;
             alerted = false;
             fastActive = false;
+            tauntDir = 0;
 
             north = false;
             east = false;
@@ -135,6 +140,8 @@ namespace Chaos_University
             south = false;
 
             taunt = false;
+            temp = PieceState.Floor;
+            temp2 = PieceState.Floor;
 
             base.Initialize();
         }
@@ -732,13 +739,25 @@ namespace Chaos_University
                                 switch (activeGuards[x].Direction)
                                 {
                                     case 0:
-                                        level.GetGamePiece(currX + 3, currY + 1).PieceState = PieceState.East;
+                                        tauntDir = activeGuards[x].Direction;
+                                        temp = level.GetGamePiece(currX + 3, currY).PieceState;
+                                        temp2 = level.GetGamePiece(currX + 3, currY + 1).PieceState;
+                                        level.GetGamePiece(currX + 3, currY).PieceState = PieceState.East;
+                                        level.GetGamePiece(currX + 3, currY + 1).PieceState = PieceState.OffEast;
                                         break;
                                     case 1:
-                                        level.GetGamePiece(currX + 2, currY).PieceState = PieceState.East;
+                                        tauntDir = activeGuards[x].Direction;
+                                        temp = level.GetGamePiece(currX + 3, currY).PieceState;
+                                        temp2 = level.GetGamePiece(currX + 2, currY).PieceState;
+                                        level.GetGamePiece(currX + 3, currY).PieceState = PieceState.East;
+                                        level.GetGamePiece(currX + 2, currY).PieceState = PieceState.OffEast;
                                         break;
                                     case 2:
-                                        level.GetGamePiece(currX + 3, currY - 1).PieceState = PieceState.East;
+                                        tauntDir = activeGuards[x].Direction;
+                                        temp = level.GetGamePiece(currX + 3, currY).PieceState;
+                                        temp2 = level.GetGamePiece(currX + 3, currY - 1).PieceState;
+                                        level.GetGamePiece(currX + 3, currY).PieceState = PieceState.East;
+                                        level.GetGamePiece(currX + 3, currY - 1).PieceState = PieceState.OffEast;
                                         break;
                                     case 3:
                                         activeGuards[x].Taunted = false;
@@ -758,15 +777,18 @@ namespace Chaos_University
                                 switch (activeGuards[x].Direction)
                                 {
                                     case 0:
+                                        level.GetGamePiece(currX + 3, currY).PieceState = PieceState.West;
                                         level.GetGamePiece(currX + 3, currY + 1).PieceState = PieceState.West;
                                         break;
                                     case 1:
                                         activeGuards[x].Taunted = false;
                                         break;
                                     case 2:
+                                        level.GetGamePiece(currX + 3, currY).PieceState = PieceState.West;
                                         level.GetGamePiece(currX + 3, currY - 1).PieceState = PieceState.West;
                                         break;
                                     case 3:
+                                        level.GetGamePiece(currX + 3, currY).PieceState = PieceState.West;
                                         level.GetGamePiece(currX + 4, currY).PieceState = PieceState.West;
                                         break;
                                 }
@@ -784,15 +806,18 @@ namespace Chaos_University
                                 switch (activeGuards[x].Direction)
                                 {
                                     case 0:
+                                        level.GetGamePiece(currX + 3, currY).PieceState = PieceState.North;
                                         level.GetGamePiece(currX + 3, currY + 1).PieceState = PieceState.North;
                                         break;
                                     case 1:
+                                        level.GetGamePiece(currX + 3, currY).PieceState = PieceState.North;
                                         level.GetGamePiece(currX + 2, currY).PieceState = PieceState.North;
                                         break;
                                     case 2:
                                         activeGuards[x].Taunted = false;
                                         break;
                                     case 3:
+                                        level.GetGamePiece(currX + 3, currY).PieceState = PieceState.North;
                                         level.GetGamePiece(currX + 4, currY).PieceState = PieceState.North;
                                         break;
                                 }
@@ -811,15 +836,18 @@ namespace Chaos_University
                                 switch (activeGuards[x].Direction)
                                 {
                                     case 0:
+                                        level.GetGamePiece(currX + 3, currY).PieceState = PieceState.South;
                                         level.GetGamePiece(currX + 3, currY - 1).PieceState = PieceState.South;
                                         break;
                                     case 1:
+                                        level.GetGamePiece(currX + 3, currY).PieceState = PieceState.South;
                                         level.GetGamePiece(currX + 2, currY).PieceState = PieceState.South;
                                         break;
                                     case 2:
                                         activeGuards[x].Taunted = false;
                                         break;
                                     case 3:
+                                        level.GetGamePiece(currX + 3, currY).PieceState = PieceState.South;
                                         level.GetGamePiece(currX + 4, currY).PieceState = PieceState.South;
                                         break;
                                 }
@@ -1313,6 +1341,19 @@ namespace Chaos_University
 
         //GUARD STUFF THAT NEEDS TO BE IN THIS CLASS!
 
+        public void GuardRemake(int gNum, int dir)
+        {
+            activeGuards[gNum] = new Enemy(
+                                        activeGuards[gNum].PositionRect.X,
+                                        activeGuards[gNum].PositionRect.Y,
+                                        dir, guardTextures,
+                                        activeGuards[gNum].Difficulty,
+                                        activeGuards[gNum].InitialDirection,
+                                        activeGuards[gNum].InitialX,
+                                        activeGuards[gNum].InitialY);
+        }
+
+
         public void GuardFail() //When the player failed due to a guard
         {
             if (alerted == false)  //For alert sound effect
@@ -1425,28 +1466,14 @@ namespace Chaos_University
                                         case PieceState.North:
                                             if (activeGuards[x].Direction != 2 && north == false)
                                             {
-                                                if (activeGuards[0].Taunted == true)
+                                                if (activeGuards[x].Taunted == true)
                                                 {
-                                                    activeGuards[x] = new Enemy(
-                                                                        activeGuards[x].PositionRect.X,
-                                                                        activeGuards[x].PositionRect.Y,
-                                                                        0, guardTextures,
-                                                                        activeGuards[x].Difficulty,
-                                                                        activeGuards[x].InitialDirection,
-                                                                        activeGuards[x].InitialX,
-                                                                        activeGuards[x].InitialY);
+                                                    GuardRemake(x, 0);
                                                     activeGuards[x].Taunted = true;
                                                 }
                                                 else
                                                 {
-                                                    activeGuards[x] = new Enemy(
-                                                                        activeGuards[x].PositionRect.X,
-                                                                        activeGuards[x].PositionRect.Y,
-                                                                        0, guardTextures,
-                                                                        activeGuards[x].Difficulty,
-                                                                        activeGuards[x].InitialDirection,
-                                                                        activeGuards[x].InitialX,
-                                                                        activeGuards[x].InitialY);
+                                                    GuardRemake(x, 0);
                                                     activeGuards[x].Taunted = false;
                                                 }
                                                 activeGuards[x].Patrol(1);
@@ -1464,28 +1491,14 @@ namespace Chaos_University
                                         case PieceState.East:
                                             if (activeGuards[x].Direction != 3 && east == false)
                                             {
-                                                if (activeGuards[0].Taunted == true)
+                                                if (activeGuards[x].Taunted == true)
                                                 {
-                                                    activeGuards[x] = new Enemy(
-                                                                        activeGuards[x].PositionRect.X,
-                                                                        activeGuards[x].PositionRect.Y,
-                                                                        1, guardTextures,
-                                                                        activeGuards[x].Difficulty,
-                                                                        activeGuards[x].InitialDirection,
-                                                                        activeGuards[x].InitialX,
-                                                                        activeGuards[x].InitialY);
+                                                    GuardRemake(x, 1);
                                                     activeGuards[x].Taunted = true;
                                                 }
                                                 else
                                                 {
-                                                    activeGuards[x] = new Enemy(
-                                                                        activeGuards[x].PositionRect.X,
-                                                                        activeGuards[x].PositionRect.Y,
-                                                                        1, guardTextures,
-                                                                        activeGuards[x].Difficulty,
-                                                                        activeGuards[x].InitialDirection,
-                                                                        activeGuards[x].InitialX,
-                                                                        activeGuards[x].InitialY);
+                                                    GuardRemake(x, 1);
                                                     activeGuards[x].Taunted = false;
                                                 }
                                                 activeGuards[x].Patrol(1);
@@ -1495,36 +1508,34 @@ namespace Chaos_University
                                                 south = false;
                                                 if (activeGuards[x].Taunted == true)
                                                 {
-                                                    level.GetGamePiece(i, j).PieceState = PieceState.Floor;
+                                                    level.GetGamePiece(i, j).PieceState = temp;
                                                     activeGuards[x].Taunted = false;
+                                                    switch (tauntDir)
+                                                    {
+                                                        case 0:
+                                                            level.GetGamePiece(i, j + 1).PieceState = temp2;
+                                                            break;
+                                                        case 1:
+                                                            level.GetGamePiece(i - 1, j).PieceState = temp2;
+                                                            break;
+                                                        case 2:
+                                                            level.GetGamePiece(i, j - 1).PieceState = temp2;
+                                                            break;
+                                                    }
                                                 }
                                             }
                                             break;
                                         case PieceState.South:
                                             if (activeGuards[x].Direction != 0 && south == false)
                                             {
-                                                if (activeGuards[0].Taunted == true)
+                                                if (activeGuards[x].Taunted == true)
                                                 {
-                                                    activeGuards[x] = new Enemy(
-                                                                        activeGuards[x].PositionRect.X,
-                                                                        activeGuards[x].PositionRect.Y,
-                                                                        2, guardTextures,
-                                                                        activeGuards[x].Difficulty,
-                                                                        activeGuards[x].InitialDirection,
-                                                                        activeGuards[x].InitialX,
-                                                                        activeGuards[x].InitialY);
+                                                    GuardRemake(x, 2);
                                                     activeGuards[x].Taunted = true;
                                                 }
                                                 else
                                                 {
-                                                    activeGuards[x] = new Enemy(
-                                                                        activeGuards[x].PositionRect.X,
-                                                                        activeGuards[x].PositionRect.Y,
-                                                                        2, guardTextures,
-                                                                        activeGuards[x].Difficulty,
-                                                                        activeGuards[x].InitialDirection,
-                                                                        activeGuards[x].InitialX,
-                                                                        activeGuards[x].InitialY);
+                                                    GuardRemake(x, 2);
                                                     activeGuards[x].Taunted = false;
                                                 }
                                                 activeGuards[x].Patrol(1);
@@ -1542,28 +1553,14 @@ namespace Chaos_University
                                         case PieceState.West:
                                             if (activeGuards[x].Direction != 1 && west == false)
                                             {
-                                                if (activeGuards[0].Taunted == true)
+                                                if (activeGuards[x].Taunted == true)
                                                 {
-                                                    activeGuards[x] = new Enemy(
-                                                                        activeGuards[x].PositionRect.X,
-                                                                        activeGuards[x].PositionRect.Y,
-                                                                        3, guardTextures,
-                                                                        activeGuards[x].Difficulty,
-                                                                        activeGuards[x].InitialDirection,
-                                                                        activeGuards[x].InitialX,
-                                                                        activeGuards[x].InitialY);
+                                                    GuardRemake(x, 3);
                                                     activeGuards[x].Taunted = true;
                                                 }
                                                 else
                                                 {
-                                                    activeGuards[x] = new Enemy(
-                                                                        activeGuards[x].PositionRect.X,
-                                                                        activeGuards[x].PositionRect.Y,
-                                                                        3, guardTextures,
-                                                                        activeGuards[x].Difficulty,
-                                                                        activeGuards[x].InitialDirection,
-                                                                        activeGuards[x].InitialX,
-                                                                        activeGuards[x].InitialY);
+                                                    GuardRemake(x, 3);
                                                     activeGuards[x].Taunted = false;
                                                 }
                                                 activeGuards[x].Patrol(1);
@@ -1578,51 +1575,41 @@ namespace Chaos_University
                                                 }
                                             }
                                             break;
+                                        case PieceState.OffEast:
+                                            GuardRemake(x, 1);
+                                            activeGuards[x].Patrol(1);
+                                            level.GetGamePiece(i, j).PieceState = temp;
+                                            activeGuards[x].Taunted = false;
+                                            switch (tauntDir)
+                                            {
+                                                case 0:
+                                                    level.GetGamePiece(i, j - 1).PieceState = temp2;
+                                                    break;
+                                                case 1:
+                                                    level.GetGamePiece(i + 1, j).PieceState = temp2;
+                                                    break;
+                                                case 2:
+                                                    level.GetGamePiece(i, j + 1).PieceState = temp2;
+                                                    break;
+                                            }
+                                            break;
                                         case PieceState.SpecialNorth:
-                                            activeGuards[x] = new Enemy(
-                                                                    activeGuards[x].PositionRect.X,
-                                                                    activeGuards[x].PositionRect.Y,
-                                                                    0, guardTextures,
-                                                                    activeGuards[x].Difficulty,
-                                                                    activeGuards[x].InitialDirection,
-                                                                    activeGuards[x].InitialX,
-                                                                    activeGuards[x].InitialY);
+                                            GuardRemake(x, 0);
                                             activeGuards[x].Patrol(1);
                                             level.GetGamePiece(i, j).IncrementType();
                                             break;
                                         case PieceState.SpecialEast:
-                                            activeGuards[x] = new Enemy(
-                                                                    activeGuards[x].PositionRect.X,
-                                                                    activeGuards[x].PositionRect.Y,
-                                                                    1, guardTextures,
-                                                                    activeGuards[x].Difficulty,
-                                                                    activeGuards[x].InitialDirection,
-                                                                    activeGuards[x].InitialX,
-                                                                    activeGuards[x].InitialY);
+                                            GuardRemake(x, 1);
                                             activeGuards[x].Patrol(1);
                                             level.GetGamePiece(i, j).IncrementType();
                                             break;
                                         case PieceState.SpecialSouth:
-                                            activeGuards[x] = new Enemy(
-                                                                    activeGuards[x].PositionRect.X,
-                                                                    activeGuards[x].PositionRect.Y,
-                                                                    2, guardTextures,
-                                                                    activeGuards[x].Difficulty,
-                                                                    activeGuards[x].InitialDirection,
-                                                                    activeGuards[x].InitialX,
-                                                                    activeGuards[x].InitialY);
+                                            GuardRemake(x, 2);
                                             activeGuards[x].Patrol(1);
                                             level.GetGamePiece(i, j).IncrementType();
                                             break;
                                         case PieceState.SpecialWest:
-                                            activeGuards[x] = new Enemy(
-                                                                    activeGuards[x].PositionRect.X,
-                                                                    activeGuards[x].PositionRect.Y,
-                                                                    3, guardTextures,
-                                                                    activeGuards[x].Difficulty,
-                                                                    activeGuards[x].InitialDirection,
-                                                                    activeGuards[x].InitialX,
-                                                                    activeGuards[x].InitialY);
+                                            GuardRemake(x, 3);
                                             activeGuards[x].Patrol(1);
                                             level.GetGamePiece(i, j).IncrementType();
                                             break;
