@@ -258,6 +258,21 @@ namespace Chaos_University
             }
         }
 
+        //changes gate back to closed texture, does on reset state
+        public void ResetGate()
+        {
+            for (int j = 0; j < this.Height; ++j)
+            {
+                for (int i = 0; i < this.Width; ++i)
+                {
+                    if (this.GetGamePiece(i, j).PieceState == PieceState.Goal)
+                    {
+                        grid[i, j].IndexTexture = 0;                        
+                    }
+                }
+            }
+        }
+
 
         public CollisionState CheckCollisions()
         {

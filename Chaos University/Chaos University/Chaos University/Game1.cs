@@ -476,6 +476,7 @@ namespace Chaos_University
             this.CenterCamera();
             GlobalVar.SpeedLevel = 50;
             fastActive = false;
+            
 
             //Reset all direction tiles.
             for (int b = 0; b < level.Height; ++b)
