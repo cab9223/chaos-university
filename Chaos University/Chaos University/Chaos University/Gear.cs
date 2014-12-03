@@ -28,14 +28,14 @@ namespace Chaos_University
                 PositionRect.X + offX,
                 PositionRect.Y + offY,
                 50,
-                90);
+                75);
             
             if (User.ThisMajor == Player.Major.Ninja)
             {                
                 if ( rotDir <= 2 * Math.PI)
                 {
                         obj.Draw(listTextures[0],
-                    new Rectangle(offsetRect.X + offsetRect.Width / 2, offsetRect.Y + offsetRect.Height / 4, 50, 90),
+                    new Rectangle(offsetRect.X + offsetRect.Width / 2, offsetRect.Y + offsetRect.Height / 3, 50, 75),
                     null,
                     Color.White,
                     rotDir,
