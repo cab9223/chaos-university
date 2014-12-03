@@ -39,7 +39,7 @@ namespace Chaos_University
                     null,
                     Color.White,
                     rotDir,
-                    new Vector2(User.PositionRect.Width / 2, User.PositionRect.Height/ 2),
+                    new Vector2(User.PositionRect.Width / 2, User.PositionRect.Height/ 2 + this.PositionRect.Height),
                     SpriteEffects.None,
                     0.0f);
 
