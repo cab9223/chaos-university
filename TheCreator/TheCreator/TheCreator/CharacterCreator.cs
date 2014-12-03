@@ -311,13 +311,19 @@ namespace TheCreator
                 gearR + "," + gearG + "," + gearB);
 
             writer.Close();
-
             
             this.Hide();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
+            // overwrite previous values in file
+            StreamWriter writer = new StreamWriter(path, false);
+
+            writer.WriteLine("0,0,0,0,0,0,0,0,0");
+
+            writer.Close();
+
             this.Hide();
         }
 
