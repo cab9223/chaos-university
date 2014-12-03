@@ -169,6 +169,11 @@ namespace Chaos_University
                             PositionRect.Height);
                         break;
                 }
+
+                if (AbilityActive && ThisMajor == Major.Ninja)
+                {
+                    this.ThisGear.PositionRect = new Rectangle(this.PositionRect.X, this.PositionRect.Y, this.ThisGear.PositionRect.Width, this.ThisGear.PositionRect.Height);
+                }
             }
         }
 
