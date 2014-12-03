@@ -172,7 +172,10 @@ namespace Chaos_University
 
                 if (AbilityActive && ThisMajor == Major.Ninja)
                 {
-                    this.ThisGear.PositionRect = new Rectangle(this.PositionRect.X, this.PositionRect.Y, this.ThisGear.PositionRect.Width, this.ThisGear.PositionRect.Height);
+                    this.ThisGear.PositionRect = new Rectangle(this.PositionRect.X - this.PositionRect.Width / 2,
+                        this.PositionRect.Y - this.PositionRect.Height / 2,
+                        this.ThisGear.PositionRect.Width,
+                        this.ThisGear.PositionRect.Height);
                 }
             }
         }
