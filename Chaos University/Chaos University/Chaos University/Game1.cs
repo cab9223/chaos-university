@@ -945,7 +945,7 @@ namespace Chaos_University
             //Guard Textures.
             guardTextures = new List<Texture2D>();
             guardTextures.Add(this.Content.Load<Texture2D>("Default_Guard"));
-            guardTextures.Add(this.Content.Load<Texture2D>("Default_Guard_2"));
+            guardTextures.Add(this.Content.Load<Texture2D>("Default_Guard_2_New"));
             guardTextures.Add(this.Content.Load<Texture2D>("!"));
 
             //Tutorial messages
