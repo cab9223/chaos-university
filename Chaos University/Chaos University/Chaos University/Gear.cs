@@ -25,8 +25,8 @@ namespace Chaos_University
         public override void Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch obj, int offX, int offY)
         {
             Rectangle offsetRect = new Rectangle(
-                User.PositionRect.X + offX,
-                User.PositionRect.Y + offY,
+                PositionRect.X + offX,
+                PositionRect.Y + offY,
                 50,
                 90);
             
@@ -35,7 +35,7 @@ namespace Chaos_University
                 if ( rotDir <= 2 * Math.PI)
                 {
                         obj.Draw(listTextures[0],
-                    new Rectangle(offsetRect.X + offsetRect.Width / 2, offsetRect.Y + offsetRect.Height / 2, offsetRect.Width, offsetRect.Height),
+                    new Rectangle(offsetRect.X + offsetRect.Width / 2, offsetRect.Y + offsetRect.Height / 2, 50, 90),
                     null,
                     Color.White,
                     rotDir,

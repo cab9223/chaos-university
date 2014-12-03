@@ -128,12 +128,19 @@ namespace Chaos_University
 
         public bool Attack(Player obj) //Method for attacking player
         {
-            if (obj.PositionRect.Intersects(this.DetectRect) == true)
+            if (isAlive == true)
             {
-                Detected = true;
-                Moving = false;
+                if (obj.PositionRect.Intersects(this.DetectRect) == true)
+                {
+                    Detected = true;
+                    Moving = false;
 
-                return true;
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             else
             {

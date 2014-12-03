@@ -1126,7 +1126,7 @@ namespace Chaos_University
                     {
                         foreach (Enemy guard in activeGuards)
                         {
-                            if (level.Ninja.ThisGear.PositionRect.Intersects(guard.PositionRect))
+                            if (guard.CheckCollision(this.level.Ninja.ThisGear))
                             {
                                 guard.Dead();
                             }
