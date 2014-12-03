@@ -16,6 +16,8 @@ namespace Chaos_University
         //List of textures the object uses.
         public List<Texture2D> listTextures { get; set; } //All GamePiece images
 
+        public float rotDir { get; set; }
+
         //Index of the current texture of the object.
         private int indexTexture;
         public int IndexTexture
@@ -110,6 +112,8 @@ namespace Chaos_University
             InitialX = x;
 
             InitialY = y;
+
+            rotDir = 0.0f;
         }
 
         //Draws any gameobject to screen

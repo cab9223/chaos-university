@@ -78,6 +78,8 @@ namespace Chaos_University
 
             InitialDirection = dir;
 
+            this.PieceState = PieceState.Enemy;
+
             if (dir == 0 || dir == 2)
             {
                 DetectRect = new Rectangle(x + 20, y + 20, (GlobalVar.TILESIZE / 5), (GlobalVar.TILESIZE / 2));

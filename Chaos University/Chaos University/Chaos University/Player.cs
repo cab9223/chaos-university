@@ -28,14 +28,18 @@ namespace Chaos_University
 
         public Gear ThisGear { get; set; }
 
+        public List<Texture2D> GearTextures { get; set; }
+
         //Constructor
-        public Player(int x, int y, int direction, List<Texture2D> textures, Major myMajor)
-            : base(x, y, direction, textures)
+        public Player(int x, int y, int direction, List<Texture2D> characterTextures, Major myMajor)
+            : base(x, y, direction, characterTextures)
         {
             //PlrName = name;  //sets player name
             Moving = false;
             ThisMajor = myMajor;
-            
+
+            GearTextures = new List<Texture2D>();
+
             AbilityActive = false;
 
             //Face initial direction
@@ -193,7 +197,7 @@ namespace Chaos_University
         }
 
         //Activate this character's ability
-        /*public void Ability()
+        public void Ability()
         {
             if (AbilityActive == false)
             {
@@ -201,6 +205,6 @@ namespace Chaos_University
                 AbilityActive = true;
             }
             
-        }*/
+        }
     }
 }
