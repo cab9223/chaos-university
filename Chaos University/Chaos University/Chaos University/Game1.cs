@@ -609,6 +609,12 @@ namespace Chaos_University
                     level.Assault.Moving = true;
             }
 
+            //Use Ninja Ability
+            if ((level.IsNinja && keyboard.IsKeyDown(Keys.D1) && keyboardPrev.IsKeyUp(Keys.D1)) || level.Ninja.AbilityActive)
+            {
+                level.Ninja.Ability();
+            }
+
             //Reset
             if (keyboard.IsKeyDown(Keys.R) && keyboardPrev.IsKeyUp(Keys.R))
             {
@@ -928,7 +934,7 @@ namespace Chaos_University
 
             //Single Money texture.
             moneyTextures = new List<Texture2D>();
-            moneyTextures.Add(this.Content.Load<Texture2D>("Default_Collect"));
+            moneyTextures.Add(this.Content.Load<Texture2D>("Default_Intel"));
 
             //Ability Textures
             abilityTextures = new List<Texture2D>();
@@ -1053,12 +1059,6 @@ namespace Chaos_University
                             GlobalVar.TILESIZE *
                             (float)gameTime.ElapsedGameTime.TotalSeconds / 
                             GlobalVar.SpeedLevel));
-                    }
-
-                    //Use Ninja Ability
-                    if ((level.IsNinja && keyboard.IsKeyDown(Keys.D1) && keyboardPrev.IsKeyUp(Keys.D1)) || level.Ninja.AbilityActive)
-                    {
-                        level.Ninja.Ability();
                     }
 
                     //Rotate Ninja sword if the Ability is active

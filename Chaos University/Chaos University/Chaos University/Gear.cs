@@ -35,13 +35,14 @@ namespace Chaos_University
                 if ( rotDir <= 2 * Math.PI)
                 {
                         obj.Draw(listTextures[0],
-                    new Rectangle(offsetRect.X + offsetRect.Width / 2, offsetRect.Y + offsetRect.Height / 2, 50, 90),
+                    new Rectangle(offsetRect.X + offsetRect.Width / 2, offsetRect.Y + offsetRect.Height / 4, 50, 90),
                     null,
                     Color.White,
                     rotDir,
-                    new Vector2(0, listTextures[0].Height),
+                    new Vector2(User.PositionRect.Width / 2, User.PositionRect.Height/ 2 + this.PositionRect.Height),
                     SpriteEffects.None,
                     0.0f);
+
 
                 }
 
@@ -54,7 +55,7 @@ namespace Chaos_University
 
         public void Rotate(float increment)
         {
-            rotDir += 100 * (float)Math.PI * increment;
+            rotDir += 200 * (float)Math.PI * increment;
         }
     }
 }
