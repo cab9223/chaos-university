@@ -17,39 +17,35 @@ namespace Chaos_University
         public Gear(int x, int y, List<Texture2D> textures, Player owner) : base(x, y, textures)
         {
             User = owner;
-            AnimTime = 0;
-            direction = 0.0f;
+
         }
-
-        public int AnimTime { get; set; }
-
-        private float direction;
 
         public Player User { get; set; }
 
         public override void Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch obj, int offX, int offY)
         {
+            Rectangle offsetRect = new Rectangle(
+                User.PositionRect.X + offX,
+                User.PositionRect.Y + offY,
+                50,
+                90);
+            
             if (User.ThisMajor == Player.Major.Ninja)
-            {
-                if ( direction <= 2 * Math.PI)
+            {                
+                if ( rotDir <= 2 * Math.PI)
                 {
-                    obj.Draw(listTextures[1],
-                            new Rectangle(User.PositionRect.X,
-                                User.PositionRect.Y,
-                                listTextures[1].Width,
-                                listTextures[1].Height),
-                            null,
-                            Color.FromNonPremultiplied(GlobalVar.ColorsSplit[6], GlobalVar.ColorsSplit[7], GlobalVar.ColorsSplit[8], 255),
-                            direction,
-                            new Vector2(User.PositionRect.X, User.PositionRect.Y),
-                            SpriteEffects.None,
-                            0.0f);
-
-                    AnimTime++;
+                        obj.Draw(listTextures[0],
+                    new Rectangle(offsetRect.X + offsetRect.Width / 2, offsetRect.Y + offsetRect.Height / 2, offsetRect.Width, offsetRect.Height),
+                    null,
+                    Color.White,
+                    rotDir,
+                    new Vector2(0, listTextures[0].Height),
+                    SpriteEffects.None,
+                    0.0f);
 
                 }
 
-                if (direction > 2 * Math.PI)
+                if (rotDir > 2 * Math.PI)
                 {
                     User.AbilityActive = false;
                 }
@@ -58,7 +54,7 @@ namespace Chaos_University
 
         public void Rotate(float increment)
         {
-            direction += 4 * (float)Math.PI * increment;
+            rotDir += 100 * (float)Math.PI * increment;
         }
     }
 }

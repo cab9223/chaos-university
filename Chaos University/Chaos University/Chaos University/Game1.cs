@@ -84,7 +84,7 @@ namespace Chaos_University
         List<Texture2D> guardTextures;
         List<Texture2D> moneyTextures;
         List<Texture2D> specialTileTextures;
-        //List<Texture2D> abilityTextures;
+        List<Texture2D> abilityTextures;
 
         //Songs
         List<Song> music;
@@ -272,6 +272,7 @@ namespace Chaos_University
                                     Player.Major.Ninja);
                                 newLevel.StartNinja = newLevel.Ninja.PositionRect;
                                 newLevel.IsNinja = true;
+                                newLevel.Ninja.GearTextures.Add(abilityTextures[0]);
                                 break;
                             //R = Recon
                             case 'R':
@@ -929,6 +930,10 @@ namespace Chaos_University
             moneyTextures = new List<Texture2D>();
             moneyTextures.Add(this.Content.Load<Texture2D>("Default_Collect"));
 
+            //Ability Textures
+            abilityTextures = new List<Texture2D>();
+            abilityTextures.Add(this.Content.Load<Texture2D>("Sword"));
+
             // Order player textures from lowest to highest. (Alex wishes this was a robot.)
             playerTextures = new List<Texture2D>();
             playerTextures.Add(this.Content.Load<Texture2D>("Default_Body"));
@@ -1051,16 +1056,16 @@ namespace Chaos_University
                     }
 
                     //Use Ninja Ability
-                    /*if ((level.IsNinja && keyboard.IsKeyDown(Keys.NumPad1) && keyboardPrev.IsKeyUp(Keys.NumPad1)) || level.Ninja.AbilityActive)
+                    if ((level.IsNinja && keyboard.IsKeyDown(Keys.D1) && keyboardPrev.IsKeyUp(Keys.D1)) || level.Ninja.AbilityActive)
                     {
                         level.Ninja.Ability();
-                    }*/
+                    }
 
                     //Rotate Ninja sword if the Ability is active
-                    /*if (level.Ninja.AbilityActive)
+                    if (level.Ninja.AbilityActive)
                     {
                         level.Ninja.ThisGear.Rotate((float)(gameTime.ElapsedGameTime.TotalSeconds / GlobalVar.SpeedLevel));
-                    }*/
+                    }
                      
 
                     //Move Recon
@@ -1116,6 +1121,18 @@ namespace Chaos_University
                             this.Fail();
                             break;
                     }
+
+                    if (level.IsNinja && level.Ninja.AbilityActive)
+                    {
+                        foreach (Enemy guard in activeGuards)
+                        {
+                            if (level.Ninja.ThisGear.PositionRect.Intersects(guard.PositionRect))
+                            {
+                                guard.Dead();
+                            }
+                        }
+                    }
+
                     break;
 
                 //LEVEL COMPLETE
@@ -1205,6 +1222,10 @@ namespace Chaos_University
                     //DRAW LEVEL
                     level.Draw(spriteBatch, camX, camY);
 
+
+                    //DRAW INDICATOR
+                    indicator.Draw(spriteBatch, camX, camY);
+
                     //DRAW PLAYERS
                     if(level.IsNinja)
                         level.Ninja.Draw(spriteBatch, camX, camY);
@@ -1223,11 +1244,9 @@ namespace Chaos_University
                     }
 
                     //DRAW PLAYER ABILITIES
-                    /*if (level.Ninja.AbilityActive)
-                        level.Ninja.ThisGear.Draw(spriteBatch, camX, camY);*/
+                    if (level.Ninja.AbilityActive)
+                        level.Ninja.ThisGear.Draw(spriteBatch, camX, camY);
 
-                    //DRAW INDICATOR
-                    indicator.Draw(spriteBatch, camX, camY);
 
                     //Draw Tutorial Messages
                     tutorial.Draw(spriteBatch, camX, camY);
