@@ -30,7 +30,10 @@ namespace Chaos_University
         SpecialEast,
         SpecialSouth,
         SpecialWest,
-        Enemy
+        OffNorth,
+        OffEast,
+        OffSouth,
+        OffWest
     }
 
     public enum CollisionState
