@@ -241,7 +241,7 @@ namespace Chaos_University
         }
 
 
-        public void OpenGate()
+        public void OpenGate() //Changes goal to open
         {
             if (this.Monies.Count == (this.Monies.Count - GetMoneyCount()))
             {

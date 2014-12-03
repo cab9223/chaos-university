@@ -18,6 +18,8 @@ namespace Chaos_University
 
         public bool Detected { get; set; }
 
+        public bool Taunted { get; set; }
+
         private bool isAlive; //For guard death
         public bool IsAlive//Read only
         {
@@ -67,6 +69,8 @@ namespace Chaos_University
             Moving = true;
 
             Detected = false;
+
+            Taunted = false;
 
             InitialX = x;
 
@@ -145,6 +149,8 @@ namespace Chaos_University
             Moving = true;
 
             Detected = false;
+
+            Taunted = false;
 
             Direction = InitialDirection;
 
