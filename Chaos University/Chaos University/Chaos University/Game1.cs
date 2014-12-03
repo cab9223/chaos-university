@@ -934,7 +934,7 @@ namespace Chaos_University
 
             //Single Money texture.
             moneyTextures = new List<Texture2D>();
-            moneyTextures.Add(this.Content.Load<Texture2D>("Default_Collect"));
+            moneyTextures.Add(this.Content.Load<Texture2D>("Default_Intel"));
 
             //Ability Textures
             abilityTextures = new List<Texture2D>();
