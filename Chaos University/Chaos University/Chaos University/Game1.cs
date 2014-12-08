@@ -46,7 +46,7 @@ namespace Chaos_University
         bool attacked;              //Guard attacked player
         Indicator indicator;        //Indicator of currently selected tile.
         float timer;                //Short pause
-        bool alerted;               //Alert went off
+        float timer2;               //Long pause
 
         //Variables for preventing stuck
         bool north;
@@ -58,6 +58,8 @@ namespace Chaos_University
 
         //Sound effect stuff
         bool taunt;
+        bool alerted;               //Alert went off
+        bool stun;
 
         //Other things.
         Vector2 menuPos;            //Position of the menu header
@@ -74,6 +76,8 @@ namespace Chaos_University
         PieceState temp;
         PieceState temp2;
         int tauntDir;
+        bool stunned;
+        bool flip;
 
 
         //Textures
@@ -129,9 +133,13 @@ namespace Chaos_University
             guardIndex = 0;
             guardCount = 0;
             attacked = false;
+            flip = false;
             timer = 0;
+            timer2 = 0;
             alerted = false;
             fastActive = false;
+            stunned = false;
+            stun = false;
             tauntDir = 0;
 
             north = false;
@@ -733,18 +741,60 @@ namespace Chaos_University
         }
 
 
+        public void GuardStunned() //After a successful ReconStun
+        {
+
+            if (timer2 < 0.5f) //half second pause
+            {
+                flip = false;
+                level.Recon.Moving = false;
+                guard.Stop();
+            }
+
+            if (timer2 >= 0.5f && flip == false) //After half second pause
+            {
+                switch (level.Recon.Direction)
+                {
+                    case 0:
+                        level.Recon.turn(2);
+                        break;
+                    case 1:
+                        level.Recon.turn(3);
+                        break;
+                    case 2:
+                        level.Recon.turn(0);
+                        break;
+                    case 3:
+                        level.Recon.turn(1);
+                        break;
+                }
+
+                flip = true;
+                level.Recon.Moving = true;
+            }
+
+            if (timer2 >= 4.0f) //4 second pause
+            {
+                guard.Detected = false;
+                guard.StartMove();
+                stunned = false;
+                timer2 = 0;
+            }
+        }
+
+
         public void ReconStun() //Recon special move, Tazer -- initial code
         {
             if (level.IsRecon) //if active Recon
             {
-                //if (taunt == false) //For taunt sound effect
+                //if (stun == false) //For stun sound effect
                 //{
-                //    effects[1].Play();
-                //    taunt = true;
+                //    effects[2].Play();
+                //    stun = true;
                 //}
 
-                //taunt = false;
-                //level.Assault.Ability();
+                //stun = false;
+                //level.Recon.Ability();
 
                 for (int x = 0; x < guardCount; x++)
                 {
@@ -756,6 +806,8 @@ namespace Chaos_University
                                 && (activeGuards[x].PositionRect.Y > level.Recon.PositionRect.Y - (GlobalVar.TILESIZE * 2)))
                             {
                                 activeGuards[x].Detected = true;
+                                guard = activeGuards[x];
+                                stunned = true;
                             }
                             break;
                         case 1:
@@ -764,6 +816,8 @@ namespace Chaos_University
                                 && (activeGuards[x].PositionRect.X < level.Recon.PositionRect.X + (GlobalVar.TILESIZE * 2)))
                             {
                                 activeGuards[x].Detected = true;
+                                guard = activeGuards[x];
+                                stunned = true;
                             }
                             break;
                         case 2:
@@ -772,6 +826,8 @@ namespace Chaos_University
                                 && (activeGuards[x].PositionRect.Y < level.Recon.PositionRect.Y + (GlobalVar.TILESIZE * 2)))
                             {
                                 activeGuards[x].Detected = true;
+                                guard = activeGuards[x];
+                                stunned = true;
                             }
                             break;
                         case 3:
@@ -780,6 +836,8 @@ namespace Chaos_University
                                 && (activeGuards[x].PositionRect.X > level.Recon.PositionRect.X - (GlobalVar.TILESIZE * 2)))
                             {
                                 activeGuards[x].Detected = true;
+                                guard = activeGuards[x];
+                                stunned = true;
                             }
                             break;
                     }
@@ -1227,7 +1285,6 @@ namespace Chaos_University
                     //Move Assault
                     if (level.IsAssault)
                     {
-                        //Console.WriteLine("LOL!");
                         level.Assault.Move((int)(
                             100 * 
                             GlobalVar.TILESIZE *
@@ -1238,6 +1295,12 @@ namespace Chaos_University
                     this.UpdateGuards(gameTime.ElapsedGameTime.TotalSeconds);  //Updates and checks guards
 
                     level.OpenGate(); //Checks to see if all intel is collected
+
+                    if (stunned == true) //Attacked by a guard
+                    {
+                        timer2 += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                        GuardStunned();
+                    }
 
                     if (attacked == true) //Attacked by a guard
                     {
