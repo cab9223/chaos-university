@@ -212,7 +212,12 @@ namespace Chaos_University
                 ThisGear = new Gear(this.PositionRect.X, this.PositionRect.Y, GearTextures, this);
                 AbilityActive = true;
             }
-            
         }
+
+        //Deactivate this character's ability
+        public void EndAbility()
+        {
+            AbilityActive = false;
+        }        
     }
 }

@@ -296,6 +296,7 @@ namespace Chaos_University
                                     Player.Major.Recon);
                                 newLevel.StartRecon = newLevel.Recon.PositionRect;
                                 newLevel.IsRecon = true;
+                                newLevel.Recon.GearTextures.Add(abilityTextures[2]);
                                 break;
                             //T = assaulT
                             case 'T':
@@ -313,7 +314,7 @@ namespace Chaos_University
                                 newLevel.IsAssault = true;
                                 newLevel.Assault.GearTextures.Add(abilityTextures[1]);
                                 break;
-                            //X = Guard Difficulty 0
+                            //X = Guard Difficulty 0  -- Patrol and ignore
                             case 'X':
                                 newLevel.SetTile(columnNumber, lineNumber, new Tile(
                                     columnNumber * GlobalVar.TILESIZE,
@@ -327,7 +328,7 @@ namespace Chaos_University
                                 guards.Add(guard);
                                 guardCount = guardCount + 1;
                                 break;
-                            //Y = Guard Difficulty 1
+                            //Y = Guard Difficulty 1 -- Patrol and intercept
                             case 'Y':
                                 newLevel.SetTile(columnNumber, lineNumber, new Tile(
                                     columnNumber * GlobalVar.TILESIZE,
@@ -342,7 +343,7 @@ namespace Chaos_University
                                 guards.Add(guard);
                                 guardCount = guardCount + 1;
                                 break;
-                            //Z = Guard 
+                            //Z = Guard -- May become final boss
                             case 'Z':
                                 newLevel.SetTile(columnNumber, lineNumber, new Tile(
                                     columnNumber * GlobalVar.TILESIZE,
@@ -743,16 +744,25 @@ namespace Chaos_University
 
         public void GuardStunned() //After a successful ReconStun
         {
-
-            if (timer2 < 0.5f) //half second pause
+            if (stun == false) //For stun sound effect
             {
+                effects[2].Play();
+                stun = true;
+            }
+
+
+            if (timer2 < 1.0f) //1 second pause
+            {
+                level.Recon.Ability();
                 flip = false;
                 level.Recon.Moving = false;
                 guard.Stop();
             }
 
-            if (timer2 >= 0.5f && flip == false) //After half second pause
+            if (timer2 >= 1.0f && flip == false) //After 1 second pause
             {
+                level.Recon.EndAbility();
+
                 switch (level.Recon.Direction)
                 {
                     case 0:
@@ -773,7 +783,7 @@ namespace Chaos_University
                 level.Recon.Moving = true;
             }
 
-            if (timer2 >= 4.0f) //4 second pause
+            if (timer2 >= 5.0f) //5 second pause
             {
                 guard.Detected = false;
                 guard.StartMove();
@@ -787,14 +797,7 @@ namespace Chaos_University
         {
             if (level.IsRecon) //if active Recon
             {
-                //if (stun == false) //For stun sound effect
-                //{
-                //    effects[2].Play();
-                //    stun = true;
-                //}
-
-                //stun = false;
-                //level.Recon.Ability();
+                stun = false;
 
                 for (int x = 0; x < guardCount; x++)
                 {
@@ -1096,6 +1099,7 @@ namespace Chaos_University
             effects = new List<SoundEffect>();
             effects.Add(this.Content.Load<SoundEffect>("AlertWav"));
             effects.Add(this.Content.Load<SoundEffect>("shout"));
+            effects.Add(this.Content.Load<SoundEffect>("spark"));
 
 
             introVideo = this.Content.Load<Video>("Intro_V2");
@@ -1141,6 +1145,7 @@ namespace Chaos_University
             abilityTextures = new List<Texture2D>();
             abilityTextures.Add(this.Content.Load<Texture2D>("Sword"));
             abilityTextures.Add(this.Content.Load<Texture2D>("Taunt"));
+            abilityTextures.Add(this.Content.Load<Texture2D>("Stun_Gun"));
 
             // Order player textures from lowest to highest. (Alex wishes this was a robot.)
             playerTextures = new List<Texture2D>();
@@ -1296,7 +1301,7 @@ namespace Chaos_University
 
                     level.OpenGate(); //Checks to see if all intel is collected
 
-                    if (stunned == true) //Attacked by a guard
+                    if (stunned == true) //Guard hit by stun
                     {
                         timer2 += (float)gameTime.ElapsedGameTime.TotalSeconds;
                         GuardStunned();
@@ -1463,7 +1468,11 @@ namespace Chaos_University
                         if (level.Assault.AbilityActive)
                             level.Assault.ThisGear.Draw(spriteBatch, camX, camY);
                     }
-
+                    if (level.IsRecon)
+                    {
+                        if (level.Recon.AbilityActive)
+                            level.Recon.ThisGear.Draw(spriteBatch, camX, camY);
+                    }
 
                     //Draw Tutorial Messages
                     tutorial.Draw(spriteBatch, camX, camY);
@@ -1577,6 +1586,9 @@ namespace Chaos_University
 
 
         //GUARD STUFF THAT NEEDS TO BE IN THIS CLASS!
+        //
+        //
+        //
 
         public void GuardRemake(int gNum, int dir)
         {

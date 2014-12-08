@@ -69,13 +69,74 @@ namespace Chaos_University
                 User.AbilityActive = false;
 
                 }
+            }
+
+            if (User.ThisMajor == Player.Major.Recon)
+            {
+                switch (User.Direction)
+                {
+                    case 0:
+                        if (User.AbilityActive == true)
+                        {
+                            obj.Draw(listTextures[0],
+                        new Rectangle(offsetRect.X + offsetRect.Width / 2, offsetRect.Y + offsetRect.Height / 3, 25, 75),
+                        null,
+                        Color.White,
+                        ((float)Math.PI / 2),
+                        new Vector2(User.PositionRect.Width / 2, User.PositionRect.Height / 2 + 10),
+                        SpriteEffects.None,
+                        0.0f);
+                        }
+                        break;
+                    case 1:
+                        if (User.AbilityActive == true)
+                        {
+                            obj.Draw(listTextures[0],
+                        new Rectangle(offsetRect.X + offsetRect.Width / 2, offsetRect.Y + offsetRect.Height / 3, 25, 75),
+                        null,
+                        Color.White,
+                        ((float)Math.PI / 2),
+                        new Vector2(User.PositionRect.Width / 2, User.PositionRect.Height / 2 + 60),
+                        SpriteEffects.None,
+                        0.0f);
+                        }
+                        break;
+                    case 2:
+                        if (User.AbilityActive == true)
+                        {
+                            obj.Draw(listTextures[0],
+                        new Rectangle(offsetRect.X + offsetRect.Width / 2, offsetRect.Y + offsetRect.Height / 3, 75, 25),
+                        null,
+                        Color.White,
+                        (2 * (float)Math.PI / 3),
+                        new Vector2(User.PositionRect.Width / 2, User.PositionRect.Height / 2 - 40),
+                        SpriteEffects.None,
+                        0.0f);
+                        }
+                        break;
+                    case 3:
+                        if (User.AbilityActive == true)
+                        {
+                            obj.Draw(listTextures[0],
+                        new Rectangle(offsetRect.X + offsetRect.Width / 2, offsetRect.Y + offsetRect.Height / 3, 75, 40),
+                        null,
+                        Color.White,
+                        ((float)Math.PI / 2),
+                        new Vector2(User.PositionRect.Width / 2, User.PositionRect.Height / 2 + 10),
+                        SpriteEffects.None,
+                        0.0f);
+                        }
+                        break;
+                }
 
             }
+
         }
 
         public void Rotate(float increment)
         {
             rotDir += 200 * (float)Math.PI * increment;
         }
+
     }
 }
