@@ -55,7 +55,6 @@ namespace Chaos_University
 
             if (User.ThisMajor == Player.Major.Assault)
             {
-                Console.WriteLine("LOL");
                 if (User.AbilityActive == true)
                 {
                     obj.Draw(listTextures[0],

@@ -610,12 +610,30 @@ namespace Chaos_University
                     level.Assault.Moving = true;
             }
 
-            //Use Ninja Ability
+            //Use Ninja Ability -- Sword
             if (level.IsNinja)
             {
                 if ((level.IsNinja && keyboard.IsKeyDown(Keys.D1) && keyboardPrev.IsKeyUp(Keys.D1)) || level.Ninja.AbilityActive)
                 {
                     level.Ninja.Ability();
+                }
+            }
+
+            //Use Assault Ability -- Taunt
+            if (level.IsAssault)
+            {
+                if ((level.IsAssault && keyboard.IsKeyDown(Keys.D2) && keyboardPrev.IsKeyUp(Keys.D2)) || level.Assault.AbilityActive)
+                {
+                    AssaultTaunt();
+                }
+            }
+
+            //Use Recon Ability -- Tazer
+            if (level.IsRecon)
+            {
+                if ((level.IsRecon && keyboard.IsKeyDown(Keys.D3) && keyboardPrev.IsKeyUp(Keys.D3)))
+                {
+                    ReconStun();
                 }
             }
 
@@ -653,12 +671,6 @@ namespace Chaos_University
             if (keyboard.IsKeyDown(Keys.Space) && keyboardPrev.IsKeyUp(Keys.Space))
             {
                 FastForward();
-            }
-
-            //Assault Taunt initial code... has strange wall glitch right now
-            if (keyboard.IsKeyDown(Keys.Q) && keyboardPrev.IsKeyUp(Keys.Q))
-            {
-                AssaultTaunt();
             }
 
             //Next Level cheat, for our personal testing purposes only!
@@ -721,7 +733,62 @@ namespace Chaos_University
         }
 
 
-        public void AssaultTaunt() //Assault special move, Taunt -- Testing new concept that seems to be working!
+        public void ReconStun() //Recon special move, Tazer -- initial code
+        {
+            if (level.IsRecon) //if active Recon
+            {
+                //if (taunt == false) //For taunt sound effect
+                //{
+                //    effects[1].Play();
+                //    taunt = true;
+                //}
+
+                //taunt = false;
+                //level.Assault.Ability();
+
+                for (int x = 0; x < guardCount; x++)
+                {
+                    switch (level.Recon.Direction)
+                    {
+                        case 0:
+                            if ((activeGuards[x].PositionRect.X == level.Recon.PositionRect.X)
+                                && ((activeGuards[x].PositionRect.Y < level.Recon.PositionRect.Y))
+                                && (activeGuards[x].PositionRect.Y > level.Recon.PositionRect.Y - (GlobalVar.TILESIZE * 2)))
+                            {
+                                activeGuards[x].Detected = true;
+                            }
+                            break;
+                        case 1:
+                            if ((activeGuards[x].PositionRect.Y == level.Recon.PositionRect.Y)
+                                && ((activeGuards[x].PositionRect.X > level.Recon.PositionRect.X))
+                                && (activeGuards[x].PositionRect.X < level.Recon.PositionRect.X + (GlobalVar.TILESIZE * 2)))
+                            {
+                                activeGuards[x].Detected = true;
+                            }
+                            break;
+                        case 2:
+                            if ((activeGuards[x].PositionRect.X == level.Recon.PositionRect.X)
+                                && ((activeGuards[x].PositionRect.Y > level.Recon.PositionRect.Y))
+                                && (activeGuards[x].PositionRect.Y < level.Recon.PositionRect.Y + (GlobalVar.TILESIZE * 2)))
+                            {
+                                activeGuards[x].Detected = true;
+                            }
+                            break;
+                        case 3:
+                            if ((activeGuards[x].PositionRect.Y == level.Recon.PositionRect.Y)
+                                && ((activeGuards[x].PositionRect.X < level.Recon.PositionRect.X))
+                                && (activeGuards[x].PositionRect.X > level.Recon.PositionRect.X - (GlobalVar.TILESIZE * 2)))
+                            {
+                                activeGuards[x].Detected = true;
+                            }
+                            break;
+                    }
+                }
+            }
+        }
+
+
+        public void AssaultTaunt() //Assault special move, Taunt -- Working
         {
             if (level.IsAssault) //if active Assault
             {
