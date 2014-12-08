@@ -303,6 +303,7 @@ namespace Chaos_University
                                     Player.Major.Assault);
                                 newLevel.StartAssault = newLevel.Assault.PositionRect;
                                 newLevel.IsAssault = true;
+                                newLevel.Assault.GearTextures.Add(abilityTextures[1]);
                                 break;
                             //X = Guard Difficulty 0
                             case 'X':
@@ -610,9 +611,12 @@ namespace Chaos_University
             }
 
             //Use Ninja Ability
-            if ((level.IsNinja && keyboard.IsKeyDown(Keys.D1) && keyboardPrev.IsKeyUp(Keys.D1)) || level.Ninja.AbilityActive)
+            if (level.IsNinja)
             {
-                level.Ninja.Ability();
+                if ((level.IsNinja && keyboard.IsKeyDown(Keys.D1) && keyboardPrev.IsKeyUp(Keys.D1)) || level.Ninja.AbilityActive)
+                {
+                    level.Ninja.Ability();
+                }
             }
 
             //Reset
@@ -728,6 +732,7 @@ namespace Chaos_University
                 }
 
                 taunt = false;
+                level.Assault.Ability();
 
                 for (int x = 0; x < guardCount; x++)
                 {
@@ -743,6 +748,7 @@ namespace Chaos_University
                                 currY = (activeGuards[x].PositionRect.Y - camY) / GlobalVar.TILESIZE;
 
                                 activeGuards[x].Taunted = true;
+                                activeGuards[x].Detected = true;
 
                                 switch (activeGuards[x].Direction)
                                 {
@@ -751,24 +757,34 @@ namespace Chaos_University
                                         temp = level.GetGamePiece(currX + 3, currY).PieceState;
                                         temp2 = level.GetGamePiece(currX + 3, currY + 1).PieceState;
                                         level.GetGamePiece(currX + 3, currY).PieceState = PieceState.East;
-                                        level.GetGamePiece(currX + 3, currY + 1).PieceState = PieceState.OffEast;
+                                        if (level.GetGamePiece(currX + 3, currY + 1).PieceState != PieceState.Wall)
+                                        {
+                                            level.GetGamePiece(currX + 3, currY + 1).PieceState = PieceState.OffEast;
+                                        }
                                         break;
                                     case 1:
                                         tauntDir = activeGuards[x].Direction;
                                         temp = level.GetGamePiece(currX + 3, currY).PieceState;
                                         temp2 = level.GetGamePiece(currX + 2, currY).PieceState;
                                         level.GetGamePiece(currX + 3, currY).PieceState = PieceState.East;
-                                        level.GetGamePiece(currX + 2, currY).PieceState = PieceState.OffEast;
+                                        if (level.GetGamePiece(currX + 2, currY).PieceState != PieceState.Wall)
+                                        {
+                                            level.GetGamePiece(currX + 2, currY).PieceState = PieceState.OffEast;
+                                        }
                                         break;
                                     case 2:
                                         tauntDir = activeGuards[x].Direction;
                                         temp = level.GetGamePiece(currX + 3, currY).PieceState;
                                         temp2 = level.GetGamePiece(currX + 3, currY - 1).PieceState;
                                         level.GetGamePiece(currX + 3, currY).PieceState = PieceState.East;
-                                        level.GetGamePiece(currX + 3, currY - 1).PieceState = PieceState.OffEast;
+                                        if (level.GetGamePiece(currX + 3, currY - 1).PieceState != PieceState.Wall)
+                                        {
+                                            level.GetGamePiece(currX + 3, currY - 1).PieceState = PieceState.OffEast;
+                                        }
                                         break;
                                     case 3:
                                         activeGuards[x].Taunted = false;
+                                        activeGuards[x].Detected = false;
                                         break;
                                 }
  
@@ -781,23 +797,43 @@ namespace Chaos_University
                                 currY = (activeGuards[x].PositionRect.Y - camY) / GlobalVar.TILESIZE;
 
                                 activeGuards[x].Taunted = true;
+                                activeGuards[x].Detected = true;
 
                                 switch (activeGuards[x].Direction)
                                 {
                                     case 0:
+                                        tauntDir = activeGuards[x].Direction;
+                                        temp = level.GetGamePiece(currX + 3, currY).PieceState;
+                                        temp2 = level.GetGamePiece(currX + 3, currY + 1).PieceState;
                                         level.GetGamePiece(currX + 3, currY).PieceState = PieceState.West;
-                                        level.GetGamePiece(currX + 3, currY + 1).PieceState = PieceState.West;
+                                        if (level.GetGamePiece(currX + 3, currY + 1).PieceState != PieceState.Wall)
+                                        {
+                                            level.GetGamePiece(currX + 3, currY + 1).PieceState = PieceState.OffWest;
+                                        }
                                         break;
                                     case 1:
                                         activeGuards[x].Taunted = false;
+                                        activeGuards[x].Detected = false;
                                         break;
                                     case 2:
+                                        tauntDir = activeGuards[x].Direction;
+                                        temp = level.GetGamePiece(currX + 3, currY).PieceState;
+                                        temp2 = level.GetGamePiece(currX + 3, currY - 1).PieceState;
                                         level.GetGamePiece(currX + 3, currY).PieceState = PieceState.West;
-                                        level.GetGamePiece(currX + 3, currY - 1).PieceState = PieceState.West;
+                                        if (level.GetGamePiece(currX + 3, currY - 1).PieceState != PieceState.Wall)
+                                        {
+                                            level.GetGamePiece(currX + 3, currY - 1).PieceState = PieceState.OffWest;
+                                        }
                                         break;
                                     case 3:
+                                        tauntDir = activeGuards[x].Direction;
+                                        temp = level.GetGamePiece(currX + 3, currY).PieceState;
+                                        temp2 = level.GetGamePiece(currX + 4, currY).PieceState;
                                         level.GetGamePiece(currX + 3, currY).PieceState = PieceState.West;
-                                        level.GetGamePiece(currX + 4, currY).PieceState = PieceState.West;
+                                        if (level.GetGamePiece(currX + 4, currY).PieceState != PieceState.Wall)
+                                        {
+                                            level.GetGamePiece(currX + 4, currY).PieceState = PieceState.OffWest;
+                                        }
                                         break;
                                 }
 
@@ -810,23 +846,43 @@ namespace Chaos_University
                                 currY = (activeGuards[x].PositionRect.Y - camY) / GlobalVar.TILESIZE;
 
                                 activeGuards[x].Taunted = true;
+                                activeGuards[x].Detected = true;
 
                                 switch (activeGuards[x].Direction)
                                 {
                                     case 0:
+                                        tauntDir = activeGuards[x].Direction;
+                                        temp = level.GetGamePiece(currX + 3, currY).PieceState;
+                                        temp2 = level.GetGamePiece(currX + 3, currY + 1).PieceState;
                                         level.GetGamePiece(currX + 3, currY).PieceState = PieceState.North;
-                                        level.GetGamePiece(currX + 3, currY + 1).PieceState = PieceState.North;
+                                        if (level.GetGamePiece(currX + 3, currY + 1).PieceState != PieceState.Wall)
+                                        {
+                                            level.GetGamePiece(currX + 3, currY + 1).PieceState = PieceState.OffNorth;
+                                        }
                                         break;
                                     case 1:
+                                        tauntDir = activeGuards[x].Direction;
+                                        temp = level.GetGamePiece(currX + 3, currY).PieceState;
+                                        temp2 = level.GetGamePiece(currX + 2, currY).PieceState;
                                         level.GetGamePiece(currX + 3, currY).PieceState = PieceState.North;
-                                        level.GetGamePiece(currX + 2, currY).PieceState = PieceState.North;
+                                        if (level.GetGamePiece(currX + 2, currY).PieceState != PieceState.Wall)
+                                        {
+                                            level.GetGamePiece(currX + 2, currY).PieceState = PieceState.OffNorth;
+                                        }
                                         break;
                                     case 2:
                                         activeGuards[x].Taunted = false;
+                                        activeGuards[x].Detected = false;
                                         break;
                                     case 3:
+                                        tauntDir = activeGuards[x].Direction;
+                                        temp = level.GetGamePiece(currX + 3, currY).PieceState;
+                                        temp2 = level.GetGamePiece(currX + 4, currY).PieceState;
                                         level.GetGamePiece(currX + 3, currY).PieceState = PieceState.North;
-                                        level.GetGamePiece(currX + 4, currY).PieceState = PieceState.North;
+                                        if (level.GetGamePiece(currX + 4, currY).PieceState != PieceState.Wall)
+                                        {
+                                            level.GetGamePiece(currX + 4, currY).PieceState = PieceState.OffNorth;
+                                        }
                                         break;
                                 }
 
@@ -840,23 +896,43 @@ namespace Chaos_University
                                 currY = (activeGuards[x].PositionRect.Y - camY) / GlobalVar.TILESIZE;
 
                                 activeGuards[x].Taunted = true;
+                                activeGuards[x].Detected = true;
 
                                 switch (activeGuards[x].Direction)
                                 {
                                     case 0:
-                                        level.GetGamePiece(currX + 3, currY).PieceState = PieceState.South;
-                                        level.GetGamePiece(currX + 3, currY - 1).PieceState = PieceState.South;
+                                        activeGuards[x].Taunted = false;
+                                        activeGuards[x].Detected = false;
                                         break;
                                     case 1:
+                                        tauntDir = activeGuards[x].Direction;
+                                        temp = level.GetGamePiece(currX + 3, currY).PieceState;
+                                        temp2 = level.GetGamePiece(currX + 2, currY).PieceState;
                                         level.GetGamePiece(currX + 3, currY).PieceState = PieceState.South;
-                                        level.GetGamePiece(currX + 2, currY).PieceState = PieceState.South;
+                                        if (level.GetGamePiece(currX + 2, currY).PieceState != PieceState.Wall)
+                                        {
+                                            level.GetGamePiece(currX + 2, currY).PieceState = PieceState.OffSouth;
+                                        }
                                         break;
                                     case 2:
-                                        activeGuards[x].Taunted = false;
+                                        tauntDir = activeGuards[x].Direction;
+                                        temp = level.GetGamePiece(currX + 3, currY).PieceState;
+                                        temp2 = level.GetGamePiece(currX + 3, currY - 1).PieceState;
+                                        level.GetGamePiece(currX + 3, currY).PieceState = PieceState.South;
+                                        if (level.GetGamePiece(currX + 3, currY - 1).PieceState != PieceState.Wall)
+                                        {
+                                            level.GetGamePiece(currX + 3, currY - 1).PieceState = PieceState.OffSouth;
+                                        }
                                         break;
                                     case 3:
+                                        tauntDir = activeGuards[x].Direction;
+                                        temp = level.GetGamePiece(currX + 3, currY).PieceState;
+                                        temp2 = level.GetGamePiece(currX + 4, currY).PieceState;
                                         level.GetGamePiece(currX + 3, currY).PieceState = PieceState.South;
-                                        level.GetGamePiece(currX + 4, currY).PieceState = PieceState.South;
+                                        if (level.GetGamePiece(currX + 4, currY).PieceState != PieceState.Wall)
+                                        {
+                                            level.GetGamePiece(currX + 4, currY).PieceState = PieceState.OffSouth;
+                                        }
                                         break;
                                 }
 
@@ -939,6 +1015,7 @@ namespace Chaos_University
             //Ability Textures
             abilityTextures = new List<Texture2D>();
             abilityTextures.Add(this.Content.Load<Texture2D>("Sword"));
+            abilityTextures.Add(this.Content.Load<Texture2D>("Taunt"));
 
             // Order player textures from lowest to highest. (Alex wishes this was a robot.)
             playerTextures = new List<Texture2D>();
@@ -1062,11 +1139,13 @@ namespace Chaos_University
                     }
 
                     //Rotate Ninja sword if the Ability is active
-                    if (level.Ninja.AbilityActive)
+                    if (level.IsNinja)
                     {
-                        level.Ninja.ThisGear.Rotate((float)(gameTime.ElapsedGameTime.TotalSeconds / GlobalVar.SpeedLevel));
+                        if (level.Ninja.AbilityActive)
+                        {
+                            level.Ninja.ThisGear.Rotate((float)(gameTime.ElapsedGameTime.TotalSeconds / GlobalVar.SpeedLevel));
+                        }
                     }
-                     
 
                     //Move Recon
                     if (level.IsRecon)
@@ -1244,8 +1323,16 @@ namespace Chaos_University
                     }
 
                     //DRAW PLAYER ABILITIES
-                    if (level.Ninja.AbilityActive)
-                        level.Ninja.ThisGear.Draw(spriteBatch, camX, camY);
+                    if (level.IsNinja)
+                    {
+                        if (level.Ninja.AbilityActive)
+                            level.Ninja.ThisGear.Draw(spriteBatch, camX, camY);
+                    }
+                    if (level.IsAssault)
+                    {
+                        if (level.Assault.AbilityActive)
+                            level.Assault.ThisGear.Draw(spriteBatch, camX, camY);
+                    }
 
 
                     //Draw Tutorial Messages
@@ -1503,8 +1590,20 @@ namespace Chaos_University
                                                 south = false;
                                                 if (activeGuards[x].Taunted == true)
                                                 {
-                                                    level.GetGamePiece(i, j).PieceState = PieceState.Floor;
+                                                    level.GetGamePiece(i, j).PieceState = temp;
                                                     activeGuards[x].Taunted = false;
+                                                    switch (tauntDir)
+                                                    {
+                                                        case 0:
+                                                            level.GetGamePiece(i, j + 1).PieceState = temp2;
+                                                            break;
+                                                        case 1:
+                                                            level.GetGamePiece(i - 1, j).PieceState = temp2;
+                                                            break;
+                                                        case 3:
+                                                            level.GetGamePiece(i + 1, j).PieceState = temp2;
+                                                            break;
+                                                    }
                                                 }
                                             }
                                             break;
@@ -1565,8 +1664,20 @@ namespace Chaos_University
                                                 south = true;
                                                 if (activeGuards[x].Taunted == true)
                                                 {
-                                                    level.GetGamePiece(i, j).PieceState = PieceState.Floor;
+                                                    level.GetGamePiece(i, j).PieceState = temp;
                                                     activeGuards[x].Taunted = false;
+                                                    switch (tauntDir)
+                                                    {
+                                                        case 1:
+                                                            level.GetGamePiece(i - 1, j).PieceState = temp2;
+                                                            break;
+                                                        case 2:
+                                                            level.GetGamePiece(i, j - 1).PieceState = temp2;
+                                                            break;
+                                                        case 3:
+                                                            level.GetGamePiece(i + 1, j).PieceState = temp2;
+                                                            break;
+                                                    }
                                                 }
                                             }
                                             break;
@@ -1590,26 +1701,92 @@ namespace Chaos_University
                                                 south = false;
                                                 if (activeGuards[x].Taunted == true)
                                                 {
-                                                    level.GetGamePiece(i, j).PieceState = PieceState.Floor;
+                                                    level.GetGamePiece(i, j).PieceState = temp;
                                                     activeGuards[x].Taunted = false;
+                                                    switch (tauntDir)
+                                                    {
+                                                        case 0:
+                                                            level.GetGamePiece(i, j + 1).PieceState = temp2;
+                                                            break;
+                                                        case 2:
+                                                            level.GetGamePiece(i, j - 1).PieceState = temp2;
+                                                            break;
+                                                        case 3:
+                                                            level.GetGamePiece(i + 1, j).PieceState = temp2;
+                                                            break;
+                                                    }
                                                 }
                                             }
                                             break;
                                         case PieceState.OffEast:
                                             GuardRemake(x, 1);
                                             activeGuards[x].Patrol(1);
-                                            level.GetGamePiece(i, j).PieceState = temp;
+                                            level.GetGamePiece(i, j).PieceState = temp2;
                                             activeGuards[x].Taunted = false;
                                             switch (tauntDir)
                                             {
                                                 case 0:
-                                                    level.GetGamePiece(i, j - 1).PieceState = temp2;
+                                                    level.GetGamePiece(i, j - 1).PieceState = temp;
                                                     break;
                                                 case 1:
-                                                    level.GetGamePiece(i + 1, j).PieceState = temp2;
+                                                    level.GetGamePiece(i + 1, j).PieceState = temp;
                                                     break;
                                                 case 2:
-                                                    level.GetGamePiece(i, j + 1).PieceState = temp2;
+                                                    level.GetGamePiece(i, j + 1).PieceState = temp;
+                                                    break;
+                                            }
+                                            break;
+                                        case PieceState.OffNorth:
+                                            GuardRemake(x, 0);
+                                            activeGuards[x].Patrol(1);
+                                            level.GetGamePiece(i, j).PieceState = temp2;
+                                            activeGuards[x].Taunted = false;
+                                            switch (tauntDir)
+                                            {
+                                                case 0:
+                                                    level.GetGamePiece(i, j - 1).PieceState = temp;
+                                                    break;
+                                                case 1:
+                                                    level.GetGamePiece(i + 1, j).PieceState = temp;
+                                                    break;
+                                                case 3:
+                                                    level.GetGamePiece(i - 1, j).PieceState = temp;
+                                                    break;
+                                            }
+                                            break;
+                                        case PieceState.OffWest:
+                                            GuardRemake(x, 3);
+                                            activeGuards[x].Patrol(1);
+                                            level.GetGamePiece(i, j).PieceState = temp2;
+                                            activeGuards[x].Taunted = false;
+                                            switch (tauntDir)
+                                            {
+                                                case 0:
+                                                    level.GetGamePiece(i, j - 1).PieceState = temp;
+                                                    break;
+                                                case 2:
+                                                    level.GetGamePiece(i, j + 1).PieceState = temp;
+                                                    break;
+                                                case 3:
+                                                    level.GetGamePiece(i - 1, j).PieceState = temp;
+                                                    break;
+                                            }
+                                            break;
+                                        case PieceState.OffSouth:
+                                            GuardRemake(x, 2);
+                                            activeGuards[x].Patrol(1);
+                                            level.GetGamePiece(i, j).PieceState = temp2;
+                                            activeGuards[x].Taunted = false;
+                                            switch (tauntDir)
+                                            {
+                                                case 1:
+                                                    level.GetGamePiece(i + 1, j).PieceState = temp;
+                                                    break;
+                                                case 2:
+                                                    level.GetGamePiece(i, j + 1).PieceState = temp;
+                                                    break;
+                                                case 3:
+                                                    level.GetGamePiece(i - 1, j).PieceState = temp;
                                                     break;
                                             }
                                             break;

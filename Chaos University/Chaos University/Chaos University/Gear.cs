@@ -50,6 +50,27 @@ namespace Chaos_University
                 {
                     User.AbilityActive = false;
                 }
+
+            }
+
+            if (User.ThisMajor == Player.Major.Assault)
+            {
+                Console.WriteLine("LOL");
+                if (User.AbilityActive == true)
+                {
+                    obj.Draw(listTextures[0],
+                new Rectangle(offsetRect.X + offsetRect.Width / 2, offsetRect.Y + offsetRect.Height / 3, 50, 50),
+                null,
+                Color.White,
+                rotDir,
+                new Vector2(User.PositionRect.Width / 2, User.PositionRect.Height / 2 + 10),
+                SpriteEffects.None,
+                0.0f);
+
+                User.AbilityActive = false;
+
+                }
+
             }
         }
 

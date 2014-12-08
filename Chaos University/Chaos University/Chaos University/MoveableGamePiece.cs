@@ -14,7 +14,8 @@ namespace Chaos_University
     abstract class MoveableGamePiece : GamePiece
     {
         // standard 4-direction setup.
-        // 0 = Up, 1 = Right, 2 = Down, 3 = Left
+        // 0 = Up, 1 = Right, 2 = Down, 3 = Left 
+        //This is reversed for enemies
         private int direction;
         public int Direction
         {
@@ -25,14 +26,14 @@ namespace Chaos_University
 
             set
             {
-                if ((value > -1) && (value < 4)) //Test to make sure its direction is from only 0 to 3
-                {
+                //if ((value > -1) && (value < 4)) //Test to make sure its direction is from only 0 to 3
+                //{
                     direction = value;
-                }
-                else
-                {
-                    direction = 0;
-                }
+                //}
+                //else
+                //{
+                //    direction = 0;
+                //}
             }
         }
 
