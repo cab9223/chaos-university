@@ -14,9 +14,19 @@ namespace Chaos_University
 {
     class Gear : GamePiece
     {
-        public Gear(int x, int y, List<Texture2D> textures, Player owner) : base(x, y, textures)
+        float rotDir;
+
+        public Gear(int x, int y, List<Texture2D> textures, Player owner)
         {
+            rotDir = 0;
+
             User = owner;
+
+            listTextures = textures;
+
+            IndexTexture = 0;
+
+            PositionRect = new Rectangle(x, y, listTextures[0].Width, listTextures[0].Height);
 
         }
 
@@ -27,19 +37,19 @@ namespace Chaos_University
             Rectangle offsetRect = new Rectangle(
                 PositionRect.X + offX,
                 PositionRect.Y + offY,
-                50,
-                75);
+                PositionRect.Width,
+                PositionRect.Height);
             
             if (User.ThisMajor == Player.Major.Ninja)
             {                
                 if ( rotDir <= 2 * Math.PI)
                 {
                         obj.Draw(listTextures[0],
-                    new Rectangle(offsetRect.X + offsetRect.Width / 2, offsetRect.Y + offsetRect.Height / 3, 50, 75),
+                    new Rectangle(offsetRect.X + offsetRect.Width / 2, offsetRect.Y + offsetRect.Height / 2, PositionRect.Width, PositionRect.Height),
                     null,
                     Color.White,
                     rotDir,
-                    new Vector2(User.PositionRect.Width / 2, User.PositionRect.Height/ 2 + this.PositionRect.Height),
+                    new Vector2(User.PositionRect.Width / 2, User.PositionRect.Height/ 2 + this.PositionRect.Height ),
                     SpriteEffects.None,
                     0.0f);
 

@@ -1340,9 +1340,9 @@ namespace Chaos_University
                     {
                         foreach (Enemy guard in activeGuards)
                         {
-                            if (guard.CheckCollision(this.level.Ninja.ThisGear))
+                            if ((guard.PositionRect.X / GlobalVar.TILESIZE == level.Ninja.ThisGear.PositionRect.Right / GlobalVar.TILESIZE) && (guard.PositionRect.Y / GlobalVar.TILESIZE == level.Ninja.ThisGear.PositionRect.Top / GlobalVar.TILESIZE) )
                             {
-                                guard.Dead();
+                                guard.Stop();
                             }
                         }
                     }
