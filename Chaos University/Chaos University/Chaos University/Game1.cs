@@ -1099,7 +1099,7 @@ namespace Chaos_University
             effects = new List<SoundEffect>();
             effects.Add(this.Content.Load<SoundEffect>("AlertWav"));
             effects.Add(this.Content.Load<SoundEffect>("shout"));
-            effects.Add(this.Content.Load<SoundEffect>("spark"));
+            //effects.Add(this.Content.Load<SoundEffect>("spark"));
 
 
             introVideo = this.Content.Load<Video>("Intro_V2");
