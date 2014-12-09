@@ -1340,9 +1340,9 @@ namespace Chaos_University
                     {
                         foreach (Enemy guard in activeGuards)
                         {
-                            if ((guard.PositionRect.X / GlobalVar.TILESIZE == level.Ninja.ThisGear.PositionRect.Right / GlobalVar.TILESIZE) && (guard.PositionRect.Y / GlobalVar.TILESIZE == level.Ninja.ThisGear.PositionRect.Top / GlobalVar.TILESIZE) )
+                            if (level.Ninja.ThisGear.CheckCollision(guard))
                             {
-                                guard.Stop();
+                                guard.Dead();
                             }
                         }
                     }
@@ -1439,16 +1439,8 @@ namespace Chaos_University
 
                     //DRAW INDICATOR
                     indicator.Draw(spriteBatch, camX, camY);
-
-                    //DRAW PLAYERS
-                    if(level.IsNinja)
-                        level.Ninja.Draw(spriteBatch, camX, camY);
-                    if (level.IsRecon)
-                        level.Recon.Draw(spriteBatch, camX, camY);
-                    if(level.IsAssault)
-                        level.Assault.Draw(spriteBatch, camX, camY);
-
-                    //DRAW GUARDS
+                    
+                //DRAW GUARDS
                     if (isGuard == true) //Guard in level?
                     {
                         for (int i = 0; i < guardCount; i++)  //Draw all guards
@@ -1473,6 +1465,14 @@ namespace Chaos_University
                         if (level.Recon.AbilityActive)
                             level.Recon.ThisGear.Draw(spriteBatch, camX, camY);
                     }
+
+                    //DRAW PLAYERS
+                    if(level.IsNinja)
+                        level.Ninja.Draw(spriteBatch, camX, camY);
+                    if (level.IsRecon)
+                        level.Recon.Draw(spriteBatch, camX, camY);
+                    if(level.IsAssault)
+                        level.Assault.Draw(spriteBatch, camX, camY);
 
                     //Draw Tutorial Messages
                     tutorial.Draw(spriteBatch, camX, camY);

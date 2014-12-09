@@ -26,7 +26,7 @@ namespace Chaos_University
 
             IndexTexture = 0;
 
-            PositionRect = new Rectangle(x, y, listTextures[0].Width, listTextures[0].Height);
+            PositionRect = new Rectangle(x - (GlobalVar.TILESIZE * 3) / 2, y - (GlobalVar.TILESIZE * 3) / 2, GlobalVar.TILESIZE * 3, GlobalVar.TILESIZE * 3);
 
         }
 
@@ -45,11 +45,11 @@ namespace Chaos_University
                 if ( rotDir <= 2 * Math.PI)
                 {
                         obj.Draw(listTextures[0],
-                    new Rectangle(offsetRect.X + offsetRect.Width / 2, offsetRect.Y + offsetRect.Height / 2, PositionRect.Width, PositionRect.Height),
+                    new Rectangle(offsetRect.X + offsetRect.Width / 6 + PositionRect.Width / 2, offsetRect.Y + GlobalVar.TILESIZE / 2 + PositionRect.Width / 2, listTextures[0].Width, listTextures[0].Height),
                     null,
                     Color.White,
                     rotDir,
-                    new Vector2(User.PositionRect.Width / 2, User.PositionRect.Height/ 2 + this.PositionRect.Height ),
+                    new Vector2(GlobalVar.TILESIZE / 2, listTextures[0].Height),
                     SpriteEffects.None,
                     0.0f);
 
@@ -145,7 +145,7 @@ namespace Chaos_University
 
         public void Rotate(float increment)
         {
-            rotDir += 200 * (float)Math.PI * increment;
+            rotDir += 300 * (float)Math.PI * increment;
         }
 
     }
