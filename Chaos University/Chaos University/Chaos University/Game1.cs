@@ -1329,7 +1329,7 @@ namespace Chaos_University
                             break;
                         case CollisionState.Fail:
                             for (int i = 0; i < guardCount; i++)
-                            {
+                            {                                
                                 activeGuards[i].Reset();
                             }
                             this.Fail();
