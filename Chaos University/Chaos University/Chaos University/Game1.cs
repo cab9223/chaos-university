@@ -1586,10 +1586,6 @@ namespace Chaos_University
 
 
         //GUARD STUFF THAT NEEDS TO BE IN THIS CLASS!
-        //
-        //
-        //
-
         public void GuardRemake(int gNum, int dir)
         {
             activeGuards[gNum] = new Enemy(
