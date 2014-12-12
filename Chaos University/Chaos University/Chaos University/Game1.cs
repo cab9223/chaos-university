@@ -1330,7 +1330,7 @@ namespace Chaos_University
                             break;
                         case CollisionState.Fail:
                             for (int i = 0; i < guardCount; i++)
-                            {
+                            {                                
                                 activeGuards[i].Reset();
                             }
                             this.Fail();
@@ -1341,7 +1341,7 @@ namespace Chaos_University
                     {
                         foreach (Enemy guard in activeGuards)
                         {
-                            if (guard.CheckCollision(this.level.Ninja.ThisGear))
+                            if (level.Ninja.ThisGear.CheckCollision(guard))
                             {
                                 guard.Dead();
                             }
@@ -1440,16 +1440,8 @@ namespace Chaos_University
 
                     //DRAW INDICATOR
                     indicator.Draw(spriteBatch, camX, camY);
-
-                    //DRAW PLAYERS
-                    if(level.IsNinja)
-                        level.Ninja.Draw(spriteBatch, camX, camY);
-                    if (level.IsRecon)
-                        level.Recon.Draw(spriteBatch, camX, camY);
-                    if(level.IsAssault)
-                        level.Assault.Draw(spriteBatch, camX, camY);
-
-                    //DRAW GUARDS
+                    
+                //DRAW GUARDS
                     if (isGuard == true) //Guard in level?
                     {
                         for (int i = 0; i < guardCount; i++)  //Draw all guards
@@ -1474,6 +1466,14 @@ namespace Chaos_University
                         if (level.Recon.AbilityActive)
                             level.Recon.ThisGear.Draw(spriteBatch, camX, camY);
                     }
+
+                    //DRAW PLAYERS
+                    if(level.IsNinja)
+                        level.Ninja.Draw(spriteBatch, camX, camY);
+                    if (level.IsRecon)
+                        level.Recon.Draw(spriteBatch, camX, camY);
+                    if(level.IsAssault)
+                        level.Assault.Draw(spriteBatch, camX, camY);
 
                     //Draw Tutorial Messages
                     tutorial.Draw(spriteBatch, camX, camY);
@@ -1587,10 +1587,6 @@ namespace Chaos_University
 
 
         //GUARD STUFF THAT NEEDS TO BE IN THIS CLASS!
-        //
-        //
-        //
-
         public void GuardRemake(int gNum, int dir)
         {
             activeGuards[gNum] = new Enemy(
