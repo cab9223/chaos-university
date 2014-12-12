@@ -808,7 +808,7 @@ namespace Chaos_University
                                 && ((activeGuards[x].PositionRect.Y < level.Recon.PositionRect.Y))
                                 && (activeGuards[x].PositionRect.Y > level.Recon.PositionRect.Y - (GlobalVar.TILESIZE * 2)))
                             {
-                                activeGuards[x].Detected = true;
+                                activeGuards[x].Confused = true;
                                 guard = activeGuards[x];
                                 stunned = true;
                             }
@@ -818,7 +818,7 @@ namespace Chaos_University
                                 && ((activeGuards[x].PositionRect.X > level.Recon.PositionRect.X))
                                 && (activeGuards[x].PositionRect.X < level.Recon.PositionRect.X + (GlobalVar.TILESIZE * 2)))
                             {
-                                activeGuards[x].Detected = true;
+                                activeGuards[x].Confused = true;
                                 guard = activeGuards[x];
                                 stunned = true;
                             }
@@ -828,7 +828,7 @@ namespace Chaos_University
                                 && ((activeGuards[x].PositionRect.Y > level.Recon.PositionRect.Y))
                                 && (activeGuards[x].PositionRect.Y < level.Recon.PositionRect.Y + (GlobalVar.TILESIZE * 2)))
                             {
-                                activeGuards[x].Detected = true;
+                                activeGuards[x].Confused = true;
                                 guard = activeGuards[x];
                                 stunned = true;
                             }
@@ -838,7 +838,7 @@ namespace Chaos_University
                                 && ((activeGuards[x].PositionRect.X < level.Recon.PositionRect.X))
                                 && (activeGuards[x].PositionRect.X > level.Recon.PositionRect.X - (GlobalVar.TILESIZE * 2)))
                             {
-                                activeGuards[x].Detected = true;
+                                activeGuards[x].Confused = true;
                                 guard = activeGuards[x];
                                 stunned = true;
                             }
@@ -876,7 +876,7 @@ namespace Chaos_University
                                 currY = (activeGuards[x].PositionRect.Y - camY) / GlobalVar.TILESIZE;
 
                                 activeGuards[x].Taunted = true;
-                                activeGuards[x].Detected = true;
+                                activeGuards[x].Confused = true;
 
                                 switch (activeGuards[x].Direction)
                                 {
@@ -912,7 +912,7 @@ namespace Chaos_University
                                         break;
                                     case 3:
                                         activeGuards[x].Taunted = false;
-                                        activeGuards[x].Detected = false;
+                                        activeGuards[x].Confused = false;
                                         break;
                                 }
  
@@ -925,7 +925,7 @@ namespace Chaos_University
                                 currY = (activeGuards[x].PositionRect.Y - camY) / GlobalVar.TILESIZE;
 
                                 activeGuards[x].Taunted = true;
-                                activeGuards[x].Detected = true;
+                                activeGuards[x].Confused = true;
 
                                 switch (activeGuards[x].Direction)
                                 {
@@ -941,7 +941,7 @@ namespace Chaos_University
                                         break;
                                     case 1:
                                         activeGuards[x].Taunted = false;
-                                        activeGuards[x].Detected = false;
+                                        activeGuards[x].Confused = false;
                                         break;
                                     case 2:
                                         tauntDir = activeGuards[x].Direction;
@@ -974,7 +974,7 @@ namespace Chaos_University
                                 currY = (activeGuards[x].PositionRect.Y - camY) / GlobalVar.TILESIZE;
 
                                 activeGuards[x].Taunted = true;
-                                activeGuards[x].Detected = true;
+                                activeGuards[x].Confused = true;
 
                                 switch (activeGuards[x].Direction)
                                 {
@@ -1000,7 +1000,7 @@ namespace Chaos_University
                                         break;
                                     case 2:
                                         activeGuards[x].Taunted = false;
-                                        activeGuards[x].Detected = false;
+                                        activeGuards[x].Confused = false;
                                         break;
                                     case 3:
                                         tauntDir = activeGuards[x].Direction;
@@ -1024,13 +1024,13 @@ namespace Chaos_University
                                 currY = (activeGuards[x].PositionRect.Y - camY) / GlobalVar.TILESIZE;
 
                                 activeGuards[x].Taunted = true;
-                                activeGuards[x].Detected = true;
+                                activeGuards[x].Confused = true;
 
                                 switch (activeGuards[x].Direction)
                                 {
                                     case 0:
                                         activeGuards[x].Taunted = false;
-                                        activeGuards[x].Detected = false;
+                                        activeGuards[x].Confused = false;
                                         break;
                                     case 1:
                                         tauntDir = activeGuards[x].Direction;
@@ -1099,7 +1099,7 @@ namespace Chaos_University
             effects = new List<SoundEffect>();
             effects.Add(this.Content.Load<SoundEffect>("AlertWav"));
             effects.Add(this.Content.Load<SoundEffect>("shout"));
-            //effects.Add(this.Content.Load<SoundEffect>("spark"));
+            effects.Add(this.Content.Load<SoundEffect>("spark"));
 
 
             introVideo = this.Content.Load<Video>("Intro_V2");
@@ -1160,6 +1160,7 @@ namespace Chaos_University
             guardTextures.Add(this.Content.Load<Texture2D>("Default_Guard"));
             guardTextures.Add(this.Content.Load<Texture2D>("Default_Guard_2_New"));
             guardTextures.Add(this.Content.Load<Texture2D>("!"));
+            guardTextures.Add(this.Content.Load<Texture2D>("Question_mark3"));
 
             //Tutorial messages
             tutorial = new Tutorial(GraphicsDevice.Viewport.Height, GraphicsDevice.Viewport.Width, menuFont);

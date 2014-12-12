@@ -18,6 +18,8 @@ namespace Chaos_University
 
         public bool Detected { get; set; }
 
+        public bool Confused { get; set; }
+
         public bool Taunted { get; set; }
 
         private bool isAlive; //For guard death
@@ -70,6 +72,8 @@ namespace Chaos_University
 
             Detected = false;
 
+            Confused = false;
+
             Taunted = false;
 
             InitialX = x;
@@ -103,6 +107,8 @@ namespace Chaos_University
             Moving = true;
 
             Detected = false;
+
+            Confused = false;
 
             InitialX = initX;
 
@@ -156,6 +162,8 @@ namespace Chaos_University
             Moving = true;
 
             Detected = false;
+
+            Confused = false;
 
             Taunted = false;
 
@@ -284,7 +292,7 @@ namespace Chaos_University
 
             }
 
-            //For checking Detection
+            //For checking Detection -- Testing purposes only
             //obj.Draw(listTextures[0],
             //        new Rectangle((DetectRect.X + DetectRect.Width / 2) + offX, (DetectRect.Y + DetectRect.Height / 2) + offY, DetectRect.Width, DetectRect.Height),
             //        null,
@@ -294,8 +302,22 @@ namespace Chaos_University
             //        SpriteEffects.None,
             //        0.0f);
 
-            if (this.Detected == true) //For Emotion
+            if (this.Confused == true) //For Emotion -- ?
             {
+                obj.Draw(listTextures[3],
+                    new Rectangle((EmotionRect.X + EmotionRect.Width / 2) + offX, (EmotionRect.Y + EmotionRect.Height / 2) + offY, EmotionRect.Width, EmotionRect.Height),
+                    null,
+                    Color.White,
+                    (float)(Math.Atan2(-1, 0) + Math.PI / 2),
+                    new Vector2(listTextures[2].Width / 2, listTextures[2].Height / 2),
+                    SpriteEffects.None,
+                    0.0f);
+            }
+
+            if (this.Detected == true) //For Emotion -- !
+            {
+                Confused = false;
+
                 obj.Draw(listTextures[2],
                     new Rectangle((EmotionRect.X + EmotionRect.Width / 2) + offX, (EmotionRect.Y + EmotionRect.Height / 2) + offY, EmotionRect.Width, EmotionRect.Height),
                     null,
@@ -305,6 +327,7 @@ namespace Chaos_University
                     SpriteEffects.None,
                     0.0f);
             }
+
 
         }
 
