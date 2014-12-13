@@ -22,6 +22,8 @@ namespace Chaos_University
 
         public bool Taunted { get; set; }
 
+        public int PrevDir { get; set; } //0 - 3, South, West, North, East, also 4 for none.
+
         private bool isAlive; //For guard death
         public bool IsAlive//Read only
         {
@@ -97,10 +99,12 @@ namespace Chaos_University
         }
 
 
-        public Enemy(int x, int y, int dir, List<Texture2D> textures, int diff, int initDir, int initX, int initY) //Constructor 2
+        public Enemy(int x, int y, int dir, List<Texture2D> textures, int diff, int initDir, int initX, int initY, int pDir) //Constructor 2
             : base(x, y, dir, textures)
         {
             Difficulty = diff;
+
+            PrevDir = pDir;
 
             isAlive = true;
 
@@ -166,6 +170,8 @@ namespace Chaos_University
             Confused = false;
 
             Taunted = false;
+
+            PrevDir = 4;
 
             Direction = InitialDirection;
 

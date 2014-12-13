@@ -49,12 +49,11 @@ namespace Chaos_University
         float timer2;               //Long pause
 
         //Variables for preventing stuck
-        bool north;
-        bool east;
-        bool west;
-        bool south;
         int currX;
         int currY;
+        int currX2;
+        int currY2;
+
 
         //Special Ability Stuff
         bool usedNinja;
@@ -83,6 +82,7 @@ namespace Chaos_University
         int tauntDir;
         bool stunned;
         bool flip;
+        Rectangle tmp;
 
 
         //Textures
@@ -146,11 +146,6 @@ namespace Chaos_University
             stunned = false;
             stun = false;
             tauntDir = 0;
-
-            north = false;
-            east = false;
-            west = false;
-            south = false;
 
             usedNinja = false;
             usedAssault = false;
@@ -526,12 +521,37 @@ namespace Chaos_University
             GlobalVar.ParCount = 0;                             //Reset par.
             indicator.Active = false;                           //Reset indicator.
             clickPrevX = -1;                                    //Reset clickPrev at a nonexistent index.
-            clickPrevY = -1;                                    //Reset clickPrev at a nonexistent index.
+            clickPrevY = -1;                                    //Reset clickPrev at a nonexistent index. 
         }
 
         //Speeds up gameplay or returns to normal
         private void FastForward()
         {
+            //if (level.IsNinja)
+            //{
+            //    tmp = level.Ninja.PositionRect;
+
+            //    currX2 = (level.Ninja.PositionRect.X - camX) / GlobalVar.TILESIZE;
+            //    currY2 = (level.Ninja.PositionRect.Y - camY) / GlobalVar.TILESIZE;
+
+            //    tmp.X = currX2;
+            //    tmp.Y = currY2;
+
+
+            //}
+
+            //if (level.IsAssault)
+            //{
+            //    currX2 = (level.Assault.PositionRect.X - camX) / GlobalVar.TILESIZE;
+            //    currY2 = (level.Assault.PositionRect.Y - camY) / GlobalVar.TILESIZE;
+            //}
+
+            //if (level.IsRecon)
+            //{
+            //    currX2 = (level.Recon.PositionRect.X - camX) / GlobalVar.TILESIZE;
+            //    currY2 = (level.Recon.PositionRect.Y - camY) / GlobalVar.TILESIZE;
+            //}
+
             if (fastActive == false)
             {
                 GlobalVar.SpeedLevel = 40;
@@ -813,7 +833,8 @@ namespace Chaos_University
                     switch (level.Recon.Direction)
                     {
                         case 0:
-                            if ((activeGuards[x].PositionRect.X == level.Recon.PositionRect.X)
+                            if (activeGuards[x].PositionRect.X > level.Recon.PositionRect.X - (GlobalVar.TILESIZE /2)
+                                && (activeGuards[x].PositionRect.X < level.Recon.PositionRect.X + (GlobalVar.TILESIZE /2))
                                 && ((activeGuards[x].PositionRect.Y < level.Recon.PositionRect.Y))
                                 && (activeGuards[x].PositionRect.Y > level.Recon.PositionRect.Y - (GlobalVar.TILESIZE * 2)))
                             {
@@ -823,7 +844,8 @@ namespace Chaos_University
                             }
                             break;
                         case 1:
-                            if ((activeGuards[x].PositionRect.Y == level.Recon.PositionRect.Y)
+                            if ((activeGuards[x].PositionRect.Y > level.Recon.PositionRect.Y - (GlobalVar.TILESIZE / 2))
+                                && (activeGuards[x].PositionRect.Y < level.Recon.PositionRect.Y + (GlobalVar.TILESIZE / 2))
                                 && ((activeGuards[x].PositionRect.X > level.Recon.PositionRect.X))
                                 && (activeGuards[x].PositionRect.X < level.Recon.PositionRect.X + (GlobalVar.TILESIZE * 2)))
                             {
@@ -833,7 +855,8 @@ namespace Chaos_University
                             }
                             break;
                         case 2:
-                            if ((activeGuards[x].PositionRect.X == level.Recon.PositionRect.X)
+                            if (activeGuards[x].PositionRect.X > level.Recon.PositionRect.X - (GlobalVar.TILESIZE / 2)
+                                && (activeGuards[x].PositionRect.X < level.Recon.PositionRect.X + (GlobalVar.TILESIZE / 2))
                                 && ((activeGuards[x].PositionRect.Y > level.Recon.PositionRect.Y))
                                 && (activeGuards[x].PositionRect.Y < level.Recon.PositionRect.Y + (GlobalVar.TILESIZE * 2)))
                             {
@@ -843,7 +866,8 @@ namespace Chaos_University
                             }
                             break;
                         case 3:
-                            if ((activeGuards[x].PositionRect.Y == level.Recon.PositionRect.Y)
+                            if ((activeGuards[x].PositionRect.Y > level.Recon.PositionRect.Y - (GlobalVar.TILESIZE / 2))
+                                && (activeGuards[x].PositionRect.Y < level.Recon.PositionRect.Y + (GlobalVar.TILESIZE / 2))
                                 && ((activeGuards[x].PositionRect.X < level.Recon.PositionRect.X))
                                 && (activeGuards[x].PositionRect.X > level.Recon.PositionRect.X - (GlobalVar.TILESIZE * 2)))
                             {
@@ -1244,8 +1268,8 @@ namespace Chaos_University
                     if (keyboard.IsKeyDown(Keys.Enter) && keyboardPrev.IsKeyUp(Keys.Enter)) //Press enter to play.
                     {
                         //Play sound. Do this only to type change.
-                        MediaPlayer.Play(music[0]);
-                        MediaPlayer.IsRepeating = true;
+                        //MediaPlayer.Play(music[0]);
+                        //MediaPlayer.IsRepeating = true;
 
                         string path = Directory.GetCurrentDirectory() + "/../../../../../../Colors.txt";
 
@@ -1614,7 +1638,8 @@ namespace Chaos_University
                                         activeGuards[gNum].Difficulty,
                                         activeGuards[gNum].InitialDirection,
                                         activeGuards[gNum].InitialX,
-                                        activeGuards[gNum].InitialY);
+                                        activeGuards[gNum].InitialY,
+                                        activeGuards[gNum].PrevDir);
         }
 
 
@@ -1722,13 +1747,10 @@ namespace Chaos_University
                                     switch (level.GetGamePiece(i, j).PieceState)
                                     {
                                         case PieceState.Floor:
-                                            north = false;
-                                            east = false;
-                                            west = false;
-                                            south = false;
+                                            activeGuards[x].PrevDir = 4;
                                             break;
                                         case PieceState.North:
-                                            if (activeGuards[x].Direction != 2 && north == false)
+                                            if (activeGuards[x].Direction != 2 && activeGuards[x].PrevDir != 2)
                                             {
                                                 if (activeGuards[x].Taunted == true)
                                                 {
@@ -1741,10 +1763,7 @@ namespace Chaos_University
                                                     activeGuards[x].Taunted = false;
                                                 }
                                                 activeGuards[x].Patrol(1);
-                                                north = true;
-                                                east = false;
-                                                west = false;
-                                                south = false;
+                                                activeGuards[x].PrevDir = 2;
                                                 if (activeGuards[x].Taunted == true)
                                                 {
                                                     level.GetGamePiece(i, j).PieceState = temp;
@@ -1765,7 +1784,7 @@ namespace Chaos_University
                                             }
                                             break;
                                         case PieceState.East:
-                                            if (activeGuards[x].Direction != 3 && east == false)
+                                            if (activeGuards[x].Direction != 3 && activeGuards[x].PrevDir != 3)
                                             {
                                                 if (activeGuards[x].Taunted == true)
                                                 {
@@ -1778,10 +1797,7 @@ namespace Chaos_University
                                                     activeGuards[x].Taunted = false;
                                                 }
                                                 activeGuards[x].Patrol(1);
-                                                north = false;
-                                                east = true;
-                                                west = false;
-                                                south = false;
+                                                activeGuards[x].PrevDir = 3;
                                                 if (activeGuards[x].Taunted == true)
                                                 {
                                                     level.GetGamePiece(i, j).PieceState = temp;
@@ -1802,7 +1818,7 @@ namespace Chaos_University
                                             }
                                             break;
                                         case PieceState.South:
-                                            if (activeGuards[x].Direction != 0 && south == false)
+                                            if (activeGuards[x].Direction != 0 && activeGuards[x].PrevDir != 0)
                                             {
                                                 if (activeGuards[x].Taunted == true)
                                                 {
@@ -1815,10 +1831,7 @@ namespace Chaos_University
                                                     activeGuards[x].Taunted = false;
                                                 }
                                                 activeGuards[x].Patrol(1);
-                                                north = false;
-                                                east = false;
-                                                west = false;
-                                                south = true;
+                                                activeGuards[x].PrevDir = 0;
                                                 if (activeGuards[x].Taunted == true)
                                                 {
                                                     level.GetGamePiece(i, j).PieceState = temp;
@@ -1839,7 +1852,7 @@ namespace Chaos_University
                                             }
                                             break;
                                         case PieceState.West:
-                                            if (activeGuards[x].Direction != 1 && west == false)
+                                            if (activeGuards[x].Direction != 1 && activeGuards[x].PrevDir != 1)
                                             {
                                                 if (activeGuards[x].Taunted == true)
                                                 {
@@ -1852,10 +1865,7 @@ namespace Chaos_University
                                                     activeGuards[x].Taunted = false;
                                                 }
                                                 activeGuards[x].Patrol(1);
-                                                north = false;
-                                                east = false;
-                                                west = true;
-                                                south = false;
+                                                activeGuards[x].PrevDir = 1;
                                                 if (activeGuards[x].Taunted == true)
                                                 {
                                                     level.GetGamePiece(i, j).PieceState = temp;
