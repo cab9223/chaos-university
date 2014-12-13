@@ -68,11 +68,11 @@ namespace Chaos_University
                 if (User.AbilityActive == true)
                 {
                     obj.Draw(listTextures[0],
-                new Rectangle(offsetRect.X + offsetRect.Width / 2, offsetRect.Y + offsetRect.Height / 3, 50, 50),
+                new Rectangle((offsetRect.X + offsetRect.Width / 2) + 20, (offsetRect.Y + offsetRect.Height / 2) + 20, 50, 50),
                 null,
                 Color.White,
                 rotDir,
-                new Vector2(User.PositionRect.Width / 2, User.PositionRect.Height / 2 + 10),
+                new Vector2(User.PositionRect.Width / 2, User.PositionRect.Height / 2),
                 SpriteEffects.None,
                 0.0f);
 
@@ -89,52 +89,52 @@ namespace Chaos_University
                         if (User.AbilityActive == true)
                         {
                             obj.Draw(listTextures[0],
-                        new Rectangle(offsetRect.X + offsetRect.Width / 2, offsetRect.Y + offsetRect.Height / 3, 25, 75),
-                        null,
-                        Color.White,
-                        ((float)Math.PI / 2),
-                        new Vector2(User.PositionRect.Width / 2, User.PositionRect.Height / 2 + 10),
-                        SpriteEffects.None,
-                        0.0f);
+                             new Rectangle(offsetRect.X + offsetRect.Width / 2 + 25, offsetRect.Y + offsetRect.Height / 2 - 40, 25, 75),
+                             null,
+                             Color.White,
+                             (float)(Math.Atan2(-1, 0) + Math.PI / 2),
+                             new Vector2(User.PositionRect.Width / 2, User.PositionRect.Height / 2),
+                             SpriteEffects.None,
+                             0.0f);
                         }
                         break;
                     case 1:
                         if (User.AbilityActive == true)
                         {
                             obj.Draw(listTextures[0],
-                        new Rectangle(offsetRect.X + offsetRect.Width / 2, offsetRect.Y + offsetRect.Height / 3, 25, 75),
-                        null,
-                        Color.White,
-                        ((float)Math.PI / 2),
-                        new Vector2(User.PositionRect.Width / 2, User.PositionRect.Height / 2 + 60),
-                        SpriteEffects.None,
-                        0.0f);
+                            new Rectangle(offsetRect.X + offsetRect.Width / 2 + 90, offsetRect.Y + offsetRect.Height / 2 + 25, 25, 75),
+                            null,
+                            Color.White,
+                            (float)(Math.Atan2(0, 1) + Math.PI / 2),
+                            new Vector2(User.PositionRect.Width / 2, User.PositionRect.Height / 2),
+                            SpriteEffects.None,
+                            0.0f);
                         }
                         break;
                     case 2:
                         if (User.AbilityActive == true)
                         {
                             obj.Draw(listTextures[0],
-                        new Rectangle(offsetRect.X + offsetRect.Width / 2, offsetRect.Y + offsetRect.Height / 3, 75, 25),
-                        null,
-                        Color.White,
-                        (2 * (float)Math.PI / 3),
-                        new Vector2(User.PositionRect.Width / 2, User.PositionRect.Height / 2 - 40),
-                        SpriteEffects.None,
-                        0.0f);
+                            new Rectangle(offsetRect.X + offsetRect.Width / 2 + 25, offsetRect.Y + offsetRect.Height / 2 + 90, 25, 75),
+                            null,
+                            Color.White,
+                            (float)(Math.Atan2(1, 0) + Math.PI / 2),
+                            new Vector2(User.PositionRect.Width / 2, User.PositionRect.Height / 2),
+                            SpriteEffects.None,
+                            0.0f);
                         }
                         break;
                     case 3:
                         if (User.AbilityActive == true)
                         {
                             obj.Draw(listTextures[0],
-                        new Rectangle(offsetRect.X + offsetRect.Width / 2, offsetRect.Y + offsetRect.Height / 3, 75, 40),
-                        null,
-                        Color.White,
-                        ((float)Math.PI / 2),
-                        new Vector2(User.PositionRect.Width / 2, User.PositionRect.Height / 2 + 10),
-                        SpriteEffects.None,
-                        0.0f);
+                            new Rectangle(offsetRect.X + offsetRect.Width / 2 - 40, offsetRect.Y + offsetRect.Height / 2 + 25, 25, 75),
+                            null,
+                            Color.White,
+                            (float)(Math.Atan2(0, -1) + Math.PI / 2),
+                            new Vector2(User.PositionRect.Width / 2, User.PositionRect.Height / 2),
+                            SpriteEffects.None,
+                            0.0f);
                         }
                         break;
                 }

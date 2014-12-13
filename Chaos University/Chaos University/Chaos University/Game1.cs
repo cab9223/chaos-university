@@ -56,6 +56,11 @@ namespace Chaos_University
         int currX;
         int currY;
 
+        //Special Ability Stuff
+        bool usedNinja;
+        bool usedAssault;
+        bool usedRecon;
+
         //Sound effect stuff
         bool taunt;
         bool alerted;               //Alert went off
@@ -146,6 +151,10 @@ namespace Chaos_University
             east = false;
             west = false;
             south = false;
+
+            usedNinja = false;
+            usedAssault = false;
+            usedRecon = false;
 
             taunt = false;
             temp = PieceState.Floor;
@@ -448,10 +457,6 @@ namespace Chaos_University
                 level.Ninja.PositionRect = level.StartNinja;    //Reset Player Location.
                 level.Ninja.turn(level.RotNinja);               //Reset Player Direction.
                 level.Ninja.Moving = false;                     //Halt player.
-                for (int i = 0; i < guardCount; i++)
-                {
-                    activeGuards[i].Reset();
-                }
             }
 
             //Recon
@@ -460,10 +465,6 @@ namespace Chaos_University
                 level.Recon.PositionRect = level.StartRecon;    //Reset Player Location.
                 level.Recon.turn(level.RotRecon);               //Reset Player Direction.
                 level.Recon.Moving = false;                     //Halt player.
-                for (int i = 0; i < guardCount; i++)
-                {
-                    activeGuards[i].Reset();
-                }
             }
 
             //Assault
@@ -472,13 +473,19 @@ namespace Chaos_University
                 level.Assault.PositionRect = level.StartAssault;    //Reset Player Location.
                 level.Assault.turn(level.RotAssault);               //Reset Player Direction.
                 level.Assault.Moving = false;                       //Halt player.
-                for (int i = 0; i < guardCount; i++)
-                {
-                    activeGuards[i].Reset();
-                }
             }
 
+            for (int i = 0; i < guardCount; i++)                //Reset all guards
+            {
+                activeGuards[i].Reset();
+            }
+            
 
+            usedNinja = false;
+            usedAssault = false;
+            usedRecon = false;
+            stunned = false;
+            timer2 = 0;
             GlobalVar.ParCount = 0;                             //Reset par for player.
             level.ActivateMoney();                              //Reset monies.
             indicator.Active = false;                           //Reset indicator.
@@ -622,7 +629,7 @@ namespace Chaos_University
             //Use Ninja Ability -- Sword
             if (level.IsNinja)
             {
-                if ((level.IsNinja && keyboard.IsKeyDown(Keys.D1) && keyboardPrev.IsKeyUp(Keys.D1)) || level.Ninja.AbilityActive)
+                if ((level.IsNinja && keyboard.IsKeyDown(Keys.D1) && keyboardPrev.IsKeyUp(Keys.D1)) && usedNinja == false || level.Ninja.AbilityActive)
                 {
                     level.Ninja.Ability();
                 }
@@ -744,6 +751,8 @@ namespace Chaos_University
 
         public void GuardStunned() //After a successful ReconStun
         {
+            usedRecon = true;
+
             if (stun == false) //For stun sound effect
             {
                 effects[2].Play();
@@ -786,7 +795,7 @@ namespace Chaos_University
             if (timer2 >= 5.0f) //5 second pause
             {
                 guard.Detected = false;
-                guard.StartMove();
+                guard.StartMove(); //Stationary guard will start moving
                 stunned = false;
                 timer2 = 0;
             }
@@ -795,7 +804,7 @@ namespace Chaos_University
 
         public void ReconStun() //Recon special move, Tazer -- initial code
         {
-            if (level.IsRecon) //if active Recon
+            if (level.IsRecon == true && usedRecon == false) //if active Recon
             {
                 stun = false;
 
@@ -851,7 +860,7 @@ namespace Chaos_University
 
         public void AssaultTaunt() //Assault special move, Taunt -- Working
         {
-            if (level.IsAssault) //if active Assault
+            if (level.IsAssault == true && usedAssault == false) //if active Assault
             {
                 if (taunt == false) //For taunt sound effect
                 {
@@ -877,6 +886,8 @@ namespace Chaos_University
 
                                 activeGuards[x].Taunted = true;
                                 activeGuards[x].Confused = true;
+                                usedAssault = true;
+                                activeGuards[x].StartMove();
 
                                 switch (activeGuards[x].Direction)
                                 {
@@ -926,6 +937,8 @@ namespace Chaos_University
 
                                 activeGuards[x].Taunted = true;
                                 activeGuards[x].Confused = true;
+                                usedAssault = true;
+                                activeGuards[x].StartMove();
 
                                 switch (activeGuards[x].Direction)
                                 {
@@ -975,6 +988,8 @@ namespace Chaos_University
 
                                 activeGuards[x].Taunted = true;
                                 activeGuards[x].Confused = true;
+                                usedAssault = true;
+                                activeGuards[x].StartMove();
 
                                 switch (activeGuards[x].Direction)
                                 {
@@ -1025,6 +1040,8 @@ namespace Chaos_University
 
                                 activeGuards[x].Taunted = true;
                                 activeGuards[x].Confused = true;
+                                usedAssault = true;
+                                activeGuards[x].StartMove();
 
                                 switch (activeGuards[x].Direction)
                                 {
@@ -1344,6 +1361,7 @@ namespace Chaos_University
                             if (level.Ninja.ThisGear.CheckCollision(guard))
                             {
                                 guard.Dead();
+                                usedNinja = true;
                             }
                         }
                     }

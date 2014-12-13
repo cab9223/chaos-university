@@ -48,14 +48,14 @@ namespace Chaos_University
 
             set
             {
-                if ((value > -1) && (value < 4)) //Test to make sure its direction is from only 0 to 3
-                {
+                //if ((value > -1) && (value < 4)) //Test to make sure its direction is from only 0 to 3
+                //{
                     initialDirection = value;
-                }
-                else
-                {
-                    initialDirection = 0;
-                }
+                //}
+                //else
+                //{
+                //    initialDirection = 0;
+                //}
             }
         }
 

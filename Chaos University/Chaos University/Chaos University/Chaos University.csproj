@@ -139,9 +139,6 @@
     <None Include="LevelMap1.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="LevelMapX1.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="LevelMap3.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
