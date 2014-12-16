@@ -103,6 +103,10 @@ namespace Chaos_University
         Video introVideo;
         VideoPlayer videoPlayer;
 
+        Video creditsVideo;
+        VideoPlayer videoPlayer2;
+        int startTime = 0;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -121,6 +125,7 @@ namespace Chaos_University
             current = GameState.Intro;      // Establish starting game state.
             this.IsMouseVisible = true;     // Make mouse visible on screen.
             videoPlayer = new VideoPlayer();
+            videoPlayer2 = new VideoPlayer();
             levels = new List<Level>();
             guards = new List<Enemy>();
             activeGuards = new List<Enemy>();
@@ -1144,6 +1149,7 @@ namespace Chaos_University
 
 
             introVideo = this.Content.Load<Video>("Intro_V2");
+            creditsVideo = this.Content.Load<Video>("TT_Credits");
 
             //Single indicator.
             List<Texture2D> indicatorTextureTemp = new List<Texture2D>();
@@ -1422,6 +1428,30 @@ namespace Chaos_University
                         current = GameState.Title;
                     }
                     break;
+
+                case GameState.Credits:
+                    //Waits total lenght of video (in this case, 6 sec)
+
+                    if (startTime == 0)
+                    {
+                        videoPlayer2.Play(creditsVideo);
+                        videoPlayer2.IsLooped = false;
+                        startTime = gameTime.TotalGameTime.Seconds;
+                    }
+                    else if (gameTime.TotalGameTime.Seconds > startTime + 20)
+                    {
+                        videoPlayer.Stop();
+                        current = GameState.Title;
+                    }
+
+                    // Can skip Intro Animation
+                    if (keyboard.IsKeyDown(Keys.Enter) && keyboardPrev.IsKeyUp(Keys.Enter)) //Press enter to play.
+                    {
+                        videoPlayer2.IsLooped = false;
+                        videoPlayer2.Stop();
+                        current = GameState.Title;
+                    }
+                    break;
             }
             mousePrev = Mouse.GetState();
             keyboardPrev = Keyboard.GetState();
@@ -1619,6 +1649,10 @@ namespace Chaos_University
                         "Press enter to continue.",
                         new Vector2(25, GraphicsDevice.Viewport.Height - 26),
                         Color.White);
+                    break;
+
+                case GameState.Credits:
+                    spriteBatch.Draw(videoPlayer2.GetTexture(), new Rectangle(0, 0, creditsVideo.Width, creditsVideo.Height), Color.White);
                     break;
             }
 

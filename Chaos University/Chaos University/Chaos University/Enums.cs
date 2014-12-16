@@ -12,7 +12,8 @@ namespace Chaos_University
         Playing,
         LevelComp,
         LevelFail,
-        GameOver
+        GameOver,
+        Credits
     }
 
     public enum PieceState
