@@ -927,7 +927,7 @@ namespace Chaos_University
             tutorial.Increment();
             isGuard = false;            
             activeGuards.Clear();
-            if (indexLevel < GlobalVar.LevelCount && gameRestarted == false)
+            if (indexLevel < levels.Count && gameRestarted == false)
             {
                 guardCount = guardAmount.Dequeue();
             }
@@ -1661,7 +1661,8 @@ namespace Chaos_University
 
                         current = GameState.Playing;
 
-                        if (indexLevel + 3 > GlobalVar.LevelCount)
+                        //Last 3 levels are ignored.
+                        if (indexLevel + 3 > levels.Count)
                         {
                             current = GameState.Credits;
                         }
