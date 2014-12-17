@@ -40,6 +40,14 @@ namespace Chaos_University
             set { assault = value; }
         }
 
+        private Boss boss;
+        public Boss Boss
+        {
+            get { return boss; }
+            set { Boss = value; }
+        }
+
+
 
         //LEVEL PLAYERS START POSITION
         private Rectangle startNinja;             //Location at which ninja starts.
@@ -62,6 +70,14 @@ namespace Chaos_University
             get { return startAssault; }
             set { startAssault = value; }
         }
+
+        //LEVEL PLAYERS START POSITION
+        //private Rectangle startBoss;             //Location at which boss starts.
+        //public Rectangle StartBoss
+        //{
+        //    get { return startBoss; }
+        //    set { startBoss = value; }
+        //}
 
         //LEVEL PLAYERS START ROTATION
         private int rotNinja;               //Initial direction the Ninja faces.
@@ -455,6 +471,7 @@ namespace Chaos_University
                         }
                     }
                     
+                    
                     //Now will change tile direction after all the player's changed directions are taken care of.
                     if (specialIncrement == true)
                     {
@@ -491,6 +508,33 @@ namespace Chaos_University
                     }
                 }
             }
+            
+            //if (this.IsBoss)
+            //{
+            //    if (this.isAssault)
+            //    {
+            //        if (this.assault.PositionRect.Intersects(this.boss.PositionRect))
+            //        {
+            //            condition = CollisionState.Fail;
+            //        }
+            //    }
+
+            //    if (this.isRecon)
+            //    {
+            //        if (this.recon.PositionRect.Intersects(this.boss.PositionRect))
+            //        {
+            //            condition = CollisionState.Fail;
+            //        }
+            //    }
+
+            //    if (this.isNinja)
+            //    {
+            //        if (this.ninja.PositionRect.Intersects(this.boss.PositionRect))
+            //        {
+            //            condition = CollisionState.Fail;
+            //        }
+            //    }
+            //}
 
             return condition;
         }
