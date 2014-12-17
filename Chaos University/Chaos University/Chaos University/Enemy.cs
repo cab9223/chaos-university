@@ -14,13 +14,13 @@ namespace Chaos_University
 {
     class Enemy : MoveableGamePiece
     {
-        public int Difficulty { get; set; }
+        public int Difficulty { get; set; } //Type of guard
 
-        public bool Detected { get; set; }
+        public bool Detected { get; set; } //Guard found player
 
-        public bool Confused { get; set; }
+        public bool Confused { get; set; } //Guard effected by ability
 
-        public bool Taunted { get; set; }
+        public bool Taunted { get; set; } //For assault ability on guard
 
         public int PrevDir { get; set; } //0 - 3, South, West, North, East, also 4 for none.
 
@@ -33,7 +33,7 @@ namespace Chaos_University
             }
         }
 
-        private Rectangle detectRect;
+        private Rectangle detectRect; //For guards detection of players
         public Rectangle DetectRect
         {
             get
@@ -47,7 +47,7 @@ namespace Chaos_University
             }
         }
 
-        private Rectangle emotionRect;
+        private Rectangle emotionRect; //To show guard emotions
         public Rectangle EmotionRect
         {
             get
@@ -159,7 +159,7 @@ namespace Chaos_University
         }
 
 
-        public void Reset()
+        public void Reset() //Reset the guard
         {
             isAlive = true;
 
@@ -194,10 +194,6 @@ namespace Chaos_University
 
         public void Patrol(int type) //Method to move enemy around map
         {
-            //if (challenge < 3 && challenge > -1)
-            //{
-            //    Difficulty = challenge;
-            //}
 
             switch (type)
             {
@@ -260,9 +256,6 @@ namespace Chaos_University
                             break;
                     }
                     break;
-                case 2:
-                    //Moves in any direction based on an algorithm, stops at walls, avoids traps, maybe more
-                    break;
             }
         }
 
@@ -301,7 +294,7 @@ namespace Chaos_University
 
             }
 
-            //For checking Detection -- Testing purposes only
+            //For checking Detection -- Exist still for Testing purposes only
             //obj.Draw(listTextures[0],
             //        new Rectangle((DetectRect.X + DetectRect.Width / 2) + offX, (DetectRect.Y + DetectRect.Height / 2) + offY, DetectRect.Width, DetectRect.Height),
             //        null,
@@ -341,7 +334,7 @@ namespace Chaos_University
         }
 
 
-        public override void Move(int distance)
+        public override void Move(int distance) //Guard movement
         {
             if (Moving == true)
             {

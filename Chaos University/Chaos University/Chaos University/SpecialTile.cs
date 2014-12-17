@@ -222,6 +222,25 @@ namespace Chaos_University
             }
             return true;
         }
+
+        public override void Draw(SpriteBatch obj, int offX, int offY)
+        {
+            Rectangle offsetRect = new Rectangle(
+                PositionRect.X + offX,
+                PositionRect.Y + offY,
+                PositionRect.Width,
+                PositionRect.Height);
+
+            if (tileType == 1)
+            {
+                obj.Draw(this.listTextures[IndexTexture], offsetRect, Color.White);
+            }
+
+            if (tileType == 2)
+            {
+                obj.Draw(this.listTextures[IndexTexture], offsetRect, Color.Gray);
+            }
+        }
         
         
     }

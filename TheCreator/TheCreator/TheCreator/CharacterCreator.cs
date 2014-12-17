@@ -320,7 +320,7 @@ namespace TheCreator
             // overwrite previous values in file
             StreamWriter writer = new StreamWriter(path, false);
 
-            writer.WriteLine("0,0,0,0,0,0,0,0,0");
+            writer.WriteLine("0,0,0,0,51,51,236,12,12");
 
             writer.Close();
 
