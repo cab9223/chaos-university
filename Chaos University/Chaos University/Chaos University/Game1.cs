@@ -1706,6 +1706,7 @@ namespace Chaos_University
                     {
                         videoPlayer.IsLooped = false;
                         videoPlayer.Stop();
+                        startTime = 0;
                         this.InitializeTitleScreen();
                     }
                     break;
