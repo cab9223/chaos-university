@@ -42,11 +42,13 @@ namespace Chaos_University
             tutorials.Add(new string[1] { "Press Enter to start moving." });
             tutorials.Add(new string[1] { "Click the floor to place a tile." });
             tutorials.Add(new string[2] { "Use WASD or the arrow keys to move the camera.", "Try to not go over par." });
+            tutorials.Add(new string[1] { "Press 'R' to reset." });
 
             locations.Add(new int[2] { 24, 180 });
             locations.Add(new int[2] { 24, -60 });
             locations.Add(new int[2] { 24, -60 });
             locations.Add(new int[4] { 20, -40, 250, 550 });
+            locations.Add(new int[2] { 0, -40 });
         }
 
         //Increment level.

@@ -72,6 +72,7 @@ namespace Chaos_University
         Vector2 levelCompPos;       //Position of the level complete screen.
         SpriteFont menuFont;        //Font of menu text
         SpriteFont headerFont;      //Font of header text
+        SpriteFont hudFont;
         int camX;                   //X offset of view.
         int camY;                   //Y offset of view.
         int camXCenter;             //Current X center position of view.
@@ -85,8 +86,6 @@ namespace Chaos_University
         bool flip;
         bool gameRestarted;
         
-
-
         //Textures
         List<Texture2D> tileTextures;
         List<Texture2D> wallTextures;
@@ -97,6 +96,7 @@ namespace Chaos_University
         List<Texture2D> specialTileTextures;
         List<Texture2D> abilityTextures;
         List<Texture2D> bossTextures;
+        Texture2D hud;
 
         //Songs
         List<Song> music;
@@ -1145,6 +1145,7 @@ namespace Chaos_University
 
             menuFont = this.Content.Load<SpriteFont>("MenuFont");
             headerFont = this.Content.Load<SpriteFont>("MenuHeaderFont");
+            hudFont = this.Content.Load<SpriteFont>("HudFont");
 
             menuPos = headerFont.MeasureString(title);
             gameOverPos = headerFont.MeasureString("GAME OVER");
@@ -1224,7 +1225,8 @@ namespace Chaos_University
             bossTextures = new List<Texture2D>();
             bossTextures.Add(this.Content.Load<Texture2D>("Tank"));
             
-            
+            //Hud Texture
+            hud = this.Content.Load<Texture2D>("Status_Bar_1");
 
             //Tutorial messages
             tutorial = new Tutorial(GraphicsDevice.Viewport.Height, GraphicsDevice.Viewport.Width, menuFont);
@@ -1625,27 +1627,31 @@ namespace Chaos_University
                     tutorial.Draw(spriteBatch, camX, camY);
 
                     //DRAW UI
+                    //Draw Hud
+                    spriteBatch.Draw(
+                        hud,
+                        new Rectangle(
+                            0,
+                            GraphicsDevice.Viewport.Height - hud.Height,
+                            GraphicsDevice.Viewport.Width,
+                            hud.Height),
+                        Color.White);
                     //Draw Par UI Element.
                     if (GlobalVar.ParCount < level.Par || GlobalVar.ParCount < 1 && level.Par != 0)
                     {
-                        spriteBatch.DrawString(menuFont,
+                        spriteBatch.DrawString(hudFont,
                             String.Format("Par: {0} of {1}", GlobalVar.ParCount, level.Par),
-                            new Vector2(25, GraphicsDevice.Viewport.Height - 26),
-                            Color.White);
+                            new Vector2(25, GraphicsDevice.Viewport.Height - 35),
+                            Color.Black);
                     }
                     //Draw maxed out Par UI Element. Ternary expression stops display from going above par.
                     else if (level.Par != 0)
                     {
-                        spriteBatch.DrawString(menuFont,
+                        spriteBatch.DrawString(hudFont,
                             String.Format("Par: {0} of {1} (PAR REACHED)", GlobalVar.ParCount, level.Par),
-                            new Vector2(25, GraphicsDevice.Viewport.Height - 26),
-                            Color.White);
+                            new Vector2(25, GraphicsDevice.Viewport.Height - 35),
+                            Color.Black);
                     }
-                    //Draw Reset Directions.
-                    spriteBatch.DrawString(menuFont,
-                        "Press R to reset.",
-                        new Vector2(420, GraphicsDevice.Viewport.Height - 50),
-                        Color.White);
                     break;
 
                 //Level Complete feedback screen.
