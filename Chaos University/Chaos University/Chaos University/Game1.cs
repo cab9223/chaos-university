@@ -639,6 +639,7 @@ namespace Chaos_University
                 level.Ninja.PositionRect = level.StartNinja;    //Reset Player Location.
                 level.Ninja.turn(level.RotNinja);               //Reset Player Direction.
                 level.Ninja.Moving = false;                     //Halt player.
+                level.Ninja.Active = true;
             }
 
             //Recon
@@ -647,6 +648,7 @@ namespace Chaos_University
                 level.Recon.PositionRect = level.StartRecon;    //Reset Player Location.
                 level.Recon.turn(level.RotRecon);               //Reset Player Direction.
                 level.Recon.Moving = false;                     //Halt player.
+                level.Recon.Active = true;
             }
 
             //Assault
@@ -655,6 +657,7 @@ namespace Chaos_University
                 level.Assault.PositionRect = level.StartAssault;    //Reset Player Location.
                 level.Assault.turn(level.RotAssault);               //Reset Player Direction.
                 level.Assault.Moving = false;                       //Halt player.
+                level.Assault.Active = true;
             }
 
             for (int i = 0; i < guardCount; i++)                //Reset all guards
@@ -1667,6 +1670,7 @@ namespace Chaos_University
                     if (keyboard.IsKeyDown(Keys.Enter) && keyboardPrev.IsKeyUp(Keys.Enter))
                     {
                         //Increment level
+                        this.Fail();
                         this.Success();
 
                         current = GameState.Playing;
