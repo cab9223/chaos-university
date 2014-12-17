@@ -757,8 +757,8 @@ namespace Chaos_University
                 camXCenter = (GraphicsDevice.Viewport.Width - level.Width * GlobalVar.TILESIZE) / 2;
                 camYCenter = (GraphicsDevice.Viewport.Height - level.Height * GlobalVar.TILESIZE) / 2;
                 
-                //Camera fix for level 4.
-                if(indexLevel == 4)
+                //Temporary camera fix for level 4.
+                if(indexLevel == 3)
                 {
                     camYCenter = GraphicsDevice.Viewport.Height / 2 - level.Ninja.PositionRect.Center.Y;
                 }
@@ -781,32 +781,6 @@ namespace Chaos_University
             {
                 current = GameState.Title;
             }
-        }
-
-        //Intializes the title screen. Reads colors for player characters, sets up title level.
-        private void InitializeTitleScreen()
-        {
-            string path = Directory.GetCurrentDirectory() + "/../../../../../../Colors.txt";
-
-            //read the file
-            StreamReader reader = new StreamReader(path);
-
-            string[] stringColors = reader.ReadLine().Split(',');
-
-            GlobalVar.ColorsSplit = new Int16[stringColors.Length];
-
-            //match the values
-            for (int i = 0; i < stringColors.Length; i++)
-            {
-                GlobalVar.ColorsSplit[i] = Int16.Parse(stringColors[i]);
-            }
-
-            reader.Close();
-
-            this.IncrementLevel();
-            level.Ninja.Moving = true;
-            level.Recon.Moving = true;
-            current = GameState.Title;
         }
 
         //Centers the camera. Is called by Fail and Increment Level.
@@ -1257,9 +1231,6 @@ namespace Chaos_University
             //Tutorial messages
             tutorial = new Tutorial(GraphicsDevice.Viewport.Height, GraphicsDevice.Viewport.Width, menuFont);
 
-            //Load title level.
-            levels.Add(this.LoadLevel(1, "S"));
-
             //Load all levels.
             for (int b = 1; b <= GlobalVar.levelsOpening; ++b) //Opening levels
             {
@@ -1325,7 +1296,7 @@ namespace Chaos_University
                     else
                     {
                         videoPlayer.Stop();
-                        this.InitializeTitleScreen();
+                        current = GameState.Title;
                     }
 
                     // Can skip Intro Animation
@@ -1333,32 +1304,39 @@ namespace Chaos_University
                     {
                         videoPlayer.IsLooped = false;
                         videoPlayer.Stop();
-                        this.InitializeTitleScreen();
+                        current = GameState.Title;
                     }
                     break;
                 
                 
                 //TITLE SCREEN
                 case GameState.Title:
-                    level.Ninja.Move((int)(
-                        100 *
-                        GlobalVar.TILESIZE *
-                        (float)gameTime.ElapsedGameTime.TotalSeconds /
-                        GlobalVar.SpeedLevel));
-                    level.Recon.Move((int)(
-                        100 *
-                        GlobalVar.TILESIZE *
-                        (float)gameTime.ElapsedGameTime.TotalSeconds /
-                        GlobalVar.SpeedLevel));
-                    level.CheckCollisions();
                     if (keyboard.IsKeyDown(Keys.Enter) && keyboardPrev.IsKeyUp(Keys.Enter)) //Press enter to play.
                     {
                         //Play sound. Do this only to type change.
                         //MediaPlayer.Play(music[0]);
                         //MediaPlayer.IsRepeating = true;
 
-                        //Start first level.
+                        string path = Directory.GetCurrentDirectory() + "/../../../../../../Colors.txt";
+
+                        //read the file
+                        StreamReader reader = new StreamReader(path);
+
+                        string[] stringColors = reader.ReadLine().Split(',');
+
+                        GlobalVar.ColorsSplit = new Int16[stringColors.Length];
+
+                        //match the values
+                        for (int i = 0; i < stringColors.Length; i++)
+                        {
+                            GlobalVar.ColorsSplit[i] = Int16.Parse(stringColors[i]);
+                        }
+
+                        reader.Close();
+
+                        //First level.
                         this.IncrementLevel();
+
                         current = GameState.Playing;
                     }
                     break;
@@ -1572,13 +1550,6 @@ namespace Chaos_University
                                
                 //TITLE SCREEN
                 case GameState.Title:
-                    //Draw Level
-                    level.Draw(spriteBatch, camX, camY);
-                    //Draw Level items
-                    if (level.IsNinja)
-                        level.Ninja.Draw(spriteBatch, camX, camY);
-                    if (level.IsRecon)
-                        level.Recon.Draw(spriteBatch, camX, camY);
                     //Draw Title
                     spriteBatch.DrawString(headerFont,
                         title,
@@ -1589,11 +1560,19 @@ namespace Chaos_University
                         new Vector2(1.2f, 1.0f),
                         SpriteEffects.None,
                         0);
+                    //Draw Directions.
+                    spriteBatch.DrawString(menuFont,
+                        "Use the mouse to select tiles and change them to direction tiles.\n" +
+                        "You can place tiles before or during player movement.\n" +
+                        "You have a limited number of tries to place tiles.",
+                        new Vector2(25, 100),
+                        Color.White);
                     //Draw Press Enter Prompt
                     spriteBatch.DrawString(menuFont,
                         "Press enter to continue.",
                         new Vector2(25, GraphicsDevice.Viewport.Height - 26),
                         Color.White);
+                   
                     break;
 
                 //PLAYING
