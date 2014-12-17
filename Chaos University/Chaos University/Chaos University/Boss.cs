@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace Chaos_University
 {
-    class Boss : MoveableGamePiece
+    class Boss : MoveableGamePiece //Boss class
     {
         private bool bossactive;
         private int initialWidth;

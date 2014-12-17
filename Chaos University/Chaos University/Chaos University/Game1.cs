@@ -50,7 +50,6 @@ namespace Chaos_University
 
         //Boss stuff.
         Boss bulldozer;
-        bool isBoss;
 
         //Variables for preventing stuck
         int currX;
@@ -84,6 +83,7 @@ namespace Chaos_University
         int tauntDir;
         bool stunned;
         bool flip;
+        bool gameRestarted;
         
 
 
@@ -107,7 +107,6 @@ namespace Chaos_University
         VideoPlayer videoPlayer;
 
         Video creditsVideo;
-        VideoPlayer videoPlayer2;
         int startTime = 0;
 
         public Game1()
@@ -128,7 +127,6 @@ namespace Chaos_University
             current = GameState.Intro;      // Establish starting game state.
             this.IsMouseVisible = true;     // Make mouse visible on screen.
             videoPlayer = new VideoPlayer();
-            videoPlayer2 = new VideoPlayer();
             levels = new List<Level>();
             guards = new List<Enemy>();
             activeGuards = new List<Enemy>();
@@ -153,6 +151,7 @@ namespace Chaos_University
             fastActive = false;
             stunned = false;
             stun = false;
+            gameRestarted = false;
             tauntDir = 0;
 
             usedNinja = false;
@@ -163,16 +162,14 @@ namespace Chaos_University
             temp = PieceState.Floor;
             temp2 = PieceState.Floor;
 
-            isBoss = false;
-
             base.Initialize();
         }
 
         // Loads a new level and return it. Requires integer for specific file name.
-        private Level LoadLevel(int levelNum)
+        private Level LoadLevel(int levelNum, string levelType)
         {
             //concatanates "LevelMap" and passed int to find map file.
-            string file = "LevelMap" + levelNum + ".txt";
+            string file = "LevelMap" + levelType + levelNum + ".txt";
             Level newLevel = new Level(0, 0, 0, 0); //New Level with default values to satisfy compiler.
             
             
@@ -209,7 +206,7 @@ namespace Chaos_University
                 int lineNumber = 0;     //Counter for each row/line being written.
 
                 //While a line is to be read.
-                while((line = input.ReadLine()) != null)
+                while((line = input.ReadLine()) != null) //LEVEL BUILDER
                 {
                     columnNumber = 0;
                     foreach(char block in line)
@@ -499,6 +496,7 @@ namespace Chaos_University
             level.ResetGate();                                  //Reset ladder sprite to close
             if (level.IsBoss)
             {
+                bulldozer.Moving = false;
                 bulldozer.ResetBoss();                              //Reset boss POS.
             }
             //Reset all direction tiles.
@@ -532,6 +530,7 @@ namespace Chaos_University
             indicator.Active = false;                           //Reset indicator.
             clickPrevX = -1;                                    //Reset clickPrev at a nonexistent index.
             clickPrevY = -1;                                    //Reset clickPrev at a nonexistent index. 
+
         }
 
         //Speeds up gameplay or returns to normal --  must be activated before movement begins, but ended any time
@@ -663,6 +662,8 @@ namespace Chaos_University
                     level.Recon.Moving = true;
                 if(level.IsAssault)
                     level.Assault.Moving = true;
+                if (level.IsBoss)
+                    bulldozer.Moving = true;
             }
 
             //Use Ninja Ability -- Sword
@@ -743,13 +744,15 @@ namespace Chaos_University
             tutorial.Increment();
             isGuard = false;            
             activeGuards.Clear();
-            if (indexLevel < GlobalVar.LevelCount)
+            if (indexLevel < GlobalVar.LevelCount && gameRestarted == false)
             {
                 guardCount = guardAmount.Dequeue();
             }
 
+            
             try
             {
+
                 level = levels[indexLevel];
                 camXCenter = (GraphicsDevice.Viewport.Width - level.Width * GlobalVar.TILESIZE) / 2;
                 camYCenter = (GraphicsDevice.Viewport.Height - level.Height * GlobalVar.TILESIZE) / 2;
@@ -1233,11 +1236,32 @@ namespace Chaos_University
             //Tutorial messages
             tutorial = new Tutorial(GraphicsDevice.Viewport.Height, GraphicsDevice.Viewport.Width, menuFont);
 
-            //Load each level.
-            for (int i = 1; i <= GlobalVar.LevelCount; ++i)
+            //Load all levels.
+            for (int b = 1; b <= GlobalVar.levelsOpening; ++b) //Opening levels
             {
-                levels.Add(this.LoadLevel(i));
+                levels.Add(this.LoadLevel(b, "B"));
             }
+
+            for (int r = 1; r <= GlobalVar.levelsRecon; ++r) //Recon levels
+            {
+                levels.Add(this.LoadLevel(r, "R"));
+            }
+
+            for (int n = 1; n <= GlobalVar.levelsNinja; ++n) //Ninja levels
+            {
+                levels.Add(this.LoadLevel(n, "N"));
+            }
+
+            for (int a = 1; a <= GlobalVar.levelsAssault; ++a) //Assault levels
+            {
+                levels.Add(this.LoadLevel(a, "T"));
+            }
+
+            for (int f = 1; f <= GlobalVar.levelsBoss; ++f) //Boss levels
+            {
+                levels.Add(this.LoadLevel(f, "F"));
+            }
+                
         }
 
         /// <summary>
@@ -1366,13 +1390,17 @@ namespace Chaos_University
                             GlobalVar.SpeedLevel));
                     }
 
+                    //Move Boss
                     if (level.IsBoss == true)
                     {
-                        bulldozer.Move((int)(
-                            100 *
-                            GlobalVar.TILESIZE *
-                            (float)gameTime.ElapsedGameTime.TotalSeconds /
-                            GlobalVar.SpeedLevel));
+                        if (bulldozer.Moving == true)
+                        {
+                            bulldozer.Move((int)(
+                                100 *
+                                GlobalVar.TILESIZE *
+                                (float)gameTime.ElapsedGameTime.TotalSeconds /
+                                GlobalVar.SpeedLevel));
+                        }
 
                         if(bulldozer.PositionRect.Intersects(level.Ninja.PositionRect) ||
                             bulldozer.PositionRect.Intersects(level.Recon.PositionRect) ||
@@ -1446,6 +1474,12 @@ namespace Chaos_University
                         this.IncrementLevel();
 
                         current = GameState.Playing;
+
+                        if (indexLevel + 3 > GlobalVar.LevelCount)
+                        {
+                            current = GameState.Credits;
+                        }
+
                     }
                     break;
 
@@ -1471,10 +1505,13 @@ namespace Chaos_University
                 case GameState.Credits:
                     //Waits total lenght of video (in this case, 6 sec)
 
+                    indexLevel = -1;
+                    gameRestarted = true;
+
                     if (startTime == 0)
                     {
-                        videoPlayer2.Play(creditsVideo);
-                        videoPlayer2.IsLooped = false;
+                        videoPlayer.Play(creditsVideo);
+                        videoPlayer.IsLooped = false;
                         startTime = gameTime.TotalGameTime.Seconds;
                     }
                     else if (gameTime.TotalGameTime.Seconds > startTime + 20)
@@ -1486,8 +1523,8 @@ namespace Chaos_University
                     // Can skip Intro Animation
                     if (keyboard.IsKeyDown(Keys.Enter) && keyboardPrev.IsKeyUp(Keys.Enter)) //Press enter to play.
                     {
-                        videoPlayer2.IsLooped = false;
-                        videoPlayer2.Stop();
+                        videoPlayer.IsLooped = false;
+                        videoPlayer.Stop();
                         current = GameState.Title;
                     }
                     break;
@@ -1553,7 +1590,7 @@ namespace Chaos_University
                     indicator.Draw(spriteBatch, camX, camY);
                     
                 //DRAW GUARDS
-                    if (isGuard == true) //Guard in level?
+                    if (isGuard == true && gameRestarted == false) //Guard in level?
                     {
                         for (int i = 0; i < guardCount; i++)  //Draw all guards
                         {
@@ -1696,7 +1733,7 @@ namespace Chaos_University
                     break;
 
                 case GameState.Credits:
-                    spriteBatch.Draw(videoPlayer2.GetTexture(), new Rectangle(0, 0, creditsVideo.Width, creditsVideo.Height), Color.White);
+                    spriteBatch.Draw(videoPlayer.GetTexture(), new Rectangle(0, 0, creditsVideo.Width, creditsVideo.Height), Color.White);
                     break;
             }
 
@@ -1765,7 +1802,7 @@ namespace Chaos_University
         private void UpdateGuards(double gameTime)
         {
             //Important Guard Updates
-            if (isGuard == true)
+            if (isGuard == true && gameRestarted == false)
             {
                 for (int i = 0; i < guardCount; i++)
                 {
