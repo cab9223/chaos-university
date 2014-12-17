@@ -18,8 +18,8 @@ namespace Chaos_University
         // All the variables that we'll need
 
         //Number of level types
-        public static int levelsOpening = 12;
-        public static int levelsNinja = 10;
+        public static int levelsOpening = 12;   //12
+        public static int levelsNinja = 10;     //10
         public static int levelsRecon = 7;
         public static int levelsAssault = 1;
         public static int levelsBoss = 1;

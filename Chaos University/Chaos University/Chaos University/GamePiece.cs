@@ -60,6 +60,20 @@ namespace Chaos_University
             }
         }
 
+        //Default of piece with multiple types.
+        private PieceState defaultState;
+        public PieceState DefaultState
+        {
+            get
+            {
+                return defaultState;
+            }
+            set
+            {
+                defaultState = value;
+            }
+        }
+
         //Initial value for X
         private int initialX;
         public int InitialX
@@ -163,6 +177,12 @@ namespace Chaos_University
         {
             return 0;
         }
+
+        public virtual void ResetType()
+        {
+
+        }
+
         //Checks for object collision.
         public bool CheckCollision(GamePiece obj)
         {
