@@ -685,25 +685,23 @@ namespace Chaos_University
                 bulldozer.Moving = false;
                 bulldozer.ResetBoss();                              //Reset boss POS.
             }
+
             //Reset all direction tiles.
+            Type type = typeof(Tile);
             for (int b = 0; b < level.Height; ++b)
             {
                 for (int a = 0; a < level.Width; ++a)
                 {
-                    if (level.GetGamePiece(a, b).PieceState == PieceState.North ||
-                        level.GetGamePiece(a, b).PieceState == PieceState.East  ||
-                        level.GetGamePiece(a, b).PieceState == PieceState.South ||
-                        level.GetGamePiece(a, b).PieceState == PieceState.West)
-                    {
-                        level.GetGamePiece(a, b).PieceState = PieceState.Floor;
-                        level.GetGamePiece(a, b).IndexTexture = 0;
-                    }
-                    if (level.GetGamePiece(a, b).PieceState == PieceState.SpecialNorth||
+                    if (level.GetGamePiece(a, b).PieceState == PieceState.SpecialNorth ||
                         level.GetGamePiece(a, b).PieceState == PieceState.SpecialEast  ||
                         level.GetGamePiece(a, b).PieceState == PieceState.SpecialSouth ||
                         level.GetGamePiece(a, b).PieceState == PieceState.SpecialWest)
                     {
                         level.GetGamePiece(a, b).ReturnStartingDirection();
+                    }
+                    else if (level.GetGamePiece(a, b).GetType() == type)
+                    {
+                        level.GetGamePiece(a, b).ResetType();
                     }
                 }
             }

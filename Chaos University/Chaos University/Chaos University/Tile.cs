@@ -20,6 +20,7 @@ namespace Chaos_University
             : base(x, y, textures)
         {
             PieceState = PieceState.Floor;
+            DefaultState = PieceState.Floor;
         }
 
         //Constructor with prestablished direction.
@@ -27,6 +28,7 @@ namespace Chaos_University
             : base(x, y, textures)
         {
             PieceState = _pieceState;
+            DefaultState = _pieceState;
             switch (PieceState)
             {
                 case PieceState.Floor:
@@ -103,6 +105,30 @@ namespace Chaos_University
                     break;
             }
             return true;
+        }
+
+        //Resets tile
+        public override void ResetType()
+        {
+            PieceState = DefaultState;
+            switch (DefaultState)
+            {
+                case PieceState.Floor:
+                    IndexTexture = 0;
+                    break;
+                case PieceState.North:
+                    IndexTexture = 1;
+                    break;
+                case PieceState.East:
+                    IndexTexture = 2;
+                    break;
+                case PieceState.South:
+                    IndexTexture = 3;
+                    break;
+                case PieceState.West:
+                    IndexTexture = 4;
+                    break;
+            }
         }
     }
 }
