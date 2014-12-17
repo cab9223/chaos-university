@@ -349,7 +349,7 @@ namespace Chaos_University
                                 guards.Add(guard);
                                 guardCount = guardCount + 1;
                                 break;
-                            //Z = Guard -- May become final boss
+                            //Z = Boss -- reserved for final boss
                             case 'Z':
                                 newLevel.SetTile(columnNumber, lineNumber, new Tile(
                                     columnNumber * GlobalVar.TILESIZE,
