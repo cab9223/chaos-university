@@ -912,12 +912,6 @@ namespace Chaos_University
             {
                 FastForward();
             }
-
-            //Next Level cheat, for our personal testing purposes only!
-            if (keyboard.IsKeyDown(Keys.N) && keyboardPrev.IsKeyUp(Keys.N))
-            {
-                current = GameState.LevelComp;
-            }
         }
 
         //Increments the current level.
