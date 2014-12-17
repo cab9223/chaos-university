@@ -1474,6 +1474,12 @@ namespace Chaos_University
             mouse = Mouse.GetState();
             keyboard = Keyboard.GetState();
 
+            //Press exit to leave.
+            if(keyboard.IsKeyDown(Keys.Escape))
+            {
+                Exit();
+            }
+
             switch (current)
             {
                //Intro Animation
