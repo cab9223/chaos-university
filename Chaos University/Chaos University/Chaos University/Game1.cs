@@ -925,6 +925,10 @@ namespace Chaos_University
         //Increments the current level.
         private void IncrementLevel()
         {
+            usedNinja = false;
+            usedAssault = false;
+            usedRecon = false;
+
             indexLevel++;
             isGuard = false;            
             activeGuards.Clear();
@@ -1427,14 +1431,14 @@ namespace Chaos_University
                 levels.Add(this.LoadLevel(b, "B"));
             }
 
-            for (int r = 1; r <= GlobalVar.levelsRecon; ++r) //Recon levels
-            {
-                levels.Add(this.LoadLevel(r, "R"));
-            }
-
             for (int n = 1; n <= GlobalVar.levelsNinja; ++n) //Ninja levels
             {
                 levels.Add(this.LoadLevel(n, "N"));
+            }
+
+            for (int r = 1; r <= GlobalVar.levelsRecon; ++r) //Recon levels
+            {
+                levels.Add(this.LoadLevel(r, "R"));
             }
 
             for (int a = 1; a <= GlobalVar.levelsAssault; ++a) //Assault levels

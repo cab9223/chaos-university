@@ -34,17 +34,50 @@ namespace Chaos_University
             tutorials = new List<string[]>();
             locations = new List<int[]>();
 
+            //Levels 1-5
             tutorials.Add(new string[1] { "Press Enter to start moving." });
             tutorials.Add(new string[1] { "Press Enter to start moving." });
             tutorials.Add(new string[1] { "Click the floor to place a tile." });
             tutorials.Add(new string[2] { "Use WASD or the arrow keys to move the camera.", "Try to not go over par." });
             tutorials.Add(new string[1] { "Press 'R' to reset." });
 
+            //Levels 6-10
+            for (int i = 0; i < 4; ++i)
+            {
+                tutorials.Add(new string[1] {""});
+            }
+
+            //Level 11
+            tutorials.Add(new string[1] { "Press '1' to attack." });
+
+            //Levels 12-21
+            for (int i = 0; i < 9; ++i)
+            {
+                tutorials.Add(new string[1] { "" });
+            }
+
+
+            //Levels 1-5
             locations.Add(new int[2] { 24, 180 });
             locations.Add(new int[2] { 24, -60 });
             locations.Add(new int[2] { 24, -60 });
             locations.Add(new int[4] { 20, -40, 250, 550 });
             locations.Add(new int[2] { 0, -40 });
+
+            //Levels 6-10
+            for (int i = 0; i < 4; ++i)
+            {
+                locations.Add(new int[2] { 0, 0 });
+            }
+
+            //Level 11
+            locations.Add(new int[2] { 120, -40 });
+
+            //Levels 12-21
+            for (int i = 0; i < 9; ++i)
+            {
+                locations.Add(new int[2] { 0, 0 });
+            }
         }
 
         //Draw tutorial strings.
