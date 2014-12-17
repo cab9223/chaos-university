@@ -47,8 +47,6 @@ namespace Chaos_University
             set { Boss = value; }
         }
 
-
-
         //LEVEL PLAYERS START POSITION
         private Rectangle startNinja;             //Location at which ninja starts.
         public Rectangle StartNinja
@@ -331,6 +329,7 @@ namespace Chaos_University
                                     this.Ninja.turn(3);
                                     break;
                                 case PieceState.Goal:
+                                    this.Ninja.Active = false;
                                     condition = CollisionState.Goal;
                                     break;
                                 case PieceState.SpecialNorth:                                   
@@ -377,6 +376,7 @@ namespace Chaos_University
                                     this.Recon.turn(3);
                                     break;
                                 case PieceState.Goal:
+                                    this.Recon.Active = false;
                                     condition = CollisionState.Goal;
                                     break;
                                 case PieceState.SpecialNorth:
@@ -422,6 +422,7 @@ namespace Chaos_University
                                     this.Assault.turn(3);
                                     break;
                                 case PieceState.Goal:
+                                    this.Assault.Active = false;
                                     condition = CollisionState.Goal;
                                     break;
                                 case PieceState.SpecialNorth:
@@ -537,6 +538,17 @@ namespace Chaos_University
             //}
 
             return condition;
+        }
+
+        public bool CheckPlayerActivity()
+        {
+            if (((this.IsNinja && !this.Ninja.Active) || !this.IsNinja) &&
+                ((this.IsRecon && !this.Recon.Active) || !this.IsRecon) &&
+                ((this.IsAssault && !this.Assault.Active) || !this.IsAssault))
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

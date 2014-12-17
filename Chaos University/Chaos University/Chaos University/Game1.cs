@@ -1527,7 +1527,7 @@ namespace Chaos_University
                     this.CheckGameKeyboard(gameTime.ElapsedGameTime.TotalSeconds);
 
                     //Move Player
-                    if (level.IsNinja)
+                    if (level.IsNinja && level.Ninja.Active)
                     {
                         level.Ninja.Move((int)(
                             100 * 
@@ -1546,7 +1546,7 @@ namespace Chaos_University
                     }
 
                     //Move Recon
-                    if (level.IsRecon)
+                    if (level.IsRecon && level.Recon.Active)
                     {
                         level.Recon.Move((int)(
                             100 *
@@ -1556,7 +1556,7 @@ namespace Chaos_University
                     }
 
                     //Move Assault
-                    if (level.IsAssault)
+                    if (level.IsAssault && level.Assault.Active)
                     {
                         level.Assault.Move((int)(
                             100 * 
@@ -1608,13 +1608,16 @@ namespace Chaos_University
                     switch(level.CheckCollisions())
                     {
                         case CollisionState.Goal:
-                            if (level.GetMoneyCount() == 0 && (GlobalVar.ParCount <= level.Par || level.Par == 0))
+                            if(level.CheckPlayerActivity())
                             {
-                                current = GameState.LevelComp;
-                            }
-                            else
-                            {
-                                current = GameState.LevelFail;
+                                if (level.GetMoneyCount() == 0 && (GlobalVar.ParCount <= level.Par || level.Par == 0))
+                                {
+                                    current = GameState.LevelComp;
+                                }
+                                else
+                                {
+                                    current = GameState.LevelFail;
+                                }
                             }
                             break;
                         case CollisionState.Fail:

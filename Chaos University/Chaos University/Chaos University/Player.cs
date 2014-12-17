@@ -28,6 +28,8 @@ namespace Chaos_University
 
         public Gear ThisGear { get; set; }
 
+        public bool Active { get; set; }
+
         public List<Texture2D> GearTextures { get; set; }
 
         //Constructor
@@ -37,6 +39,7 @@ namespace Chaos_University
             //PlrName = name;  //sets player name
             Moving = false;
             ThisMajor = myMajor;
+            Active = true;
 
             GearTextures = new List<Texture2D>();
 
@@ -67,67 +70,69 @@ namespace Chaos_University
         //Draws all player components.
         public override void Draw(SpriteBatch obj, int offX, int offY) //Draws player using base draw method
         {
-            Rectangle offsetRect = new Rectangle(
-                PositionRect.X + offX,
-                PositionRect.Y + offY,
-                PositionRect.Width,
-                PositionRect.Height);
-
-            //Draws all parts of the character on top of each other.
-            obj.Draw(listTextures[0],
-                new Rectangle(offsetRect.X + offsetRect.Width / 2, offsetRect.Y + offsetRect.Height / 2, offsetRect.Width, offsetRect.Height),
-                null,
-                Color.FromNonPremultiplied(GlobalVar.ColorsSplit[0],GlobalVar.ColorsSplit[1],GlobalVar.ColorsSplit[2], 255),
-                (float)(Math.Atan2(Vector.Y, Vector.X) + Math.PI / 2),
-                new Vector2(listTextures[0].Width / 2, listTextures[0].Height / 2),
-                SpriteEffects.None,
-                0.0f);
-
-            if (ThisMajor == Major.Assault)
+            if (Active)
             {
-                obj.Draw(listTextures[1],
+                Rectangle offsetRect = new Rectangle(
+                    PositionRect.X + offX,
+                    PositionRect.Y + offY,
+                    PositionRect.Width,
+                    PositionRect.Height);
+
+                //Draws all parts of the character on top of each other.
+                obj.Draw(listTextures[0],
                     new Rectangle(offsetRect.X + offsetRect.Width / 2, offsetRect.Y + offsetRect.Height / 2, offsetRect.Width, offsetRect.Height),
                     null,
-                    Color.FromNonPremultiplied(GlobalVar.ColorsSplit[6], GlobalVar.ColorsSplit[7], GlobalVar.ColorsSplit[8], 255),
+                    Color.FromNonPremultiplied(GlobalVar.ColorsSplit[0], GlobalVar.ColorsSplit[1], GlobalVar.ColorsSplit[2], 255),
                     (float)(Math.Atan2(Vector.Y, Vector.X) + Math.PI / 2),
-                    new Vector2(listTextures[1].Width / 2, listTextures[1].Height / 2),
+                    new Vector2(listTextures[0].Width / 2, listTextures[0].Height / 2),
                     SpriteEffects.None,
                     0.0f);
-            }
 
-            if (ThisMajor == Major.Recon)
-            {
-                obj.Draw(listTextures[2],
+                if (ThisMajor == Major.Assault)
+                {
+                    obj.Draw(listTextures[1],
+                        new Rectangle(offsetRect.X + offsetRect.Width / 2, offsetRect.Y + offsetRect.Height / 2, offsetRect.Width, offsetRect.Height),
+                        null,
+                        Color.FromNonPremultiplied(GlobalVar.ColorsSplit[6], GlobalVar.ColorsSplit[7], GlobalVar.ColorsSplit[8], 255),
+                        (float)(Math.Atan2(Vector.Y, Vector.X) + Math.PI / 2),
+                        new Vector2(listTextures[1].Width / 2, listTextures[1].Height / 2),
+                        SpriteEffects.None,
+                        0.0f);
+                }
+
+                if (ThisMajor == Major.Recon)
+                {
+                    obj.Draw(listTextures[2],
+                        new Rectangle(offsetRect.X + offsetRect.Width / 2, offsetRect.Y + offsetRect.Height / 2, offsetRect.Width, offsetRect.Height),
+                        null,
+                        Color.FromNonPremultiplied(GlobalVar.ColorsSplit[6], GlobalVar.ColorsSplit[7], GlobalVar.ColorsSplit[8], 255),
+                        (float)(Math.Atan2(Vector.Y, Vector.X) + Math.PI / 2),
+                        new Vector2(listTextures[2].Width / 2, listTextures[2].Height / 2),
+                        SpriteEffects.None,
+                        0.0f);
+                }
+
+                obj.Draw(listTextures[3],
                     new Rectangle(offsetRect.X + offsetRect.Width / 2, offsetRect.Y + offsetRect.Height / 2, offsetRect.Width, offsetRect.Height),
                     null,
-                    Color.FromNonPremultiplied(GlobalVar.ColorsSplit[6], GlobalVar.ColorsSplit[7], GlobalVar.ColorsSplit[8], 255),
+                        Color.FromNonPremultiplied(GlobalVar.ColorsSplit[3], GlobalVar.ColorsSplit[4], GlobalVar.ColorsSplit[5], 255),
                     (float)(Math.Atan2(Vector.Y, Vector.X) + Math.PI / 2),
-                    new Vector2(listTextures[2].Width / 2, listTextures[2].Height / 2),
+                    new Vector2(listTextures[3].Width / 2, listTextures[3].Height / 2),
                     SpriteEffects.None,
                     0.0f);
+
+                if (ThisMajor == Major.Ninja)
+                {
+                    obj.Draw(listTextures[4],
+                        new Rectangle(offsetRect.X + offsetRect.Width / 2, offsetRect.Y + offsetRect.Height / 2, offsetRect.Width, offsetRect.Height),
+                        null,
+                        Color.FromNonPremultiplied(GlobalVar.ColorsSplit[6], GlobalVar.ColorsSplit[7], GlobalVar.ColorsSplit[8], 255),
+                        (float)(Math.Atan2(Vector.Y, Vector.X) + Math.PI / 2),
+                        new Vector2(listTextures[4].Width / 2, listTextures[4].Height / 2),
+                        SpriteEffects.None,
+                        0.0f);
+                }
             }
-
-            obj.Draw(listTextures[3],
-                new Rectangle(offsetRect.X + offsetRect.Width / 2, offsetRect.Y + offsetRect.Height / 2, offsetRect.Width, offsetRect.Height),
-                null,
-                    Color.FromNonPremultiplied(GlobalVar.ColorsSplit[3], GlobalVar.ColorsSplit[4], GlobalVar.ColorsSplit[5], 255),
-                (float)(Math.Atan2(Vector.Y, Vector.X) + Math.PI / 2),
-                new Vector2(listTextures[3].Width / 2, listTextures[3].Height / 2),
-                SpriteEffects.None,
-                0.0f);
-
-            if (ThisMajor == Major.Ninja)
-            {
-                obj.Draw(listTextures[4],
-                    new Rectangle(offsetRect.X + offsetRect.Width / 2, offsetRect.Y + offsetRect.Height / 2, offsetRect.Width, offsetRect.Height),
-                    null,
-                    Color.FromNonPremultiplied(GlobalVar.ColorsSplit[6], GlobalVar.ColorsSplit[7], GlobalVar.ColorsSplit[8], 255),
-                    (float)(Math.Atan2(Vector.Y, Vector.X) + Math.PI / 2),
-                    new Vector2(listTextures[4].Width / 2, listTextures[4].Height / 2),
-                    SpriteEffects.None,
-                    0.0f);
-            }
-
         }
 
         //Move Player
