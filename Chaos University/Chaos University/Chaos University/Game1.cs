@@ -365,6 +365,7 @@ namespace Chaos_University
                                 bulldozer = new Boss(columnNumber * GlobalVar.TILESIZE,
                                     lineNumber * GlobalVar.TILESIZE, 400, 200, 2, bossTextures);
                                 newLevel.IsBoss = true;
+                                //newLevel.StartBoss = newLevel.Boss.PositionRect;
                                 
                                 break;
                             //W = Rotate_Clockwise_North
@@ -1369,6 +1370,15 @@ namespace Chaos_University
                             GlobalVar.TILESIZE *
                             (float)gameTime.ElapsedGameTime.TotalSeconds /
                             GlobalVar.SpeedLevel));
+
+                        if(bulldozer.PositionRect.Intersects(level.Ninja.PositionRect) ||
+                            bulldozer.PositionRect.Intersects(level.Recon.PositionRect) ||
+                            bulldozer.PositionRect.Intersects(level.Assault.PositionRect))
+                        {
+                            this.Fail();
+                            current = GameState.LevelFail;
+                        }
+                            
                     }
 
                     this.UpdateGuards(gameTime.ElapsedGameTime.TotalSeconds);  //Updates and checks guards

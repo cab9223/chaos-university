@@ -71,7 +71,7 @@ namespace Chaos_University
             this.PositionRect = new Rectangle(InitialX, InitialY, InitialWidth, InitialHeight);
         }
 
-       
+        
             
         
     }
