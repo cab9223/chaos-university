@@ -24,6 +24,7 @@ namespace Chaos_University
         GameState current;          //State of the game (title, menu, playing, gameover, etc.)
         int indexLevel;             //Current level index.
         Level level;                //Current level of the game.
+        Level titleLevel;           //Title level.
         List<Level> levels;         //List of levels.
         Tutorial tutorial;          //Tutorial Messages.
         
@@ -161,6 +162,8 @@ namespace Chaos_University
             taunt = false;
             temp = PieceState.Floor;
             temp2 = PieceState.Floor;
+
+            this.LoadColors();
 
             base.Initialize();
         }
@@ -445,6 +448,186 @@ namespace Chaos_University
             }
 
             return newLevel;
+        }
+
+        // Loads a new level and returns it. Does not affect instance variables of Game1.
+        private Level LoadUnobtrusiveLevel(int levelNum, string levelType)
+        {
+            //concatanates "LevelMap" and passed int to find map file.
+            string file = "LevelMap" + levelType + levelNum + ".txt";
+            Level newLevel = new Level(0, 0, 0, 0); //New Level with default values to satisfy compiler.
+
+
+            //makes new stream reader
+            StreamReader input;
+            try
+            {
+                //mapfiles will be one line long to avoid dealing with newlines. Also, assuming mapfile resides in bin.
+                input = new StreamReader(file);
+                string line = "";
+
+                //Read map height, width, and par. Establish newLevel.
+                int tempWidth = int.Parse(input.ReadLine());    //Width of map from file.
+                int tempHeight = int.Parse(input.ReadLine());   //Height of map from file.
+                int newLevelPar = int.Parse(input.ReadLine());  //Par of newLevel from file.
+                newLevel = new Level(tempWidth, tempHeight, GlobalVar.TILESIZE, newLevelPar);     //Establish newLevel.
+
+                //Read character directions.
+                Queue<int> charDirs = new Queue<int>();
+                foreach (char dir in input.ReadLine())
+                {
+                    charDirs.Enqueue(int.Parse(dir.ToString()));
+                }
+
+                //Read enemy directions.
+                Queue<int> guardDirs = new Queue<int>();
+                foreach (char dir in input.ReadLine())
+                {
+                    guardDirs.Enqueue(int.Parse(dir.ToString()));
+                }
+
+                //Counters for reading map blocks.
+                int columnNumber;       //Counter for each column being written.
+                int lineNumber = 0;     //Counter for each row/line being written.
+
+                //While a line is to be read.
+                while ((line = input.ReadLine()) != null) //LEVEL BUILDER
+                {
+                    columnNumber = 0;
+                    foreach (char block in line)
+                    {
+                        switch (block)
+                        {
+                            //Any unknown piece becomes a tile.
+                            default:
+                                newLevel.SetTile(columnNumber, lineNumber, new Tile(
+                                    columnNumber * GlobalVar.TILESIZE,
+                                    lineNumber * GlobalVar.TILESIZE,
+                                    tileTextures));
+                                break;
+                            //1 = Wall.
+                            case '1':
+                                newLevel.SetTile(columnNumber, lineNumber, new Wall(
+                                    columnNumber * GlobalVar.TILESIZE,
+                                    lineNumber * GlobalVar.TILESIZE,
+                                    wallTextures));
+                                break;
+                            //2 = Floor North.
+                            case '2':
+                                newLevel.SetTile(columnNumber, lineNumber, new Tile(
+                                    columnNumber * GlobalVar.TILESIZE,
+                                    lineNumber * GlobalVar.TILESIZE,
+                                    tileTextures,
+                                    PieceState.North));
+                                break;
+                            //3 = Floor East.
+                            case '3':
+                                newLevel.SetTile(columnNumber, lineNumber, new Tile(
+                                    columnNumber * GlobalVar.TILESIZE,
+                                    lineNumber * GlobalVar.TILESIZE,
+                                    tileTextures,
+                                    PieceState.East));
+                                break;
+                            //4 = Floor South.
+                            case '4':
+                                newLevel.SetTile(columnNumber, lineNumber, new Tile(
+                                    columnNumber * GlobalVar.TILESIZE,
+                                    lineNumber * GlobalVar.TILESIZE,
+                                    tileTextures,
+                                    PieceState.South));
+                                break;
+                            //5 = Floor West.
+                            case '5':
+                                newLevel.SetTile(columnNumber, lineNumber, new Tile(
+                                    columnNumber * GlobalVar.TILESIZE,
+                                    lineNumber * GlobalVar.TILESIZE,
+                                    tileTextures,
+                                    PieceState.West));
+                                break;
+                            //M = Moneh
+                            case 'M':
+                                newLevel.SetTile(columnNumber, lineNumber, new Tile(
+                                    columnNumber * GlobalVar.TILESIZE,
+                                    lineNumber * GlobalVar.TILESIZE,
+                                    tileTextures));
+                                newLevel.AddObject(new Money(
+                                    columnNumber * GlobalVar.TILESIZE,
+                                    lineNumber * GlobalVar.TILESIZE,
+                                    moneyTextures));
+                                break;
+                            //N = Ninja start and tile.
+                            case 'N':
+                                newLevel.SetTile(columnNumber, lineNumber, new Tile(
+                                    columnNumber * GlobalVar.TILESIZE,
+                                    lineNumber * GlobalVar.TILESIZE,
+                                    tileTextures));
+                                newLevel.Ninja = new Player(
+                                    columnNumber * GlobalVar.TILESIZE,
+                                    lineNumber * GlobalVar.TILESIZE,
+                                    newLevel.RotNinja = charDirs.Dequeue(),
+                                    playerTextures,
+                                    Player.Major.Ninja);
+                                newLevel.StartNinja = newLevel.Ninja.PositionRect;
+                                newLevel.IsNinja = true;
+                                newLevel.Ninja.GearTextures.Add(abilityTextures[0]);
+                                break;
+                            //R = Recon
+                            case 'R':
+                                newLevel.SetTile(columnNumber, lineNumber, new Tile(
+                                    columnNumber * GlobalVar.TILESIZE,
+                                    lineNumber * GlobalVar.TILESIZE,
+                                    tileTextures));
+                                newLevel.Recon = new Player(
+                                    columnNumber * GlobalVar.TILESIZE,
+                                    lineNumber * GlobalVar.TILESIZE,
+                                    newLevel.RotRecon = charDirs.Dequeue(),
+                                    playerTextures,
+                                    Player.Major.Recon);
+                                newLevel.StartRecon = newLevel.Recon.PositionRect;
+                                newLevel.IsRecon = true;
+                                newLevel.Recon.GearTextures.Add(abilityTextures[2]);
+                                break;
+                        }
+                        columnNumber++;
+                    }
+                    lineNumber++;
+                }
+
+                input.Close();
+            }
+            //Close if File Not Found. (Change to send an error message?)
+            catch (FileNotFoundException)
+            {
+                this.Exit();
+            }
+            //Close if any other odd Exception.
+            catch (Exception)
+            {
+                this.Exit();
+            }
+
+            return newLevel;
+        }
+
+        // Loads character colors
+        private void LoadColors()
+        {
+            string path = Directory.GetCurrentDirectory() + "/../../../../../../Colors.txt";
+
+            //read the file
+            StreamReader reader = new StreamReader(path);
+
+            string[] stringColors = reader.ReadLine().Split(',');
+
+            GlobalVar.ColorsSplit = new Int16[stringColors.Length];
+
+            //match the values
+            for (int i = 0; i < stringColors.Length; i++)
+            {
+                GlobalVar.ColorsSplit[i] = Int16.Parse(stringColors[i]);
+            }
+
+            reader.Close();
         }
 
         // Failure state.
@@ -779,8 +962,20 @@ namespace Chaos_University
             }
             catch(Exception)
             {
-                current = GameState.Title;
+                this.InitializeTitleScreen();
             }
+        }
+
+        //Intializes the title screen. Reads colors for player characters, sets up title level.
+        private void InitializeTitleScreen()
+        {
+            camXCenter = (GraphicsDevice.Viewport.Width - titleLevel.Width * GlobalVar.TILESIZE) / 2;
+            camYCenter = (GraphicsDevice.Viewport.Height - titleLevel.Height * GlobalVar.TILESIZE) / 2;
+            this.CenterCamera();
+
+            titleLevel.Ninja.Moving = true;
+            titleLevel.Recon.Moving = true;
+            current = GameState.Title;
         }
 
         //Centers the camera. Is called by Fail and Increment Level.
@@ -1231,6 +1426,9 @@ namespace Chaos_University
             //Tutorial messages
             tutorial = new Tutorial(GraphicsDevice.Viewport.Height, GraphicsDevice.Viewport.Width, menuFont);
 
+            //
+            titleLevel = this.LoadUnobtrusiveLevel(1, "S");
+
             //Load all levels.
             for (int b = 1; b <= GlobalVar.levelsOpening; ++b) //Opening levels
             {
@@ -1256,7 +1454,6 @@ namespace Chaos_University
             {
                 levels.Add(this.LoadLevel(f, "F"));
             }
-                
         }
 
         /// <summary>
@@ -1296,7 +1493,7 @@ namespace Chaos_University
                     else
                     {
                         videoPlayer.Stop();
-                        current = GameState.Title;
+                        this.InitializeTitleScreen();
                     }
 
                     // Can skip Intro Animation
@@ -1304,35 +1501,29 @@ namespace Chaos_University
                     {
                         videoPlayer.IsLooped = false;
                         videoPlayer.Stop();
-                        current = GameState.Title;
+                        this.InitializeTitleScreen();
                     }
                     break;
                 
                 
                 //TITLE SCREEN
                 case GameState.Title:
+                    titleLevel.Ninja.Move((int)(
+                        100 *
+                        GlobalVar.TILESIZE *
+                        (float)gameTime.ElapsedGameTime.TotalSeconds /
+                        GlobalVar.SpeedLevel));
+                    titleLevel.Recon.Move((int)(
+                        100 *
+                        GlobalVar.TILESIZE *
+                        (float)gameTime.ElapsedGameTime.TotalSeconds /
+                        GlobalVar.SpeedLevel));
+                    titleLevel.CheckCollisions();
                     if (keyboard.IsKeyDown(Keys.Enter) && keyboardPrev.IsKeyUp(Keys.Enter)) //Press enter to play.
                     {
                         //Play sound. Do this only to type change.
                         //MediaPlayer.Play(music[0]);
                         //MediaPlayer.IsRepeating = true;
-
-                        string path = Directory.GetCurrentDirectory() + "/../../../../../../Colors.txt";
-
-                        //read the file
-                        StreamReader reader = new StreamReader(path);
-
-                        string[] stringColors = reader.ReadLine().Split(',');
-
-                        GlobalVar.ColorsSplit = new Int16[stringColors.Length];
-
-                        //match the values
-                        for (int i = 0; i < stringColors.Length; i++)
-                        {
-                            GlobalVar.ColorsSplit[i] = Int16.Parse(stringColors[i]);
-                        }
-
-                        reader.Close();
 
                         //First level.
                         this.IncrementLevel();
@@ -1489,14 +1680,6 @@ namespace Chaos_University
                     }
                     break;
 
-                //GAME OVER
-                case GameState.GameOver:
-                    if (keyboard.IsKeyDown(Keys.Enter) && keyboardPrev.IsKeyUp(Keys.Enter))
-                    {
-                        current = GameState.Title;
-                    }
-                    break;
-
                 case GameState.Credits:
                     //Waits total lenght of video (in this case, 6 sec)
 
@@ -1512,7 +1695,7 @@ namespace Chaos_University
                     else if (gameTime.TotalGameTime.Seconds > startTime + 20)
                     {
                         videoPlayer.Stop();
-                        current = GameState.Title;
+                        this.InitializeTitleScreen();
                     }
 
                     // Can skip Intro Animation
@@ -1520,7 +1703,7 @@ namespace Chaos_University
                     {
                         videoPlayer.IsLooped = false;
                         videoPlayer.Stop();
-                        current = GameState.Title;
+                        this.InitializeTitleScreen();
                     }
                     break;
             }
@@ -1550,6 +1733,10 @@ namespace Chaos_University
                                
                 //TITLE SCREEN
                 case GameState.Title:
+                    //DRAW LEVEL
+                    titleLevel.Draw(spriteBatch, camX, camY);
+                    titleLevel.Ninja.Draw(spriteBatch, camX, camY);
+                    titleLevel.Recon.Draw(spriteBatch, camX, camY);
                     //Draw Title
                     spriteBatch.DrawString(headerFont,
                         title,
@@ -1560,13 +1747,6 @@ namespace Chaos_University
                         new Vector2(1.2f, 1.0f),
                         SpriteEffects.None,
                         0);
-                    //Draw Directions.
-                    spriteBatch.DrawString(menuFont,
-                        "Use the mouse to select tiles and change them to direction tiles.\n" +
-                        "You can place tiles before or during player movement.\n" +
-                        "You have a limited number of tries to place tiles.",
-                        new Vector2(25, 100),
-                        Color.White);
                     //Draw Press Enter Prompt
                     spriteBatch.DrawString(menuFont,
                         "Press enter to continue.",
@@ -1708,25 +1888,6 @@ namespace Chaos_University
                     //Draw Press Enter Prompt
                     spriteBatch.DrawString(menuFont,
                         "Press enter to replay level.",
-                        new Vector2(25, GraphicsDevice.Viewport.Height - 26),
-                        Color.White);
-                    break;
-
-                //GAME OVER
-                case GameState.GameOver:
-                    //Draw GAME OVER
-                    spriteBatch.DrawString(headerFont,
-                        "GAME OVER",
-                        new Vector2(GraphicsDevice.Viewport.Width / 2, 0),
-                        Color.White,
-                        0.0f,
-                        new Vector2(gameOverPos.X / 2, 0),
-                        new Vector2(1.2f, 1.0f),
-                        SpriteEffects.None,
-                        0);
-                    //Draw Press Enter Prompt
-                    spriteBatch.DrawString(menuFont,
-                        "Press enter to continue.",
                         new Vector2(25, GraphicsDevice.Viewport.Height - 26),
                         Color.White);
                     break;

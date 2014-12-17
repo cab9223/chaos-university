@@ -12,7 +12,6 @@ namespace Chaos_University
         Playing,
         LevelComp,
         LevelFail,
-        GameOver,
         Credits
     }
 

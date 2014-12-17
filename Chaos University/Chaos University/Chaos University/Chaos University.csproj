@@ -100,6 +100,9 @@
     <Compile Include="Wall.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="LevelMapS1.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="LevelMapT1.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
