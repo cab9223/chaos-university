@@ -40,12 +40,12 @@ namespace Chaos_University
             set { assault = value; }
         }
 
-        private Boss boss;
-        public Boss Boss
-        {
-            get { return boss; }
-            set { Boss = value; }
-        }
+        //private Boss boss;
+        //public Boss Boss
+        //{
+        //    get { return boss; }
+        //    set { Boss = value; }
+        //}
 
         //LEVEL PLAYERS START POSITION
         private Rectangle startNinja;             //Location at which ninja starts.
