@@ -107,6 +107,13 @@ namespace Chaos_University
             set { isAssault = value; }
         }
 
+        private bool isBoss;
+        public bool IsBoss
+        {
+            get { return isBoss; }
+            set { isBoss = value; }
+        }
+
         public List<Money> Monies
         {
             get
