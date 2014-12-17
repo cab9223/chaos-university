@@ -48,6 +48,10 @@ namespace Chaos_University
         float timer;                //Short pause
         float timer2;               //Long pause
 
+        //Boss stuff.
+        Boss bulldozer;
+        bool isBoss;
+
         //Variables for preventing stuck
         int currX;
         int currY;
@@ -91,6 +95,7 @@ namespace Chaos_University
         List<Texture2D> moneyTextures;
         List<Texture2D> specialTileTextures;
         List<Texture2D> abilityTextures;
+        List<Texture2D> bossTextures;
 
         //Songs
         List<Song> music;
@@ -156,6 +161,8 @@ namespace Chaos_University
             taunt = false;
             temp = PieceState.Floor;
             temp2 = PieceState.Floor;
+
+            isBoss = false;
 
             base.Initialize();
         }
@@ -355,14 +362,10 @@ namespace Chaos_University
                                     columnNumber * GlobalVar.TILESIZE,
                                     lineNumber * GlobalVar.TILESIZE,
                                     tileTextures));
-                                guard = new Enemy(
-                                    columnNumber * GlobalVar.TILESIZE,
-                                    lineNumber * GlobalVar.TILESIZE,
-                                    guardDirs.Dequeue(),
-                                    guardTextures);
-                                guard.Difficulty = 2;
-                                guards.Add(guard);
-                                guardCount = guardCount + 1;
+                                bulldozer = new Boss(columnNumber * GlobalVar.TILESIZE,
+                                    lineNumber * GlobalVar.TILESIZE, 400, 200, 2, bossTextures);
+                                newLevel.IsBoss = true;
+                                
                                 break;
                             //W = Rotate_Clockwise_North
                             case 'W':
@@ -492,6 +495,7 @@ namespace Chaos_University
             GlobalVar.SpeedLevel = 50;
             fastActive = false;
             level.ResetGate();                                  //Reset ladder sprite to close
+            bulldozer.ResetBoss();                              //Reset boss POS.
 
             //Reset all direction tiles.
             for (int b = 0; b < level.Height; ++b)
@@ -730,9 +734,10 @@ namespace Chaos_University
         //Increments the current level.
         private void IncrementLevel()
         {
+            
             indexLevel++;
             tutorial.Increment();
-            isGuard = false;
+            isGuard = false;            
             activeGuards.Clear();
             if (indexLevel < GlobalVar.LevelCount)
             {
@@ -1215,6 +1220,12 @@ namespace Chaos_University
             guardTextures.Add(this.Content.Load<Texture2D>("!"));
             guardTextures.Add(this.Content.Load<Texture2D>("Question_mark3"));
 
+            //Boss Textures
+            bossTextures = new List<Texture2D>();
+            bossTextures.Add(this.Content.Load<Texture2D>("Tank"));
+            
+            
+
             //Tutorial messages
             tutorial = new Tutorial(GraphicsDevice.Viewport.Height, GraphicsDevice.Viewport.Width, menuFont);
 
@@ -1351,6 +1362,15 @@ namespace Chaos_University
                             GlobalVar.SpeedLevel));
                     }
 
+                    if (level.IsBoss == true)
+                    {
+                        bulldozer.Move((int)(
+                            100 *
+                            GlobalVar.TILESIZE *
+                            (float)gameTime.ElapsedGameTime.TotalSeconds /
+                            GlobalVar.SpeedLevel));
+                    }
+
                     this.UpdateGuards(gameTime.ElapsedGameTime.TotalSeconds);  //Updates and checks guards
 
                     level.OpenGate(); //Checks to see if all intel is collected
@@ -1407,7 +1427,7 @@ namespace Chaos_University
                 //LEVEL COMPLETE
                 case GameState.LevelComp:
                     if (keyboard.IsKeyDown(Keys.Enter) && keyboardPrev.IsKeyUp(Keys.Enter))
-                    {
+                    {                        
                         //Increment level
                         this.Success();
                         this.IncrementLevel();
@@ -1526,6 +1546,11 @@ namespace Chaos_University
                         {
                             activeGuards[i].Draw(spriteBatch, camX, camY);
                         }
+                    }
+
+                    if (level.IsBoss == true)
+                    {
+                        bulldozer.Draw(spriteBatch, camX, camY);
                     }
 
                     //DRAW PLAYER ABILITIES

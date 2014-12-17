@@ -96,6 +96,13 @@ namespace Chaos_University
             vector = new Vector2(0, -1);
         }
 
+        public MoveableGamePiece(int x, int y, int width, int height, int dir, List<Texture2D> textures)
+            : base(x, y, width, height, textures)
+        {
+            direction = dir;
+            vector = new Vector2(0, -1);
+        }
+
         public virtual void Move(int value)
         {
 

@@ -117,6 +117,18 @@ namespace Chaos_University
 
         }
 
+        // for items bigger than global tile size
+        public GamePiece(int x, int y, int width, int height, List<Texture2D> textures)
+        {
+            positionRect = new Rectangle(x, y, width, height);
+
+            listTextures = textures;
+            indexTexture = 0;
+
+            InitialX = x;
+            InitialY = y;
+        }
+
         //Draws any gameobject to screen
         public virtual void Draw(SpriteBatch obj, int offX, int offY)
         {
