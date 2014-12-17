@@ -937,7 +937,7 @@ namespace Chaos_University
             //Temporary camera fix for level 4.
             if (indexLevel == 3)
             {
-                camYCenter = 25;
+                camYCenter = 125;
             }
 
             this.CenterCamera();
@@ -953,8 +953,6 @@ namespace Chaos_University
                     guardIndex++;
                 }
             }
-
-            Console.WriteLine("{0:00}\t{0:00}", guardIndex, guardCount);
         }
 
         //Initializes the title screen. Reads colors for player characters, sets up title level.
@@ -1765,7 +1763,7 @@ namespace Chaos_University
                     //DRAW INDICATOR
                     indicator.Draw(spriteBatch, camX, camY);
                     
-                //DRAW GUARDS
+                    //DRAW GUARDS
                     if (isGuard == true) //Guard in level?
                     {
                         for (int i = 0; i < guardCount; i++)  //Draw all guards
@@ -1818,20 +1816,21 @@ namespace Chaos_University
                             hud.Height),
                         Color.White);
                     //Draw Par UI Element.
-                    if (GlobalVar.ParCount < level.Par || GlobalVar.ParCount < 1 && level.Par != 0)
+                    if (level.Par != 0)
                     {
                         spriteBatch.DrawString(hudFont,
                             String.Format("Par: {0} of {1}", GlobalVar.ParCount, level.Par),
                             new Vector2(25, GraphicsDevice.Viewport.Height - 35),
-                            Color.Black);
-                    }
-                    //Draw maxed out Par UI Element. Ternary expression stops display from going above par.
-                    else if (level.Par != 0)
-                    {
-                        spriteBatch.DrawString(hudFont,
-                            String.Format("Par: {0} of {1} (PAR REACHED)", GlobalVar.ParCount, level.Par),
-                            new Vector2(25, GraphicsDevice.Viewport.Height - 35),
-                            Color.Black);
+                            Color.White);
+
+                        //Draw maxed out Par UI Element. Ternary expression stops display from going above par.
+                        if (GlobalVar.ParCount > level.Par)
+                        {
+                            spriteBatch.DrawString(hudFont,
+                                "OVER PAR!",
+                                new Vector2(GraphicsDevice.Viewport.Width - 170, GraphicsDevice.Viewport.Height - 35),
+                                Color.Red);
+                        }
                     }
                     break;
 
