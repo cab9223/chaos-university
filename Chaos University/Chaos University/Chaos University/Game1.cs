@@ -107,7 +107,7 @@ namespace Chaos_University
         VideoPlayer videoPlayer;
 
         Video creditsVideo;
-        int startTime = 0;
+        int startTime;
 
         public Game1()
         {
@@ -160,6 +160,8 @@ namespace Chaos_University
             taunt = false;
             temp = PieceState.Floor;
             temp2 = PieceState.Floor;
+
+            startTime = 0;
 
             this.LoadColors();
 
@@ -1686,10 +1688,11 @@ namespace Chaos_University
                     else if (gameTime.TotalGameTime.Seconds > startTime + 20)
                     {
                         videoPlayer.Stop();
+                        startTime = 0;
                         this.InitializeTitleScreen();
                     }
 
-                    // Can skip Intro Animation
+                    // Can skip ending animation?
                     if (keyboard.IsKeyDown(Keys.Enter) && keyboardPrev.IsKeyUp(Keys.Enter)) //Press enter to play.
                     {
                         videoPlayer.IsLooped = false;
