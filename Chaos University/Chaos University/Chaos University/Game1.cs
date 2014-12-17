@@ -761,7 +761,6 @@ namespace Chaos_University
                 if(indexLevel == 3)
                 {
                     camYCenter = GraphicsDevice.Viewport.Height / 2 - level.Ninja.PositionRect.Center.Y;
-                    Console.WriteLine(camYCenter);
                 }
 
                 this.CenterCamera();
@@ -790,7 +789,6 @@ namespace Chaos_University
             camX = camXCenter;  //Reset view.
             camY = camYCenter;  //Reset view.
         }
-
 
         public void GuardStunned() //After a successful ReconStun
         {
@@ -843,7 +841,6 @@ namespace Chaos_University
                 timer2 = 0;
             }
         }
-
 
         public void ReconStun() //Recon special move, Tazer -- initial code
         {
@@ -903,7 +900,6 @@ namespace Chaos_University
                 }
             }
         }
-
 
         public void AssaultTaunt() //Assault special move, Taunt -- Working, but actually isnt in all cases
         {
@@ -1136,9 +1132,6 @@ namespace Chaos_University
             }
         }
 
-
-
-
         /// <summary>
         /// LoadContent will be called once per game and is the place to load
         /// all of your content.
@@ -1278,7 +1271,7 @@ namespace Chaos_University
         /// checking for collisions, gathering input, and playing audio.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        protected override void Update(GameTime gameTime)                           //UPDATE METHOD
+        protected override void Update(GameTime gameTime)
         {
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
@@ -1539,7 +1532,7 @@ namespace Chaos_University
         /// This is called when the game should draw itself.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        protected override void Draw(GameTime gameTime)                                 //DRAW GAME METHOD
+        protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
 
@@ -1741,10 +1734,6 @@ namespace Chaos_University
             base.Draw(gameTime);
         }
 
-
-
-                                                             //GUARD STUFF THAT NEEDS TO BE IN THIS CLASS!
-
         public void GuardRemake(int gNum, int dir) //Remakes the guard for better repositioning
         {
             activeGuards[gNum] = new Enemy(
@@ -1757,7 +1746,6 @@ namespace Chaos_University
                                         activeGuards[gNum].InitialY,
                                         activeGuards[gNum].PrevDir);
         }
-
 
         public void GuardFail() //When the player failed due to a guard
         {
@@ -1796,7 +1784,6 @@ namespace Chaos_University
                 timer = 0;
             }
         }
-
 
         //Updates all guards.
         private void UpdateGuards(double gameTime)
