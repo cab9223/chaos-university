@@ -1474,6 +1474,11 @@ namespace Chaos_University
                 Exit();
             }
 
+            if (keyboard.IsKeyDown(Keys.N))
+            {
+                current = GameState.LevelComp;
+            }
+
             switch (current)
             {
                //Intro Animation
