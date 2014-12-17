@@ -43,7 +43,7 @@ namespace Chaos_University
         bool isGuard;               //Active Guards
         int guardIndex;             //Tells which guard to make
         int guardCount;             //Tells amount of guards
-        Queue<int> guardAmount;     //Also tells amount of guards
+        List<int> guardAmount;     //Also tells amount of guards
         bool attacked;              //Guard attacked player
         Indicator indicator;        //Indicator of currently selected tile.
         float timer;                //Short pause
@@ -131,7 +131,7 @@ namespace Chaos_University
             levels = new List<Level>();
             guards = new List<Enemy>();
             activeGuards = new List<Enemy>();
-            guardAmount = new Queue<int>();
+            guardAmount = new List<int>();
             title = "Team Tyro";
 
             indexLevel = -1;
@@ -431,7 +431,7 @@ namespace Chaos_University
                     lineNumber++;
                 }
 
-                guardAmount.Enqueue(int.Parse(guardCount.ToString())); //Sets a guard count for each stage
+                guardAmount.Add(guardCount); //Sets a guard count for each stage
                 guardCount = 0;
                 
                 input.Close();
@@ -922,48 +922,39 @@ namespace Chaos_University
         //Increments the current level.
         private void IncrementLevel()
         {
-            
             indexLevel++;
-            tutorial.Increment();
             isGuard = false;            
             activeGuards.Clear();
-            if (indexLevel < levels.Count && gameRestarted == false)
+            if (indexLevel < levels.Count)
             {
-                guardCount = guardAmount.Dequeue();
+                guardCount = guardAmount[indexLevel];
             }
 
-            
-            try
+            level = levels[indexLevel];
+            camXCenter = (GraphicsDevice.Viewport.Width - level.Width * GlobalVar.TILESIZE) / 2;
+            camYCenter = (GraphicsDevice.Viewport.Height - level.Height * GlobalVar.TILESIZE) / 2;
+
+            //Temporary camera fix for level 4.
+            if (indexLevel == 3)
             {
+                camYCenter = 25;
+            }
 
-                level = levels[indexLevel];
-                camXCenter = (GraphicsDevice.Viewport.Width - level.Width * GlobalVar.TILESIZE) / 2;
-                camYCenter = (GraphicsDevice.Viewport.Height - level.Height * GlobalVar.TILESIZE) / 2;
-                
-                //Temporary camera fix for level 4.
-                if(indexLevel == 3)
+            this.CenterCamera();
+
+            if (guardCount > 0)  //Checks for guards in this level
+            {
+                isGuard = true;  //Sets the guards to active
+
+                for (int i = 0; i < guardCount; i++)
                 {
-                    camYCenter = GraphicsDevice.Viewport.Height / 2 - level.Ninja.PositionRect.Center.Y;
-                }
-
-                this.CenterCamera();
-
-                if (guardCount > 0)  //Checks for guards in this level
-                {
-                    isGuard = true;  //Sets the guards to active
-
-                    for (int i = 0; i < guardCount; i++)
-                    {
-                        activeGuards.Add(guards[guardIndex]);
-                        activeGuards[i].Turn(activeGuards[i].Direction);
-                        guardIndex = guardIndex + 1;
-                    }
+                    activeGuards.Add(guards[guardIndex]);
+                    activeGuards[i].Turn(activeGuards[i].Direction);
+                    guardIndex++;
                 }
             }
-            catch(Exception)
-            {
-                this.InitializeTitleScreen();
-            }
+
+            Console.WriteLine("{0:00}\t{0:00}", guardIndex, guardCount);
         }
 
         //Intializes the title screen. Reads colors for player characters, sets up title level.
@@ -1685,6 +1676,8 @@ namespace Chaos_University
                     //Waits total lenght of video (in this case, 6 sec)
 
                     indexLevel = -1;
+                    guardIndex = 0;
+                    guardCount = 0;
                     gameRestarted = true;
 
                     if (startTime == 0)
@@ -1766,7 +1759,7 @@ namespace Chaos_University
                     indicator.Draw(spriteBatch, camX, camY);
                     
                 //DRAW GUARDS
-                    if (isGuard == true && gameRestarted == false) //Guard in level?
+                    if (isGuard == true) //Guard in level?
                     {
                         for (int i = 0; i < guardCount; i++)  //Draw all guards
                         {
@@ -1805,7 +1798,7 @@ namespace Chaos_University
                         level.Assault.Draw(spriteBatch, camX, camY);
 
                     //Draw Tutorial Messages
-                    tutorial.Draw(spriteBatch, camX, camY);
+                    tutorial.Draw(spriteBatch, camX, camY, indexLevel);
 
                     //DRAW UI
                     //Draw Hud
@@ -1957,7 +1950,7 @@ namespace Chaos_University
         private void UpdateGuards(double gameTime)
         {
             //Important Guard Updates
-            if (isGuard == true && gameRestarted == false)
+            if (isGuard == true)
             {
                 for (int i = 0; i < guardCount; i++)
                 {

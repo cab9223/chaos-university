@@ -18,8 +18,6 @@ namespace Chaos_University
         int screenWidth;    //Provided Width of Screen.
         SpriteFont font;    //Font
 
-        int index;          //Index of current level.
-
         //List of tutorials string.
         private List<string[]> tutorials;
 
@@ -32,8 +30,6 @@ namespace Chaos_University
             screenHeight = _screenHeight;
             screenWidth = _screenWidth;
             font = _font;
-
-            index = -1;
 
             tutorials = new List<string[]>();
             locations = new List<int[]>();
@@ -51,14 +47,8 @@ namespace Chaos_University
             locations.Add(new int[2] { 0, -40 });
         }
 
-        //Increment level.
-        public void Increment()
-        {
-            index++;
-        }
-
         //Draw tutorial strings.
-        public void Draw(SpriteBatch spriteBatch, int offX, int offY)
+        public void Draw(SpriteBatch spriteBatch, int offX, int offY, int index)
         {
             if (index < tutorials.Count)
             {
