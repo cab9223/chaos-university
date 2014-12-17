@@ -102,7 +102,7 @@
     <None Include="LevelMapT1.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="LevelMapR1.txt">
+    <None Include="LevelMapR6.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="LevelMapR2.txt">
@@ -151,10 +151,10 @@
     <None Include="LevelMapN8.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="LevelMap14.txt">
+    <None Include="LevelMapR1.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="LevelMap13.txt">
+    <None Include="LevelMapR0.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="LevelMapF.txt">

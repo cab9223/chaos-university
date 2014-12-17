@@ -51,8 +51,6 @@ namespace Chaos_University
         //Variables for preventing stuck
         int currX;
         int currY;
-        int currX2;
-        int currY2;
 
 
         //Special Ability Stuff
@@ -82,7 +80,6 @@ namespace Chaos_University
         int tauntDir;
         bool stunned;
         bool flip;
-        Rectangle tmp;
 
 
         //Textures
@@ -532,41 +529,50 @@ namespace Chaos_University
         //Speeds up gameplay or returns to normal
         private void FastForward()
         {
-            //if (level.IsNinja)
-            //{
-            //    tmp = level.Ninja.PositionRect;
-
-            //    currX2 = (level.Ninja.PositionRect.X - camX) / GlobalVar.TILESIZE;
-            //    currY2 = (level.Ninja.PositionRect.Y - camY) / GlobalVar.TILESIZE;
-
-            //    tmp.X = currX2;
-            //    tmp.Y = currY2;
-
-
-            //}
-
-            //if (level.IsAssault)
-            //{
-            //    currX2 = (level.Assault.PositionRect.X - camX) / GlobalVar.TILESIZE;
-            //    currY2 = (level.Assault.PositionRect.Y - camY) / GlobalVar.TILESIZE;
-            //}
-
-            //if (level.IsRecon)
-            //{
-            //    currX2 = (level.Recon.PositionRect.X - camX) / GlobalVar.TILESIZE;
-            //    currY2 = (level.Recon.PositionRect.Y - camY) / GlobalVar.TILESIZE;
-            //}
-
-            if (fastActive == false)
+            if (level.IsNinja)
             {
-                GlobalVar.SpeedLevel = 40;
-                fastActive = true;
+                if (fastActive == false && level.Ninja.Moving == false)
+                {
+                    GlobalVar.SpeedLevel = 30;
+                    fastActive = true;
+                }
+                else if (fastActive == true)
+                {
+                    GlobalVar.SpeedLevel = 50;
+                    fastActive = false;
+                }
             }
-            else if (fastActive == true)
+
+            if (level.IsAssault)
             {
-                GlobalVar.SpeedLevel = 50;
-                fastActive = false;
+                if (fastActive == false && level.Assault.Moving == false)
+                {
+                    GlobalVar.SpeedLevel = 30;
+                    fastActive = true;
+                }
+                else if (fastActive == true)
+                {
+                    GlobalVar.SpeedLevel = 50;
+                    fastActive = false;
+                }
             }
+
+            if (level.IsRecon)
+            {
+                if (fastActive == false && level.Recon.Moving == false)
+                {
+                    GlobalVar.SpeedLevel = 30;
+                    fastActive = true;
+                }
+                else if (fastActive == true)
+                {
+                    GlobalVar.SpeedLevel = 50;
+                    fastActive = false;
+                }
+            }
+
+            
+            
         }
 
         //Checks the state of the mouse and performs appropriate actions.
@@ -887,7 +893,7 @@ namespace Chaos_University
         }
 
 
-        public void AssaultTaunt() //Assault special move, Taunt -- Working
+        public void AssaultTaunt() //Assault special move, Taunt -- Working, but actually isnt in all cases
         {
             if (level.IsAssault == true && usedAssault == false) //if active Assault
             {
@@ -1233,7 +1239,7 @@ namespace Chaos_University
         /// checking for collisions, gathering input, and playing audio.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        protected override void Update(GameTime gameTime)
+        protected override void Update(GameTime gameTime)                           //UPDATE METHOD
         {
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
@@ -1463,7 +1469,7 @@ namespace Chaos_University
         /// This is called when the game should draw itself.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        protected override void Draw(GameTime gameTime)
+        protected override void Draw(GameTime gameTime)                                 //DRAW GAME METHOD
         {
             GraphicsDevice.Clear(Color.Black);
 
@@ -1662,7 +1668,7 @@ namespace Chaos_University
 
 
 
-        //GUARD STUFF THAT NEEDS TO BE IN THIS CLASS!
+                                                             //GUARD STUFF THAT NEEDS TO BE IN THIS CLASS!
         public void GuardRemake(int gNum, int dir)
         {
             activeGuards[gNum] = new Enemy(
