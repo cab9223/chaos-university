@@ -1,0 +1,30 @@
+You are the commander of a squad of new specialists, fresh out of the academy.
+They have barely learned anything at the moment, so they will blindly travel in a straight line until ordered otherwise.
+Using a simple technique they've learned in the academy, you must infiltrate this enemy bunker and stop their malicious schemes.
+They are sending a nuke to center of the earth in order to trigger all the volcanoes around the globe!
+Stop them, Team Tyro!
+
+Instructions:
+Click an empty tile to place a movement order.
+Left click to rotate clockwise, right click to rotate counterclockwise.
+Hit enter to start movement.
+Press R to reset level.
+Hitting a wall, or being detected by a guard resets the level.
+You must collect all intelligence and get all characters to the ladder to complete a level.
+You can hit space before you start moving to fast forward.
+You can disable fast forward any time, but you can only turn it back on before a level starts.
+You can only adjust your most recent tile without having an effect on the maximum number of tiles you can place per level.
+The max tiles per level are referred to as par.
+White and red arrow tiles rotate clockwise automatically after you hit them, gray and red ones rotate counterclockwise.
+Brown guards move in a straight lines, turning around when they hit a wall.
+Red guards do the same, but also move like characters when they hit any special tiles. 
+Red guards cannot be locked directly against a wall.
+Press 1 to swing the Ninja's sword, killing all enemies around him.
+Press 2 to activate the Recon's stun gun, stunning an enemy in front of him and then turning him around.
+You can only connect with these abilities once per level.
+
+The character creator takes RGB numbers for your squad's color scheme.
+If you hit cancel it resets them to their default values.
+
+There is a special character, the Assault. His ability is activated by pressing the 3 key.
+He taunts enemies above, below, to his left and to his right in a plus shape to move towards him.
