@@ -85,7 +85,6 @@ namespace Chaos_University
         int tauntDir;
         bool stunned;
         bool flip;
-        bool gameRestarted;
         
         //Textures
         List<Texture2D> tileTextures;
@@ -152,7 +151,6 @@ namespace Chaos_University
             fastActive = false;
             stunned = false;
             stun = false;
-            gameRestarted = false;
             tauntDir = 0;
 
             usedNinja = false;
@@ -957,7 +955,7 @@ namespace Chaos_University
             Console.WriteLine("{0:00}\t{0:00}", guardIndex, guardCount);
         }
 
-        //Intializes the title screen. Reads colors for player characters, sets up title level.
+        //Initializes the title screen. Reads colors for player characters, sets up title level.
         private void InitializeTitleScreen()
         {
             camXCenter = (GraphicsDevice.Viewport.Width - titleLevel.Width * GlobalVar.TILESIZE) / 2;
@@ -1678,7 +1676,6 @@ namespace Chaos_University
                     indexLevel = -1;
                     guardIndex = 0;
                     guardCount = 0;
-                    gameRestarted = true;
 
                     if (startTime == 0)
                     {
@@ -1722,7 +1719,14 @@ namespace Chaos_University
             {
                 //Intro Animation
                 case GameState.Intro:
-                    spriteBatch.Draw(videoPlayer.GetTexture(), new Rectangle(0, 0, introVideo.Width, introVideo.Height), Color.White);
+                    spriteBatch.Draw(
+                        videoPlayer.GetTexture(),
+                        new Rectangle(
+                            0,
+                            -50,
+                            introVideo.Width,
+                            introVideo.Height),
+                        Color.White);
                     break;
                                
                 //TITLE SCREEN
