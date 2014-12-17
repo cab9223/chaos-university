@@ -862,7 +862,7 @@ namespace Chaos_University
             //Use Assault Ability -- Taunt
             if (level.IsAssault)
             {
-                if ((level.IsAssault && keyboard.IsKeyDown(Keys.D2) && keyboardPrev.IsKeyUp(Keys.D2)) || level.Assault.AbilityActive)
+                if ((level.IsAssault && keyboard.IsKeyDown(Keys.D3) && keyboardPrev.IsKeyUp(Keys.D3)) || level.Assault.AbilityActive)
                 {
                     AssaultTaunt();
                 }
@@ -871,7 +871,7 @@ namespace Chaos_University
             //Use Recon Ability -- Tazer
             if (level.IsRecon)
             {
-                if ((level.IsRecon && keyboard.IsKeyDown(Keys.D3) && keyboardPrev.IsKeyUp(Keys.D3)))
+                if ((level.IsRecon && keyboard.IsKeyDown(Keys.D2) && keyboardPrev.IsKeyUp(Keys.D2)))
                 {
                     ReconStun();
                 }
