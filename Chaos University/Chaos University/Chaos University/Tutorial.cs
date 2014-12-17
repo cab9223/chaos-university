@@ -57,7 +57,7 @@ namespace Chaos_University
             }
 
             //Level 24
-            tutorials.Add(new string[1] { "Press '3' to stun!" });
+            tutorials.Add(new string[1] { "Press '2' to stun!" });
 
             //Levels 1-5
             locations.Add(new int[2] { 24, 180 });
