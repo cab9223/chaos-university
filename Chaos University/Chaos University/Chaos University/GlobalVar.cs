@@ -26,7 +26,7 @@ namespace Chaos_University
         //Colors that CaracterCreator edits, set to white(no tint) by default
         public static Int16[] ColorsSplit = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
-        public static int ParCount = 0;
+        public static int ParCount = 0; //For initial par count
 
         public static int SpeedLevel = 50; //50 is normal, 40 is max
     }

@@ -526,7 +526,7 @@ namespace Chaos_University
             clickPrevY = -1;                                    //Reset clickPrev at a nonexistent index. 
         }
 
-        //Speeds up gameplay or returns to normal
+        //Speeds up gameplay or returns to normal --  must be activated before movement begins, but ended any time
         private void FastForward()
         {
             if (level.IsNinja)
@@ -1669,7 +1669,8 @@ namespace Chaos_University
 
 
                                                              //GUARD STUFF THAT NEEDS TO BE IN THIS CLASS!
-        public void GuardRemake(int gNum, int dir)
+
+        public void GuardRemake(int gNum, int dir) //Remakes the guard for better repositioning
         {
             activeGuards[gNum] = new Enemy(
                                         activeGuards[gNum].PositionRect.X,
@@ -1774,22 +1775,22 @@ namespace Chaos_University
                             {
                                 switch (level.GetGamePiece(i, j).PieceState)
                                 {
-                                    case PieceState.Wall:
+                                    case PieceState.Wall: //Touching a wall tile
                                         activeGuards[x].Patrol(0);
                                         break;
-                                    case PieceState.Goal:
+                                    case PieceState.Goal: //Touching a goal tile
                                         activeGuards[x].Patrol(0);
                                         break;
                                 }
-                                if (level.GetGamePiece(i, j).PositionRect.Center == activeGuards[x].PositionRect.Center
+                                if (level.GetGamePiece(i, j).PositionRect.Center == activeGuards[x].PositionRect.Center //For guards being effected by tiles
                                     && (activeGuards[x].Difficulty == 1 || activeGuards[x].Taunted == true))
                                 {
                                     switch (level.GetGamePiece(i, j).PieceState)
                                     {
-                                        case PieceState.Floor:
+                                        case PieceState.Floor: //Standard floor tile
                                             activeGuards[x].PrevDir = 4;
                                             break;
-                                        case PieceState.North:
+                                        case PieceState.North: //North direction tile
                                             if (activeGuards[x].Direction != 2 && activeGuards[x].PrevDir != 2)
                                             {
                                                 if (activeGuards[x].Taunted == true)
@@ -1823,7 +1824,7 @@ namespace Chaos_University
                                                 }
                                             }
                                             break;
-                                        case PieceState.East:
+                                        case PieceState.East: //East direction tile
                                             if (activeGuards[x].Direction != 3 && activeGuards[x].PrevDir != 3)
                                             {
                                                 if (activeGuards[x].Taunted == true)
@@ -1857,7 +1858,7 @@ namespace Chaos_University
                                                 }
                                             }
                                             break;
-                                        case PieceState.South:
+                                        case PieceState.South: //South direction tile
                                             if (activeGuards[x].Direction != 0 && activeGuards[x].PrevDir != 0)
                                             {
                                                 if (activeGuards[x].Taunted == true)
@@ -1891,7 +1892,7 @@ namespace Chaos_University
                                                 }
                                             }
                                             break;
-                                        case PieceState.West:
+                                        case PieceState.West: //West direction tile
                                             if (activeGuards[x].Direction != 1 && activeGuards[x].PrevDir != 1)
                                             {
                                                 if (activeGuards[x].Taunted == true)
@@ -1925,7 +1926,7 @@ namespace Chaos_University
                                                 }
                                             }
                                             break;
-                                        case PieceState.OffEast:
+                                        case PieceState.OffEast: //Taunt east tile
                                             GuardRemake(x, 1);
                                             activeGuards[x].Patrol(1);
                                             level.GetGamePiece(i, j).PieceState = temp2;
@@ -1943,7 +1944,7 @@ namespace Chaos_University
                                                     break;
                                             }
                                             break;
-                                        case PieceState.OffNorth:
+                                        case PieceState.OffNorth: //Taunt north tile
                                             GuardRemake(x, 0);
                                             activeGuards[x].Patrol(1);
                                             level.GetGamePiece(i, j).PieceState = temp2;
@@ -1961,7 +1962,7 @@ namespace Chaos_University
                                                     break;
                                             }
                                             break;
-                                        case PieceState.OffWest:
+                                        case PieceState.OffWest: //Taunt west tile
                                             GuardRemake(x, 3);
                                             activeGuards[x].Patrol(1);
                                             level.GetGamePiece(i, j).PieceState = temp2;
@@ -1979,7 +1980,7 @@ namespace Chaos_University
                                                     break;
                                             }
                                             break;
-                                        case PieceState.OffSouth:
+                                        case PieceState.OffSouth: //Taunt south tile
                                             GuardRemake(x, 2);
                                             activeGuards[x].Patrol(1);
                                             level.GetGamePiece(i, j).PieceState = temp2;
@@ -1997,22 +1998,22 @@ namespace Chaos_University
                                                     break;
                                             }
                                             break;
-                                        case PieceState.SpecialNorth:
+                                        case PieceState.SpecialNorth: //North rotating tile
                                             GuardRemake(x, 0);
                                             activeGuards[x].Patrol(1);
                                             level.GetGamePiece(i, j).IncrementType();
                                             break;
-                                        case PieceState.SpecialEast:
+                                        case PieceState.SpecialEast: //East rotating tile
                                             GuardRemake(x, 1);
                                             activeGuards[x].Patrol(1);
                                             level.GetGamePiece(i, j).IncrementType();
                                             break;
-                                        case PieceState.SpecialSouth:
+                                        case PieceState.SpecialSouth: //South rotating tile
                                             GuardRemake(x, 2);
                                             activeGuards[x].Patrol(1);
                                             level.GetGamePiece(i, j).IncrementType();
                                             break;
-                                        case PieceState.SpecialWest:
+                                        case PieceState.SpecialWest: //West rotating tile
                                             GuardRemake(x, 3);
                                             activeGuards[x].Patrol(1);
                                             level.GetGamePiece(i, j).IncrementType();
