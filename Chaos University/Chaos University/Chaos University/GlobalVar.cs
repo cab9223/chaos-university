@@ -18,7 +18,13 @@ namespace Chaos_University
         // All the variables that we'll need
 
         //Number of levels.
-        public static int LevelCount = 12;
+        public static int LevelCount = 30;
+
+        //Number of level types
+        public static int levelsOpening = 12;
+        public static int levelsNinja = 10;
+        public static int levelsRecon = 7;
+        public static int levelsAssault = 1;
 
         // Allows us to edit the size of a single tile- also useful for a bunch of other things that have been startedo n.
         public static int TILESIZE = 50;

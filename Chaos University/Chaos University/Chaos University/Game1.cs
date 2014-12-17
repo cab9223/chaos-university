@@ -84,6 +84,7 @@ namespace Chaos_University
         int tauntDir;
         bool stunned;
         bool flip;
+        
 
 
         //Textures
@@ -495,8 +496,10 @@ namespace Chaos_University
             GlobalVar.SpeedLevel = 50;
             fastActive = false;
             level.ResetGate();                                  //Reset ladder sprite to close
-            bulldozer.ResetBoss();                              //Reset boss POS.
-
+            if (level.IsBoss)
+            {
+                bulldozer.ResetBoss();                              //Reset boss POS.
+            }
             //Reset all direction tiles.
             for (int b = 0; b < level.Height; ++b)
             {
@@ -846,7 +849,7 @@ namespace Chaos_University
 
                 for (int x = 0; x < guardCount; x++)
                 {
-                    switch (level.Recon.Direction)
+                    switch (level.Recon.Direction) //Checks direction for stun effect to activate
                     {
                         case 0:
                             if (activeGuards[x].PositionRect.X > level.Recon.PositionRect.X - (GlobalVar.TILESIZE /2)
